@@ -86,6 +86,7 @@ async function seed() {
     name: 'Feminino',
     slug: 'feminino',
     description: 'Vestidos, blusas, conjuntos e alfaiataria feminina com caimento refinado.',
+    image: '/images/categories/categoria-feminino.svg',
     order: 1,
     active: true,
   });
@@ -94,6 +95,7 @@ async function seed() {
     name: 'Masculino',
     slug: 'masculino',
     description: 'Camisas, calças, polos e bermudas masculinas com toque macio e corte elegante.',
+    image: '/images/categories/categoria-masculino.svg',
     order: 2,
     active: true,
   });
@@ -102,6 +104,7 @@ async function seed() {
     name: 'Infantil',
     slug: 'infantil',
     description: 'Moda confortável, alegre e durável para meninas e meninos.',
+    image: '/images/categories/categoria-infantil.svg',
     order: 3,
     active: true,
   });
@@ -110,6 +113,7 @@ async function seed() {
     name: 'Acessórios',
     slug: 'acessorios',
     description: 'Bolsas estruturadas, cintos, lenços e detalhes que complementam sua produção.',
+    image: '/images/categories/categoria-acessorios.svg',
     order: 4,
     active: true,
   });

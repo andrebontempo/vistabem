@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450" fill="none">
+  <defs>
+    <radialGradient id="catMascBg" cx="70%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#220B44"/>
+      <stop offset="50%" stop-color="#110421"/>
+      <stop offset="100%" stop-color="#07020D"/>
+    </radialGradient>
+    <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#380C6E"/>
+      <stop offset="50%" stop-color="#1F073D"/>
+      <stop offset="100%" stop-color="#0F031F"/>
+    </linearGradient>
+    <filter id="mascGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="mascShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="450" fill="url(#catMascBg)"/>
+
+  <!-- Halo de Luz Ciano & Roxo -->
+  <circle cx="440" cy="200" r="160" fill="#7C24E0" fill-opacity="0.15" filter="url(#mascGlow)"/>
+  <circle cx="460" cy="180" r="90" fill="#00F0FF" fill-opacity="0.12" filter="url(#mascGlow)"/>
+
+  <!-- Linhas Geométricas Tecnológicas Contemporâneas -->
+  <circle cx="480" cy="120" r="80" stroke="#00F0FF" stroke-width="1.2" stroke-opacity="0.25" stroke-dasharray="4 6"/>
+  <line x1="380" y1="380" x2="560" y2="380" stroke="#00F0FF" stroke-width="1" stroke-opacity="0.3"/>
+
+  <!-- SILHUETA EDITORIAL MASCULINA: ALFAIATARIA CONTEMPORÂNEA -->
+  <g filter="url(#mascShadow)" transform="translate(180, 20)">
+    <!-- Silhueta Rosto e Cabelo Moderno -->
+    <path d="M 230,45 C 240,30 260,32 270,45 C 275,55 272,70 265,80 L 235,80 Z" fill="#1A0733"/>
+    <!-- Linha de Perfil e Maxilar Marcado -->
+    <path d="M 235,70 L 245,95 L 260,95 L 265,80" stroke="#EDE6FA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+    <!-- Colarinho e Camisa Linho -->
+    <polygon points="215,95 240,140 265,95" fill="#FAF5FF"/>
+    <!-- Gravata / Detalhe Minimalista Ciano -->
+    <polygon points="237,120 243,120 245,210 240,225 235,210" fill="#00F0FF" filter="url(#mascGlow)"/>
+
+    <!-- Blazer Alfaiataria Masculino Slim -->
+    <!-- Ombro e Manga Esquerda -->
+    <path d="M 160,110 L 130,170 L 145,390 L 190,380 L 195,200" fill="url(#suitGrad)"/>
+    <!-- Ombro e Manga Direita -->
+    <path d="M 320,110 L 350,170 L 335,390 L 290,380 L 285,200" fill="url(#suitGrad)"/>
+
+    <!-- Corpo do Blazer -->
+    <path d="M 180,115 L 180,410 C 210,425 270,425 300,410 L 300,115 Z" fill="url(#suitGrad)"/>
+
+    <!-- Lapelas Estruturadas com Pesponto Ciano -->
+    <path d="M 195,115 L 210,195 L 185,225 L 238,300 L 238,410" stroke="#00F0FF" stroke-width="2" fill="none"/>
+    <path d="M 285,115 L 270,195 L 295,225 L 242,300 L 242,410" stroke="#7C24E0" stroke-width="2" fill="none"/>
+
+    <!-- Lenço de Bolso (Pocket Square) Ciano Neon -->
+    <polygon points="190,200 205,185 215,200" fill="#00F0FF" filter="url(#mascGlow)"/>
+    <line x1="185" y1="202" x2="220" y2="202" stroke="#FFFFFF" stroke-width="2"/>
+
+    <!-- Botões em Metal Escuro com Aro Ciano -->
+    <circle cx="240" cy="325" r="5" fill="#07020D" stroke="#00F0FF" stroke-width="1.5"/>
+    <circle cx="240" cy="360" r="5" fill="#07020D" stroke="#00F0FF" stroke-width="1.5"/>
+  </g>
+
+  <!-- Assinatura Gráfica -->
+  <text x="560" y="420" font-family="'Bodoni Moda', serif" font-size="22" font-weight="700" fill="rgba(255, 255, 255, 0.15)" letter-spacing="5" text-anchor="end">TAILORED</text>
+</svg>
