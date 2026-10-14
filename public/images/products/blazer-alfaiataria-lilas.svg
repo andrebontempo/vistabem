@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
+  <defs>
+    <radialGradient id="studioBlazer" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#190B2E" stop-opacity="0.95"/>
+      <stop offset="65%" stop-color="#0E041A" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#07020D" stop-opacity="1"/>
+    </radialGradient>
+    <linearGradient id="blazerLilac" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D8B4FE"/>
+      <stop offset="50%" stop-color="#B77BFA"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <filter id="blazerShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+    <filter id="cyanLapelGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="750" rx="16" fill="url(#studioBlazer)"/>
+
+  <!-- Halo de Luz Suave -->
+  <circle cx="300" cy="350" r="170" fill="#B77BFA" fill-opacity="0.1" filter="url(#cyanLapelGlow)"/>
+
+  <!-- Tag Editorial -->
+  <g transform="translate(40, 40)">
+    <rect width="112" height="26" rx="13" fill="#140626" stroke="#00F0FF" stroke-width="1.2"/>
+    <text x="56" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#00F0FF" letter-spacing="1.5" text-anchor="middle">EXCLUSIVE</text>
+  </g>
+
+  <!-- BLAZER ESTRUTURADO -->
+  <g filter="url(#blazerShadow)">
+    <!-- Cabide de Luxo em Ciano Metálico -->
+    <path d="M 300,95 C 300,80 315,75 315,90 C 315,105 300,108 300,122" stroke="#00F0FF" stroke-width="3" stroke-linecap="round" fill="none" filter="url(#cyanLapelGlow)"/>
+    <path d="M 180,165 L 300,122 L 420,165" stroke="#00F0FF" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+    <!-- Ombros e Mangas -->
+    <!-- Manga Esquerda -->
+    <path d="M 180,165 L 140,240 L 160,490 L 210,480 L 215,280" fill="url(#blazerLilac)"/>
+    <!-- Manga Direita -->
+    <path d="M 420,165 L 460,240 L 440,490 L 390,480 L 385,280" fill="url(#blazerLilac)"/>
+
+    <!-- Punho com Botões Forrados e Linha Ciano -->
+    <line x1="160" y1="475" x2="208" y2="467" stroke="#00F0FF" stroke-width="2"/>
+    <line x1="440" y1="475" x2="392" y2="467" stroke="#00F0FF" stroke-width="2"/>
+
+    <!-- Corpo do Blazer -->
+    <path d="M 205,175 L 205,530 C 240,545 360,545 395,530 L 395,175 Z" fill="url(#blazerLilac)"/>
+
+    <!-- Blusa de Seda / Decote Interno -->
+    <polygon points="265,175 300,270 335,175" fill="#07020D"/>
+    <!-- Colar Ponto de Luz Ciano -->
+    <path d="M 275,185 Q 300,220 325,185" stroke="#00F0FF" stroke-width="1.5" fill="none"/>
+    <circle cx="300" cy="205" r="3" fill="#00F0FF" filter="url(#cyanLapelGlow)"/>
+
+    <!-- Lapela Notched Esquerda com Pesponto de Alta-Costura -->
+    <path d="M 225,175 L 245,260 L 215,290 L 275,390 L 300,390 L 270,175 Z" fill="#E9D5FF" stroke="#380C6E" stroke-width="1.5"/>
+    <!-- Lapela Direita Transpassada -->
+    <path d="M 375,175 L 355,260 L 385,290 L 300,450 L 285,450 L 330,175 Z" fill="#F3E8FF" stroke="#380C6E" stroke-width="1.5"/>
+
+    <!-- Bolso Falso / Pesponto de Lapela com detalhe Ciano -->
+    <rect x="220" y="420" width="60" height="8" rx="2" fill="#240A4E"/>
+    <rect x="320" y="420" width="60" height="8" rx="2" fill="#240A4E"/>
+    <line x1="220" y1="420" x2="280" y2="420" stroke="#00F0FF" stroke-width="1.5"/>
+    <line x1="320" y1="420" x2="380" y2="420" stroke="#00F0FF" stroke-width="1.5"/>
+
+    <!-- Botões Duplos Revestidos com borda Ciano -->
+    <circle cx="310" cy="385" r="7" fill="#140626" stroke="#00F0FF" stroke-width="2"/>
+    <circle cx="310" cy="425" r="7" fill="#140626" stroke="#00F0FF" stroke-width="2"/>
+    <circle cx="310" cy="465" r="7" fill="#140626" stroke="#00F0FF" stroke-width="2"/>
+  </g>
+
+  <!-- Assinatura Editorial -->
+  <text x="300" y="718" font-family="'Bodoni Moda', serif" font-size="16" font-weight="600" fill="#EDE6FA" letter-spacing="4" text-anchor="middle">ALFAIATARIA VISTA BEM</text>
+</svg>

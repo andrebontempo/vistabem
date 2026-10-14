@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
+  <defs>
+    <radialGradient id="studioLight2" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1E0A38" stop-opacity="0.95"/>
+      <stop offset="70%" stop-color="#0F0420" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#07020D" stop-opacity="1"/>
+    </radialGradient>
+    <filter id="glow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="750" rx="16" fill="url(#studioLight2)"/>
+
+  <!-- Tag Detalhe / Close-up -->
+  <g transform="translate(40, 40)">
+    <rect width="96" height="26" rx="13" fill="#140626" stroke="#B77BFA" stroke-width="1.2"/>
+    <text x="48" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#EDE6FA" letter-spacing="1.5" text-anchor="middle">DETALHE</text>
+  </g>
+
+  <!-- Padrão Macro do Tecido Canelado de Alta Densidade -->
+  <g transform="translate(100, 150)">
+    <rect width="400" height="460" rx="20" fill="#2E0C5B" stroke="#00F0FF" stroke-width="1.5"/>
+    
+    <!-- Linhas de canelado tridimensional -->
+    <g stroke="#3D1275" stroke-width="4">
+      <line x1="30" y1="20" x2="30" y2="440"/>
+      <line x1="60" y1="20" x2="60" y2="440"/>
+      <line x1="90" y1="20" x2="90" y2="440"/>
+      <line x1="120" y1="20" x2="120" y2="440"/>
+      <line x1="150" y1="20" x2="150" y2="440"/>
+      <line x1="180" y1="20" x2="180" y2="440"/>
+      <line x1="210" y1="20" x2="210" y2="440"/>
+      <line x1="240" y1="20" x2="240" y2="440"/>
+      <line x1="270" y1="20" x2="270" y2="440"/>
+      <line x1="300" y1="20" x2="300" y2="440"/>
+      <line x1="330" y1="20" x2="330" y2="440"/>
+      <line x1="360" y1="20" x2="360" y2="440"/>
+    </g>
+
+    <!-- Iluminação acetinada no tecido -->
+    <g stroke="#9B4AF8" stroke-width="2" stroke-opacity="0.4">
+      <line x1="34" y1="20" x2="34" y2="440"/>
+      <line x1="94" y1="20" x2="94" y2="440"/>
+      <line x1="154" y1="20" x2="154" y2="440"/>
+      <line x1="214" y1="20" x2="214" y2="440"/>
+      <line x1="274" y1="20" x2="274" y2="440"/>
+      <line x1="334" y1="20" x2="334" y2="440"/>
+    </g>
+
+    <!-- Fita com Fivela Ciano Alta-Costura em Destaque -->
+    <path d="M 0,220 Q 200,240 400,220" stroke="#00F0FF" stroke-width="12" stroke-linecap="round" filter="url(#glow2)"/>
+    <rect x="175" y="200" width="50" height="42" rx="8" fill="#07020D" stroke="#00F0FF" stroke-width="3"/>
+    <circle cx="200" cy="221" r="5" fill="#00F0FF"/>
+  </g>
+
+  <text x="300" y="670" font-family="'Bodoni Moda', serif" font-size="16" font-weight="600" fill="#EDE6FA" letter-spacing="3" text-anchor="middle">CANELADO PREMIUM · VISCOSE COM ELASTANO</text>
+</svg>

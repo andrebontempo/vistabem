@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,13 @@
   <meta name="description" content="Moda feminina, masculina, infantil e acessórios com qualidade, estilo e entrega rápida para todo o Brasil.">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#2A0F4A">
+  <meta name="theme-color" content="#07020D">
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('vb_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } catch(e) {}
+  </script>
   <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
 </head>
 <body>
@@ -29,8 +35,9 @@
         </div>
 
         <!-- Alternador de Modo Escuro / Claro -->
-        <button type="button" id="theme-toggle" class="theme-toggle accessibility-btn" aria-label="Alternar modo escuro" title="Modo Escuro / Claro">
-          <%- icon('moon', 16) %>
+        <button type="button" id="theme-toggle" class="theme-toggle accessibility-btn" aria-label="Alternar modo de cor" title="Alternar Modo Escuro / Claro">
+          <span class="theme-icon-dark" title="Mudar para Modo Claro"><%- icon('sun', 16) %></span>
+          <span class="theme-icon-light" title="Mudar para Modo Escuro"><%- icon('moon', 16) %></span>
         </button>
       </div>
     </div>

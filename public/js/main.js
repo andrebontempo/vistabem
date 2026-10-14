@@ -35,17 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('vb_font_scale', scale);
   }
 
-  // ─── 2. Modo Escuro / Claro ──────────────────────────────────────────
-  const savedTheme = localStorage.getItem('vb_theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }
+  // ─── 2. Modo Escuro / Claro (Dark Mode Padrão) ───────────────────────
+  const savedTheme = localStorage.getItem('vb_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
 
   const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const newTheme = isDark ? 'light' : 'dark';
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('vb_theme', newTheme);
     });

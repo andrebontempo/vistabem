@@ -29,9 +29,9 @@ function layout(title, content) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F8F5FE;padding:24px 0;">
 <tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 24px rgba(42,15,74,.08);">
-<tr><td style="background:linear-gradient(135deg,#2A0F4A,#4C1D95 60%,#7C3AED);padding:32px;text-align:center;">
-<div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;letter-spacing:2px;color:#ffffff;">V<span style="color:#D9B26F;">B</span></div>
-<div style="font-size:13px;letter-spacing:6px;color:#EDE6FA;margin-top:6px;">VISTA BEM</div>
+<tr><td style="background:linear-gradient(135deg,#07020D,#1E073D 60%,#380C6E);padding:32px;text-align:center;">
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;letter-spacing:2px;color:#ffffff;">V<span style="color:#00F0FF;">B</span></div>
+<div style="font-size:13px;letter-spacing:6px;color:#00F0FF;margin-top:6px;font-weight:bold;">VISTA BEM</div>
 </td></tr>
 <tr><td style="padding:32px 32px 8px;">
 <h1 style="font-family:Georgia,serif;font-size:24px;margin:0 0 16px;color:#2A0F4A;">${esc(title)}</h1>
