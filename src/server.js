@@ -10,7 +10,7 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const configurePassport = require('./config/passport');
 const { loadContext } = require('./middleware/auth');
-const { sameOrigin, mongoSanitize } = require('./middleware/security');
+const { mongoSanitize } = require('./middleware/security');
 const flash = require('./middleware/flash');
 const helpers = require('./utils/helpers');
 const stockService = require('./services/stockService');
@@ -62,7 +62,6 @@ app.use(
 
 app.get('/health', (req, res) => res.json({ status: 'ok', uptime: process.uptime() }));
 
-app.use(sameOrigin);
 app.use(flash);
 app.use(loadContext);
 
