@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'Painel Administrativo — Vista Bem' %></title>
+  <title><%= typeof title !== 'undefined' ? title : 'Painel de Gestão — Vista Bem' %></title>
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <meta name="theme-color" content="#07020D">
   <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
   <link rel="stylesheet" href="/css/admin.css?v=<%= assetVersion %>">
 </head>
@@ -15,7 +16,7 @@
       <a href="/admin">
         <img src="/images/logo-white.svg" alt="Vista Bem Admin" width="160" height="42">
       </a>
-      <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--gold-500); margin-top: 6px; font-weight: 700;">
+      <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--cyan-400); margin-top: 8px; font-weight: 700;">
         PAINEL DE GESTÃO
       </div>
     </div>
@@ -64,11 +65,11 @@
   <!-- Conteúdo Principal -->
   <div class="admin-main">
     <header class="admin-topbar">
-      <div style="font-weight: 700; color: var(--purple-900); font-size: 1.1rem;">
-        <%= typeof title !== 'undefined' ? title : 'Vista Bem Admin' %>
+      <div class="admin-topbar-title">
+        <%= typeof title !== 'undefined' ? title : 'Painel de Gestão' %>
       </div>
-      <div style="display: flex; align-items: center; gap: 12px; font-size: 0.88rem;">
-        <span>Olá, <strong><%= user ? user.firstName : 'Administrador' %></strong></span>
+      <div class="admin-topbar-user">
+        <span>Conectada como <strong><%= user ? user.name : 'Administradora' %></strong></span>
       </div>
     </header>
 

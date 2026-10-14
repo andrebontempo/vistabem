@@ -12,55 +12,57 @@
 
 <div class="admin-card">
   <% if (categories && categories.length > 0) { %>
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Capa</th>
-          <th>Nome</th>
-          <th>Slug / URL</th>
-          <th>Categoria Mãe</th>
-          <th>Ordem</th>
-          <th>Status</th>
-          <th style="text-align: right;">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% categories.forEach(function(cat) { %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
           <tr>
-            <td style="width: 50px;">
-              <% if (cat.image) { %>
-                <img src="<%= cat.image %>" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
-              <% } else { %>
-                <div style="width: 40px; height: 40px; background: var(--lilac-50); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--purple-700);">
-                  <%- icon('layers', 18) %>
-                </div>
-              <% } %>
-            </td>
-            <td><strong><%= cat.name %></strong></td>
-            <td><code>/categoria/<%= cat.slug %></code></td>
-            <td><%= cat.parent ? cat.parent.name : '— (Principal)' %></td>
-            <td><%= cat.order %></td>
-            <td>
-              <span class="badge-status <%= cat.active ? 'success' : 'muted' %>">
-                <%= cat.active ? 'Ativa' : 'Inativa' %>
-              </span>
-            </td>
-            <td style="text-align: right;">
-              <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                <a href="/admin/categorias/<%= cat._id %>/editar" class="btn btn-secondary btn-sm" title="Editar">
-                  <%- icon('edit', 16) %>
-                </a>
-                <form action="/admin/categorias/<%= cat._id %>/excluir" method="POST" onsubmit="return confirm('Deseja excluir esta categoria?');">
-                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger);" title="Excluir">
-                    <%- icon('trash', 16) %>
-                  </button>
-                </form>
-              </div>
-            </td>
+            <th>Capa</th>
+            <th>Nome</th>
+            <th>Slug / URL</th>
+            <th>Categoria Mãe</th>
+            <th>Ordem</th>
+            <th>Status</th>
+            <th style="text-align: right;">Ações</th>
           </tr>
-        <% }); %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% categories.forEach(function(cat) { %>
+            <tr>
+              <td style="width: 50px;">
+                <% if (cat.image) { %>
+                  <img src="<%= cat.image %>" alt="" style="width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-surface);">
+                <% } else { %>
+                  <div style="width: 44px; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--cyan-400);">
+                    <%- icon('layers', 18) %>
+                  </div>
+                <% } %>
+              </td>
+              <td><strong style="color: #FFFFFF;"><%= cat.name %></strong></td>
+              <td><code style="background: rgba(0,240,255,0.08); color: var(--cyan-400); padding: 2px 6px; border-radius: 4px;">/categoria/<%= cat.slug %></code></td>
+              <td><%= cat.parent ? cat.parent.name : '— (Principal)' %></td>
+              <td><%= cat.order %></td>
+              <td>
+                <span class="badge-status <%= cat.active ? 'success' : 'muted' %>">
+                  <%= cat.active ? 'Ativa' : 'Inativa' %>
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                  <a href="/admin/categorias/<%= cat._id %>/editar" class="btn btn-secondary btn-sm" title="Editar" style="padding: 6px 10px;">
+                    <%- icon('edit', 16) %>
+                  </a>
+                  <form action="/admin/categorias/<%= cat._id %>/excluir" method="POST" onsubmit="return confirm('Deseja excluir esta categoria?');">
+                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); padding: 6px 10px;" title="Excluir">
+                      <%- icon('trash', 16) %>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
   <% } else { %>
     <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">Nenhuma categoria cadastrada.</p>
   <% } %>
