@@ -66,6 +66,11 @@ app.use(sameOrigin);
 app.use(flash);
 app.use(loadContext);
 
+// Redirecionamentos de compatibilidade com o antigo WordPress
+app.get(['/wp-login.php', '/wp-login'], (req, res) => res.redirect(301, '/login'));
+app.get(['/wp-admin', '/wp-admin/*'], (req, res) => res.redirect(301, '/admin'));
+app.all(['/xmlrpc.php', '/wp-content/*'], (req, res) => res.status(404).send('Not Found'));
+
 app.use('/', require('./routes/shopRoutes'));
 app.use('/', require('./routes/authRoutes'));
 app.use('/', require('./routes/cartRoutes'));

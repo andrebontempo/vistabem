@@ -30,6 +30,7 @@ services:
         aliases:
           - vistabem-app
           - vistabem
+          - vistabem_nginx
 
 volumes:
   mongo_data:
