@@ -7,20 +7,32 @@ const rateLimit = require('express-rate-limit');
 function sameOrigin(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
   if (req.path.startsWith('/api/payments/webhook')) return next();
+
+  // Em desenvolvimento ou testes locais, libera requisições
+  const reqHost = (req.headers.host || '').toLowerCase();
+  if (process.env.NODE_ENV !== 'production' || reqHost.includes('localhost') || reqHost.includes('127.0.0.1')) {
+    return next();
+  }
+
   const origin = req.headers.origin || req.headers.referer;
   if (!origin) return next();
+
   try {
-    const host = new URL(origin).host;
-    if (host === req.headers.host || host === req.headers['x-forwarded-host']) return next();
+    const originHost = new URL(origin).host.toLowerCase();
+    const forwardedHost = (req.headers['x-forwarded-host'] || '').toLowerCase();
+    if (originHost === reqHost || (forwardedHost && originHost === forwardedHost)) {
+      return next();
+    }
   } catch {
     /* origem inválida */
   }
+
   return res.status(403).send('Origem não permitida.');
 }
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 20,
+  limit: process.env.NODE_ENV === 'production' ? 20 : 1000,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',

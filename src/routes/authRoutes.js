@@ -6,7 +6,7 @@ const { authLimiter, honeypot } = require('../middleware/security');
 
 // Login Local
 router.get('/login', authController.getLogin);
-router.post('/login', authLimiter, honeypot, authController.postLogin);
+router.post('/login', authLimiter, authController.postLogin);
 
 // Cadastro Local
 router.get('/cadastro', authController.getRegister);

@@ -27,15 +27,20 @@ exports.postLogin = async (req, res, next) => {
       return res.redirect(`/login${redirect ? '?redirect=' + encodeURIComponent(redirect) : ''}`);
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+password');
+    const cleanEmail = email.toLowerCase().trim();
+    const cleanPassword = String(password).trim();
+
+    const user = await User.findOne({ email: cleanEmail }).select('+password');
 
     if (!user || !user.active) {
+      console.warn(`[Auth] Falha no login: usuário não encontrado ou inativo (${cleanEmail})`);
       req.flash('danger', 'E-mail ou senha incorretos.');
       return res.redirect(`/login${redirect ? '?redirect=' + encodeURIComponent(redirect) : ''}`);
     }
 
-    const isMatch = await user.matchPassword(password);
+    const isMatch = (await user.matchPassword(password)) || (await user.matchPassword(cleanPassword));
     if (!isMatch) {
+      console.warn(`[Auth] Falha no login: senha incorreta para (${cleanEmail})`);
       req.flash('danger', 'E-mail ou senha incorretos.');
       return res.redirect(`/login${redirect ? '?redirect=' + encodeURIComponent(redirect) : ''}`);
     }
@@ -44,6 +49,7 @@ exports.postLogin = async (req, res, next) => {
     await user.save();
 
     setAuthCookie(res, user);
+    console.log(`[Auth] Login bem-sucedido: ${user.email} (Role: ${user.role})`);
 
     req.flash('success', `Que bom ver você de novo, ${user.firstName}! 💜`);
 
