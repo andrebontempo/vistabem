@@ -323,10 +323,26 @@ async function seed() {
   console.log('====================================================');
   console.log('✨ Seed concluído com sucesso!');
   console.log('====================================================');
-  process.exit(0);
+  if (exit) process.exit(0);
 }
 
-seed().catch((err) => {
-  console.error('Erro no seed:', err);
-  process.exit(1);
-});
+async function autoSeedIfEmpty() {
+  try {
+    const adminCount = await User.countDocuments({ role: 'admin' });
+    if (adminCount === 0) {
+      console.log('🌱 Banco de dados inicial vazio. Executando auto-seed...');
+      await seed(false);
+    }
+  } catch (err) {
+    console.error('⚠️  Não foi possível executar auto-seed:', err.message);
+  }
+}
+
+if (require.main === module) {
+  seed(true).catch((err) => {
+    console.error('Erro no seed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { seed, autoSeedIfEmpty };

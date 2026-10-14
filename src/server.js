@@ -102,7 +102,10 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-connectDB().then(() => {
+const { autoSeedIfEmpty } = require('./scripts/seed');
+
+connectDB().then(async () => {
+  await autoSeedIfEmpty();
   app.listen(PORT, () => {
     console.log('====================================================');
     console.log(`💜 Vista Bem rodando na porta ${PORT}`);
