@@ -10,10 +10,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  code-checks:
+    name: Validação de Sintaxe
     runs-on: ubuntu-latest
     steps:
-      - name: Executar Deploy Remoto
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar Dependências
+        run: npm ci || npm install
+
+      - name: Checar Sintaxe do Servidor
+        run: node -c src/server.js
+
+  deploy:
+    name: Deploy na VPS Hostinger (SSH)
+    needs: code-checks
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Executar Deploy Remoto via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
