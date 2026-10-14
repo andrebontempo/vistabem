@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 40px 20px 80px; max-width: 900px;">
+  <nav style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+    <a href="/minha-conta">Minha Conta</a> &rsaquo;
+    <a href="/minha-conta/pedidos">Meus Pedidos</a> &rsaquo;
+    <span><%= order.orderNumber %></span>
+  </nav>
+
+  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 32px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+      <div>
+        <h1 style="font-size: 1.8rem; color: var(--purple-900);">Pedido <%= order.orderNumber %></h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Realizado em <%= dateTime(order.createdAt) %></p>
+      </div>
+      <div>
+        <span class="badge-status <%= STATUS_CLASS[order.orderStatus] || 'primary' %>" style="font-size: 0.9rem; padding: 6px 16px;">
+          <%= order.orderStatus %>
+        </span>
+      </div>
+    </div>
+
+    <!-- Rastreamento se houver -->
+    <% if (order.trackingCode) { %>
+      <div style="background: var(--info-bg); color: var(--info); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <strong>Código de Rastreamento:</strong>
+          <span style="font-family: monospace; font-size: 1.1rem; margin-left: 8px;"><%= order.trackingCode %></span>
+        </div>
+        <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" rel="noopener" class="btn btn-sm btn-primary">Rastrear Entrega</a>
+      </div>
+    <% } %>
+
+    <!-- Itens Comprados -->
+    <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Peças Selecionadas</h3>
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px;">
+      <% order.items.forEach(function(item) { %>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <img src="<%= item.image || '/images/placeholder.svg' %>" alt="<%= item.name %>" style="width: 60px; height: 75px; object-fit: cover; border-radius: 6px;">
+            <div>
+              <div style="font-weight: 700; font-size: 1.05rem;"><%= item.name %></div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">
+                Tamanho: <%= item.size %> <%= item.color ? '· Cor: ' + item.color : '' %> · Quantidade: <%= item.quantity %>
+              </div>
+            </div>
+          </div>
+          <div style="font-weight: 800; font-size: 1.15rem; color: var(--purple-900);">
+            <%= money(item.price * item.quantity) %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <!-- Endereço e Totais -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+      <div>
+        <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Endereço de Entrega</h4>
+        <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+          <%= order.customer.name %><br>
+          <%= order.shippingAddress.street %>, <%= order.shippingAddress.number %> <%= order.shippingAddress.complement %><br>
+          <%= order.shippingAddress.neighborhood %> — <%= order.shippingAddress.city %>/<%= order.shippingAddress.state %><br>
+          CEP: <%= order.shippingAddress.zipCode %>
+        </p>
+      </div>
+
+      <div style="text-align: right;">
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 6px;">Subtotal: <%= money(order.subtotal) %></div>
+        <% if (order.discount > 0) { %>
+          <div style="font-size: 0.95rem; color: var(--success); margin-bottom: 6px;">Descontos: - <%= money(order.discount) %></div>
+        <% } %>
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 8px;">Frete (<%= order.shippingMethod %>): <%= order.shippingFee === 0 ? 'GRÁTIS' : money(order.shippingFee) %></div>
+        <div style="font-size: 1.4rem; font-weight: 800; color: var(--purple-900); padding-top: 10px; border-top: 1px solid var(--border-color);">
+          Total: <%= money(order.total) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

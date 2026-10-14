@@ -1,0 +1,89 @@
+  <!-- Rodapé Institucional -->
+  <footer class="footer-main">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Coluna da Marca -->
+        <div class="footer-brand">
+          <img src="/images/logo-white.svg" alt="Vista Bem" width="180" height="48">
+          <p>Moda contemporânea que valoriza sua autenticidade. Peças com acabamento impecável para mulheres, homens, crianças e acessórios elegantes.</p>
+          <div style="display: flex; gap: 12px; margin-top: 18px;">
+            <% if (settings && settings.instagram) { %>
+              <a href="<%= settings.instagram %>" target="_blank" rel="noopener" class="action-btn" style="background: rgba(255,255,255,0.1); color: #fff;">
+                <%- icon('instagram', 20) %>
+              </a>
+            <% } %>
+            <% if (settings && settings.facebook) { %>
+              <a href="<%= settings.facebook %>" target="_blank" rel="noopener" class="action-btn" style="background: rgba(255,255,255,0.1); color: #fff;">
+                <%- icon('facebook', 20) %>
+              </a>
+            <% } %>
+            <% if (settings && settings.tiktok) { %>
+              <a href="<%= settings.tiktok %>" target="_blank" rel="noopener" class="action-btn" style="background: rgba(255,255,255,0.1); color: #fff;">
+                <%- icon('tiktok', 20) %>
+              </a>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Categorias -->
+        <div>
+          <h4 class="footer-title">Coleções</h4>
+          <ul class="footer-links">
+            <li><a href="/categoria/feminino">Moda Feminina</a></li>
+            <li><a href="/categoria/masculino">Moda Masculina</a></li>
+            <li><a href="/categoria/infantil">Moda Infantil</a></li>
+            <li><a href="/categoria/acessorios">Acessórios</a></li>
+            <li><a href="/loja?sort=novidades">Novos Lançamentos</a></li>
+          </ul>
+        </div>
+
+        <!-- Atendimento e Institucional -->
+        <div>
+          <h4 class="footer-title">Atendimento</h4>
+          <ul class="footer-links">
+            <li><a href="/minha-conta/pedidos">Acompanhar Pedido</a></li>
+            <li><a href="/trocas-devolucoes">Trocas e Devoluções</a></li>
+            <li><a href="/politica-frete">Prazos e Frete</a></li>
+            <li><a href="/contato">Fale Conosco</a></li>
+            <li><a href="/sobre">Nossa História</a></li>
+          </ul>
+        </div>
+
+        <!-- Segurança & Pagamento -->
+        <div>
+          <h4 class="footer-title">Pagamento & Segurança</h4>
+          <p style="font-size: 0.85rem; color: var(--purple-300); margin-bottom: 14px;">
+            Compre com tranquilidade através do <strong>Mercado Pago</strong> com Pix com desconto imediato ou parcele no cartão.
+          </p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(255,255,255,0.1); color: #fff;">Pix Instantâneo</span>
+            <span class="badge" style="background: rgba(255,255,255,0.1); color: #fff;">Cartão de Crédito</span>
+            <span class="badge" style="background: rgba(255,255,255,0.1); color: #fff;">Mercado Pago</span>
+            <span class="badge" style="background: rgba(255,255,255,0.1); color: #fff;">Boleto Bancário</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; <%= new Date().getFullYear() %> Vista Bem (<%= (settings && settings.companyName) || 'Vista Bem Moda' %>). Todos os direitos reservados.
+        </div>
+        <div style="display: flex; gap: 18px;">
+          <a href="/privacidade" style="color: var(--purple-300);">Privacidade (LGPD)</a>
+          <a href="/termos" style="color: var(--purple-300);">Termos de Uso</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botão Flutuante do WhatsApp se configurado -->
+  <% if (settings && settings.whatsapp) { %>
+    <a href="https://wa.me/<%= settings.whatsapp.replace(/\D/g, '') %>?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20a%20loja%20Vista%20Bem." target="_blank" rel="noopener" class="whatsapp-float-btn" style="position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 999px; background: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4); z-index: 99;" aria-label="Atendimento via WhatsApp">
+      <%- icon('whatsapp', 28) %>
+    </a>
+  <% } %>
+
+  <script src="/js/main.js?v=<%= assetVersion %>"></script>
+  <script src="/js/pwa.js?v=<%= assetVersion %>"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<%- include('admin-header') %>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h1 style="font-size: 1.8rem;">Categorias Dinâmicas</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Organize os departamentos e subcategorias da loja</p>
+  </div>
+  <a href="/admin/categorias/nova" class="btn btn-primary">
+    <%- icon('plus', 18) %> <span>Nova Categoria</span>
+  </a>
+</div>
+
+<div class="admin-card">
+  <% if (categories && categories.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Capa</th>
+          <th>Nome</th>
+          <th>Slug / URL</th>
+          <th>Categoria Mãe</th>
+          <th>Ordem</th>
+          <th>Status</th>
+          <th style="text-align: right;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% categories.forEach(function(cat) { %>
+          <tr>
+            <td style="width: 50px;">
+              <% if (cat.image) { %>
+                <img src="<%= cat.image %>" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+              <% } else { %>
+                <div style="width: 40px; height: 40px; background: var(--lilac-50); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--purple-700);">
+                  <%- icon('layers', 18) %>
+                </div>
+              <% } %>
+            </td>
+            <td><strong><%= cat.name %></strong></td>
+            <td><code>/categoria/<%= cat.slug %></code></td>
+            <td><%= cat.parent ? cat.parent.name : '— (Principal)' %></td>
+            <td><%= cat.order %></td>
+            <td>
+              <span class="badge-status <%= cat.active ? 'success' : 'muted' %>">
+                <%= cat.active ? 'Ativa' : 'Inativa' %>
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <a href="/admin/categorias/<%= cat._id %>/editar" class="btn btn-secondary btn-sm" title="Editar">
+                  <%- icon('edit', 16) %>
+                </a>
+                <form action="/admin/categorias/<%= cat._id %>/excluir" method="POST" onsubmit="return confirm('Deseja excluir esta categoria?');">
+                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger);" title="Excluir">
+                    <%- icon('trash', 16) %>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">Nenhuma categoria cadastrada.</p>
+  <% } %>
+</div>
+
+<%- include('admin-footer') %>

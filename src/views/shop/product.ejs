@@ -1,0 +1,299 @@
+<%- include('../partials/header') %>
+
+<main class="container">
+  <!-- Breadcrumb -->
+  <nav style="font-size: 0.85rem; color: var(--text-muted); margin: 24px 0 10px;" aria-label="Navegação estrutural">
+    <a href="/">Início</a> &rsaquo;
+    <% if (product.category) { %>
+      <a href="/categoria/<%= product.category.slug %>"><%= product.category.name %></a> &rsaquo;
+    <% } %>
+    <span style="color: var(--purple-700); font-weight: 600;"><%= product.name %></span>
+  </nav>
+
+  <!-- Grid Principal da PDP -->
+  <div class="pdp-grid">
+    <!-- Galeria de Imagens -->
+    <div class="pdp-gallery">
+      <% if (product.images && product.images.length > 1) { %>
+        <div class="pdp-thumbs">
+          <% product.images.forEach(function(img, idx) { %>
+            <button type="button" class="thumb-btn <%= idx === 0 ? 'active' : '' %>" data-full="<%= img %>" aria-label="Ver foto <%= idx + 1 %>">
+              <img src="<%= img %>" alt="<%= product.name %> miniatura <%= idx + 1 %>">
+            </button>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <div class="pdp-main-image">
+        <img id="pdp-main-img" src="<%= (product.images && product.images[0]) || '/images/placeholder.svg' %>" alt="<%= product.name %>" width="600" height="800">
+      </div>
+    </div>
+
+    <!-- Informações do Produto & Compra -->
+    <div class="pdp-info">
+      <span class="product-cat"><%= product.category ? product.category.name : 'Vista Bem' %></span>
+      <h1 class="pdp-title"><%= product.name %></h1>
+
+      <!-- Avaliações Resumo -->
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+        <div style="display: flex; color: #F59E0B;">
+          <% for (let i = 1; i <= 5; i++) { %>
+            <%- icon('star', 16, i <= Math.round(product.ratingAvg || 5) ? 'fill-gold' : '') %>
+          <% } %>
+        </div>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">
+          (<%= product.ratingCount || 0 %> <%= product.ratingCount === 1 ? 'avaliação' : 'avaliações' %>)
+        </span>
+      </div>
+
+      <!-- Preço e Condições -->
+      <div class="pdp-price-box">
+        <div>
+          <% if (product.salePrice > 0 && product.salePrice < product.price) { %>
+            <span class="price-original" style="font-size: 1.1rem;"><%= money(product.price) %></span>
+            <span class="pdp-price-current"><%= money(product.salePrice) %></span>
+          <% } else { %>
+            <span class="pdp-price-current"><%= money(product.price) %></span>
+          <% } %>
+        </div>
+
+        <div style="font-size: 0.95rem; color: var(--text-muted); margin-top: 4px;">
+          em até <strong>6x de <%= money(((product.salePrice > 0 && product.salePrice < product.price ? product.salePrice : product.price) / 6)) %></strong> sem juros no cartão
+        </div>
+
+        <div class="pix-pill">
+          <%- icon('shield', 14) %>
+          <span>5% de desconto no Pix: <strong><%= money((product.salePrice > 0 && product.salePrice < product.price ? product.salePrice : product.price) * 0.95) %></strong></span>
+        </div>
+      </div>
+
+      <!-- Formulário de Compra & Variações -->
+      <form id="pdp-add-form" method="POST" action="/api/cart/add">
+        <input type="hidden" name="productId" value="<%= product._id %>">
+
+        <!-- Seleção de Tamanho -->
+        <div class="variant-block">
+          <div class="variant-label">
+            <span>Selecione o Tamanho:</span>
+            <button type="button" class="size-guide-btn" onclick="document.getElementById('size-modal').showModal()">
+              <%- icon('ruler', 16) %>
+              <span>Guia de Medidas</span>
+            </button>
+          </div>
+
+          <div class="size-selector-group">
+            <% if (product.variants && product.variants.length > 0) { %>
+              <% product.variants.forEach(function(v, idx) { %>
+                <label>
+                  <input type="radio" name="variantId" value="<%= v._id %>" class="size-radio" <%= v.stock <= 0 ? 'disabled' : '' %> <%= (idx === 0 && v.stock > 0) ? 'checked' : '' %>>
+                  <span class="size-btn" title="<%= v.stock <= 0 ? 'Esgotado' : v.stock + ' unidades disponíveis' %>">
+                    <%= v.size %>
+                  </span>
+                </label>
+              <% }); %>
+            <% } else { %>
+              <p style="color: var(--danger); font-size: 0.9rem;">Produto temporariamente sem variações disponíveis.</p>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- Cores Disponíveis (se houver variação de cor) -->
+        <% const colors = product.colors; %>
+        <% if (colors && colors.length > 0) { %>
+          <div class="variant-block">
+            <div class="variant-label">
+              <span>Cores Disponíveis:</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <% colors.forEach(function(c) { %>
+                <span class="color-dot active" style="background: <%= c.hex || '#4C1D95' %>;" title="<%= c.name %>"></span>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Quantidade e Botão de Ação -->
+        <div style="display: flex; gap: 14px; margin: 28px 0 20px;">
+          <input type="number" name="quantity" value="1" min="1" max="10" class="form-control" style="width: 75px; text-align: center; font-weight: 700; border-radius: var(--radius-pill);" aria-label="Quantidade">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">
+            <%- icon('bag', 20) %>
+            <span>Adicionar à Sacola</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Cálculo Rápido de Frete -->
+      <div class="shipping-calc-box">
+        <label for="shipping-cep" style="font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+          <%- icon('truck', 18) %>
+          <span>Calcular Frete e Prazo de Entrega:</span>
+        </label>
+        <div class="shipping-form">
+          <input type="text" id="shipping-cep" maxlength="9" placeholder="00000-000" class="form-control" style="border-radius: var(--radius-pill);">
+          <button type="button" id="btn-calc-shipping" class="btn btn-secondary btn-sm" style="white-space: nowrap;">Calcular</button>
+        </div>
+        <div id="shipping-result" style="margin-top: 10px; font-size: 0.88rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalhes, Composição & Cuidados -->
+  <section style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px; margin-bottom: 60px;">
+    <h3 style="font-size: 1.4rem; margin-bottom: 16px;">Detalhes da Peça</h3>
+    <div style="font-size: 1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px; white-space: pre-line;">
+      <%= product.description || product.shortDescription || 'Peça confeccionada com o alto padrão de acabamento e tecidos selecionados da Vista Bem.' %>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+      <% if (product.composition) { %>
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--purple-700); margin-bottom: 4px;">Composição</h4>
+          <p style="font-size: 0.92rem; color: var(--text-muted);"><%= product.composition %></p>
+        </div>
+      <% } %>
+      <% if (product.care) { %>
+        <div>
+          <h4 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--purple-700); margin-bottom: 4px;">Cuidados com a Peça</h4>
+          <p style="font-size: 0.92rem; color: var(--text-muted);"><%= product.care %></p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Avaliações dos Clientes -->
+  <section style="margin-bottom: 60px;">
+    <div class="section-title" style="text-align: left; margin-bottom: 24px;">
+      <h2>Avaliações de Clientes</h2>
+      <p>O que quem já comprou achou desta peça</p>
+    </div>
+
+    <% if (reviews && reviews.length > 0) { %>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <% reviews.forEach(function(rev) { %>
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <strong style="color: var(--purple-900);"><%= rev.user ? rev.user.name : 'Cliente Verificada' %></strong>
+              <div style="display: flex; color: #F59E0B;">
+                <% for (let s = 1; s <= rev.rating; s++) { %><%- icon('star', 14) %><% } %>
+              </div>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-muted);"><%= rev.comment %></p>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Seja a primeira a avaliar este produto!</p>
+    <% } %>
+
+    <!-- Formulário de Nova Avaliação -->
+    <% if (locals.user) { %>
+      <form action="/produto/<%= product._id %>/avaliar" method="POST" style="background: var(--lilac-50); padding: 24px; border-radius: var(--radius-md); max-width: 540px; border: 1px solid var(--border-color);">
+        <h4 style="margin-bottom: 12px; font-size: 1.1rem;">Deixe sua opinião</h4>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px;">Sua nota de 1 a 5 estrelas:</label>
+          <select name="rating" class="form-control" style="width: auto;">
+            <option value="5">⭐⭐⭐⭐⭐ 5 Estrelas (Excelente)</option>
+            <option value="4">⭐⭐⭐⭐ 4 Estrelas (Muito Bom)</option>
+            <option value="3">⭐⭐⭐ 3 Estrelas (Bom)</option>
+            <option value="2">⭐⭐ 2 Estrelas (Regular)</option>
+            <option value="1">⭐ 1 Estrela (Insatisfeito)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 6px;">Comentário sobre caimento, tecido e acabamento:</label>
+          <textarea name="comment" rows="3" class="form-control" placeholder="Conte como a peça vestiu em você..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Enviar Avaliação</button>
+      </form>
+    <% } else { %>
+      <p><a href="/login?redirect=/produto/<%= product.slug %>" style="color: var(--purple-600); font-weight: 700;">Faça login</a> para registrar sua avaliação.</p>
+    <% } %>
+  </section>
+
+  <!-- Produtos Relacionados (Complete o Look) -->
+  <% if (relatedProducts && relatedProducts.length > 0) { %>
+    <section class="products-section" style="padding-top: 0;">
+      <div class="section-title" style="text-align: left; margin-bottom: 24px;">
+        <h2>Complete o Look</h2>
+        <p>Outras peças que combinam perfeitamente com sua escolha</p>
+      </div>
+
+      <div class="product-grid">
+        <% relatedProducts.forEach(function(rel) { %>
+          <div class="product-card">
+            <div class="product-thumb-wrapper">
+              <a href="/produto/<%= rel.slug %>">
+                <img src="<%= (rel.images && rel.images[0]) || '/images/placeholder.svg' %>" alt="<%= rel.name %>" class="product-thumb" loading="lazy">
+              </a>
+            </div>
+            <div class="product-details">
+              <h3 class="product-name"><a href="/produto/<%= rel.slug %>"><%= rel.name %></a></h3>
+              <div class="product-price-row">
+                <span class="price-current"><%= money(rel.salePrice > 0 ? rel.salePrice : rel.price) %></span>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+  <% } %>
+</main>
+
+<!-- Modal: Guia de Medidas -->
+<dialog id="size-modal" style="border: none; border-radius: var(--radius-lg); padding: 32px; max-width: 600px; box-shadow: var(--shadow-lg);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h3 style="font-size: 1.4rem;">Tabela de Medidas (cm)</h3>
+    <button type="button" onclick="document.getElementById('size-modal').close()" class="action-btn"><%- icon('x', 20) %></button>
+  </div>
+  <table class="admin-table" style="font-size: 0.9rem;">
+    <thead>
+      <tr><th>Tamanho</th><th>Busto</th><th>Cintura</th><th>Quadril</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>PP (36)</strong></td><td>82 - 86</td><td>64 - 68</td><td>90 - 94</td></tr>
+      <tr><td><strong>P (38)</strong></td><td>86 - 90</td><td>68 - 72</td><td>94 - 98</td></tr>
+      <tr><td><strong>M (40)</strong></td><td>90 - 96</td><td>72 - 78</td><td>98 - 104</td></tr>
+      <tr><td><strong>G (42)</strong></td><td>96 - 102</td><td>78 - 84</td><td>104 - 110</td></tr>
+      <tr><td><strong>GG (44)</strong></td><td>102 - 108</td><td>84 - 90</td><td>110 - 116</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 16px;">* Medidas corporais aproximadas em centímetros. Para mais detalhes, fale com nossa equipe no WhatsApp.</p>
+</dialog>
+
+<script>
+  // Cálculo rápido de frete
+  document.getElementById('btn-calc-shipping')?.addEventListener('click', async () => {
+    const cep = document.getElementById('shipping-cep').value.replace(/\D/g, '');
+    const resBox = document.getElementById('shipping-result');
+    if (cep.length !== 8) {
+      resBox.innerHTML = '<span style="color:var(--danger)">Digite os 8 dígitos do CEP.</span>';
+      return;
+    }
+    resBox.innerHTML = 'Calculando prazo...';
+    try {
+      const res = await fetch('/api/frete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cep, subtotal: <%= product.finalPrice %> })
+      });
+      const data = await res.json();
+      if (data.success) {
+        resBox.innerHTML = `
+          <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid var(--border-color);margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-weight:700;">
+              <span>${data.method} (${data.regionName}):</span>
+              <span style="color:var(--purple-700)">${data.fee === 0 ? 'GRÁTIS' : 'R$ ' + data.fee.toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Prazo estimado: ${data.days}</div>
+          </div>
+        `;
+      } else {
+        resBox.innerHTML = `<span style="color:var(--danger)">${data.error}</span>`;
+      }
+    } catch {
+      resBox.innerHTML = '<span style="color:var(--danger)">Erro ao calcular frete.</span>';
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>

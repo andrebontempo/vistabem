@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Painel Administrativo — Vista Bem' %></title>
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
+  <link rel="stylesheet" href="/css/admin.css?v=<%= assetVersion %>">
+</head>
+<body class="admin-layout">
+  <!-- Sidebar Administrativa -->
+  <aside class="admin-sidebar">
+    <div class="admin-brand">
+      <a href="/admin">
+        <img src="/images/logo-white.svg" alt="Vista Bem Admin" width="160" height="42">
+      </a>
+      <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--gold-500); margin-top: 6px; font-weight: 700;">
+        PAINEL DE GESTÃO
+      </div>
+    </div>
+
+    <ul class="admin-nav">
+      <li class="admin-nav-item <%= currentPath === '/admin' ? 'active' : '' %>">
+        <a href="/admin"><%- icon('chart', 18) %> <span>Dashboard</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/pedidos') ? 'active' : '' %>">
+        <a href="/admin/pedidos"><%- icon('package', 18) %> <span>Pedidos</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/produtos') ? 'active' : '' %>">
+        <a href="/admin/produtos"><%- icon('hanger', 18) %> <span>Produtos</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/categorias') ? 'active' : '' %>">
+        <a href="/admin/categorias"><%- icon('layers', 18) %> <span>Categorias</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/atributos') ? 'active' : '' %>">
+        <a href="/admin/atributos"><%- icon('palette', 18) %> <span>Tamanhos &amp; Cores</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/cupons') ? 'active' : '' %>">
+        <a href="/admin/cupons"><%- icon('ticket', 18) %> <span>Cupons</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/banners') ? 'active' : '' %>">
+        <a href="/admin/banners"><%- icon('image', 18) %> <span>Banners Home</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/avaliacoes') ? 'active' : '' %>">
+        <a href="/admin/avaliacoes"><%- icon('star', 18) %> <span>Avaliações</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/clientes') ? 'active' : '' %>">
+        <a href="/admin/clientes"><%- icon('users', 18) %> <span>Clientes</span></a>
+      </li>
+      <li class="admin-nav-item <%= currentPath.startsWith('/admin/configuracoes') ? 'active' : '' %>">
+        <a href="/admin/configuracoes"><%- icon('settings', 18) %> <span>Configurações</span></a>
+      </li>
+    </ul>
+
+    <div style="padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+      <a href="/" target="_blank" class="btn btn-secondary btn-sm btn-block" style="background: rgba(255,255,255,0.08); color: #fff; border-color: transparent;">
+        <%- icon('eye', 16) %> <span>Ver Loja Virtual</span>
+      </a>
+      <a href="/logout" style="display: block; text-align: center; color: #B79CF2; font-size: 0.82rem; margin-top: 12px;">Sair do Painel</a>
+    </div>
+  </aside>
+
+  <!-- Conteúdo Principal -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div style="font-weight: 700; color: var(--purple-900); font-size: 1.1rem;">
+        <%= typeof title !== 'undefined' ? title : 'Vista Bem Admin' %>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; font-size: 0.88rem;">
+        <span>Olá, <strong><%= user ? user.firstName : 'Administrador' %></strong></span>
+      </div>
+    </header>
+
+    <%- include('../partials/flash') %>
+    <main class="admin-content">

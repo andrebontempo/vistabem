@@ -1,0 +1,88 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <h1 style="font-size: 1.8rem;">Banners da Página Inicial</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Configure os destaques visuais do topo da loja</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 30px; align-items: start;">
+  <!-- Formulário de Novo Banner -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Cadastrar Novo Banner</h3>
+
+    <form action="/admin/banners" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label class="form-label">Título do Banner</label>
+        <input type="text" name="title" class="form-control" placeholder="Ex: Nova Coleção Primavera 2026">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Subtítulo</label>
+        <input type="text" name="subtitle" class="form-control" placeholder="Ex: Peças leves com até 30% OFF">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Texto do Botão</label>
+          <input type="text" name="buttonText" value="Ver Coleção" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Link de Destino</label>
+          <input type="text" name="link" value="/loja" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Imagem do Banner * (será convertida para WebP)</label>
+        <input type="file" name="image" required accept="image/*" class="form-control" style="padding: 8px;">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ordem de Exibição</label>
+          <input type="number" name="order" value="1" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <div style="margin-top: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" name="active" checked>
+              <span>Banner Ativo</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Salvar Banner</button>
+    </form>
+  </div>
+
+  <!-- Lista de Banners -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Banners Cadastrados</h3>
+
+    <% if (banners && banners.length > 0) { %>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <% banners.forEach(function(b) { %>
+          <div style="border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; gap: 16px; align-items: center; padding: 12px;">
+            <% if (b.image) { %>
+              <img src="<%= b.image %>" alt="" style="width: 120px; height: 70px; object-fit: cover; border-radius: 6px;">
+            <% } %>
+            <div style="flex: 1;">
+              <strong><%= b.title || 'Banner sem título' %></strong>
+              <div style="font-size: 0.8rem; color: var(--text-muted);"><%= b.subtitle %></div>
+              <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 2px;">Link: <%= b.link %> · Ordem: <%= b.order %></div>
+            </div>
+            <form action="/admin/banners/<%= b._id %>/excluir" method="POST" onsubmit="return confirm('Excluir este banner?');">
+              <button type="submit" style="color: var(--danger); font-size: 0.85rem; font-weight: 700;">Excluir</button>
+            </form>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="color: var(--text-muted);">Nenhum banner cadastrado.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('admin-footer') %>

@@ -1,0 +1,168 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 30px 20px 80px;">
+  <h1 style="font-size: 2.2rem; margin-bottom: 24px;">Minha Sacola de Compras</h1>
+
+  <% if (cart.items && cart.items.length > 0) { %>
+    <!-- Barra de Frete Grátis -->
+    <% if (cart.missingForFree > 0) { %>
+      <div style="background: var(--lilac-100); border: 1px solid var(--purple-300); padding: 14px 20px; border-radius: var(--radius-md); margin-bottom: 28px; display: flex; align-items: center; gap: 12px;">
+        <%- icon('truck', 22, 'text-purple') %>
+        <span style="font-size: 0.95rem;">
+          Falta apenas <strong><%= money(cart.missingForFree) %></strong> para você garantir <strong>Frete Grátis</strong>!
+        </span>
+      </div>
+    <% } else { %>
+      <div style="background: var(--success-bg); border: 1px solid #86EFAC; padding: 14px 20px; border-radius: var(--radius-md); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; color: var(--success);">
+        <%- icon('check', 22) %>
+        <span style="font-size: 0.95rem; font-weight: 700;">
+          Parabéns! Você ganhou Frete Grátis nesta compra.
+        </span>
+      </div>
+    <% } %>
+
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: start;">
+      <!-- Lista de Itens do Carrinho -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px;">
+        <% cart.items.forEach(function(item) { %>
+          <div class="cart-item-row" style="align-items: center;">
+            <img src="<%= item.image %>" alt="<%= item.product.name %>" class="cart-item-img" style="width: 80px; height: 105px;">
+            <div class="cart-item-info">
+              <h3 style="font-size: 1.05rem; margin-bottom: 4px;">
+                <a href="/produto/<%= item.product.slug %>"><%= item.product.name %></a>
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+                Tamanho: <strong><%= item.variant.size %></strong> <%= item.variant.color ? '· Cor: ' + item.variant.color : '' %>
+              </p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <form action="/api/cart/update" method="POST" style="display: flex; align-items: center;">
+                  <input type="hidden" name="key" value="<%= item.key %>">
+                  <div class="qty-control">
+                    <button type="submit" name="quantity" value="<%= item.quantity - 1 %>" class="qty-btn">-</button>
+                    <span class="qty-val"><%= item.quantity %></span>
+                    <button type="submit" name="quantity" value="<%= item.quantity + 1 %>" class="qty-btn">+</button>
+                  </div>
+                </form>
+
+                <div style="text-align: right;">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: var(--purple-900);">
+                    <%= money(item.lineTotal) %>
+                  </div>
+                  <form action="/api/cart/remove" method="POST" style="display: inline;">
+                    <input type="hidden" name="key" value="<%= item.key %>">
+                    <button type="submit" style="font-size: 0.78rem; color: var(--danger); text-decoration: underline; margin-top: 4px;">Remover</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+
+        <div style="margin-top: 20px;">
+          <a href="/loja" class="btn btn-secondary btn-sm">
+            <%- icon('chevron-left', 16) %>
+            <span>Continuar Comprando</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Resumo do Pedido & Cupom & Frete -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <!-- Bloco de Cupom de Desconto -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px;">
+          <h4 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+            <%- icon('ticket', 18) %>
+            <span>Cupom de Desconto</span>
+          </h4>
+          <% if (cart.coupon) { %>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--success-bg); padding: 10px 14px; border-radius: 8px;">
+              <span style="font-weight: 700; color: var(--success);"><%= cart.coupon.code %> aplicado!</span>
+              <form action="/api/cart/remover-cupom" method="POST">
+                <button type="submit" style="color: var(--danger); font-size: 0.85rem; font-weight: 700;">Remover</button>
+              </form>
+            </div>
+          <% } else { %>
+            <form action="/api/cart/cupom" method="POST" style="display: flex; gap: 8px;">
+              <input type="text" name="code" placeholder="Código do cupom" class="form-control" style="text-transform: uppercase; border-radius: var(--radius-pill);">
+              <button type="submit" class="btn btn-secondary btn-sm">Aplicar</button>
+            </form>
+          <% } %>
+        </div>
+
+        <!-- Bloco de Cálculo de Frete -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 22px;">
+          <h4 style="font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+            <%- icon('truck', 18) %>
+            <span>Calcular Frete</span>
+          </h4>
+          <form action="/api/cart/cep" method="POST" style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <input type="text" name="cep" maxlength="9" placeholder="00000-000" value="<%= cart.cep %>" class="form-control" style="border-radius: var(--radius-pill);">
+            <button type="submit" class="btn btn-secondary btn-sm">Calcular</button>
+          </form>
+
+          <% if (cart.shipping) { %>
+            <div style="font-size: 0.9rem; padding: 10px; background: var(--lilac-50); border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                <span><%= cart.shipping.method %> (<%= cart.shipping.regionName %>):</span>
+                <span style="color: var(--purple-700);"><%= cart.shipping.fee === 0 ? 'GRÁTIS' : money(cart.shipping.fee) %></span>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Prazo estimado: <%= cart.shipping.days %></div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Resumo Financeiro -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 20px;">Resumo do Pedido</h3>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Subtotal:</span>
+              <span><%= money(cart.subtotal) %></span>
+            </div>
+
+            <% if (cart.discount > 0) { %>
+              <div style="display: flex; justify-content: space-between; color: var(--success); font-weight: 600;">
+                <span>Desconto do Cupom:</span>
+                <span>- <%= money(cart.discount) %></span>
+              </div>
+            <% } %>
+
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">Frete:</span>
+              <span><%= cart.shipping ? (cart.shipping.fee === 0 ? 'GRÁTIS' : money(cart.shipping.fee)) : 'A calcular no checkout' %></span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border-color); font-size: 1.25rem; font-weight: 800;">
+              <span>Total no Cartão:</span>
+              <span style="color: var(--purple-900);"><%= money(cart.total) %></span>
+            </div>
+
+            <!-- Preço Promocional no Pix -->
+            <div style="background: var(--success-bg); border-radius: 8px; padding: 12px; margin-top: 8px; text-align: center;">
+              <div style="font-size: 0.85rem; color: var(--success); font-weight: 700;">OU NO PIX COM 5% DE DESCONTO:</div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--success); margin-top: 2px;">
+                <%= money(cart.totalPix) %>
+              </div>
+            </div>
+          </div>
+
+          <a href="/checkout" class="btn btn-primary btn-block">
+            <span>Fechar Pedido</span>
+            <%- icon('arrow-right', 18) %>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  <% } else { %>
+    <div style="text-align: center; padding: 80px 20px; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+      <%- icon('bag', 54, 'text-muted') %>
+      <h2 style="font-size: 1.6rem; margin: 16px 0 8px;">Sua sacola está vazia</h2>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Que tal dar uma olhada nas nossas novidades e encontrar o look que combina com você?</p>
+      <a href="/loja" class="btn btn-primary">Explorar Peças</a>
+    </div>
+  <% } %>
+</main>
+
+<%- include('../partials/footer') %>

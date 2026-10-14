@@ -1,0 +1,84 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 50px 20px 90px; max-width: 860px;">
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Fale Conosco</h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem;">
+      Dúvidas sobre pedidos, medidas ou entregas? Nossa equipe terá prazer em ajudar!
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;">
+    <!-- Informações Diretas -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px;">
+      <h3 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--purple-900);">Canais de Atendimento</h3>
+
+      <div style="display: flex; gap: 14px; margin-bottom: 20px;">
+        <div class="feature-icon-wrapper"><%- icon('mail', 20) %></div>
+        <div>
+          <strong style="display: block; font-size: 0.95rem;">E-mail</strong>
+          <span style="font-size: 0.9rem; color: var(--text-muted);"><%= (settings && settings.contactEmail) || 'atendimento@vistabem.com' %></span>
+        </div>
+      </div>
+
+      <% if (settings && settings.whatsapp) { %>
+        <div style="display: flex; gap: 14px; margin-bottom: 20px;">
+          <div class="feature-icon-wrapper"><%- icon('whatsapp', 20) %></div>
+          <div>
+            <strong style="display: block; font-size: 0.95rem;">WhatsApp</strong>
+            <a href="https://wa.me/<%= settings.whatsapp.replace(/\D/g, '') %>" target="_blank" rel="noopener" style="font-size: 0.9rem; color: var(--purple-700); font-weight: 700;">
+              <%= settings.whatsapp %>
+            </a>
+          </div>
+        </div>
+      <% } %>
+
+      <div style="display: flex; gap: 14px;">
+        <div class="feature-icon-wrapper"><%- icon('truck', 20) %></div>
+        <div>
+          <strong style="display: block; font-size: 0.95rem;">Horário de Suporte</strong>
+          <span style="font-size: 0.9rem; color: var(--text-muted);">Segunda a Sexta: 09h às 18h<br>Sábados: 09h às 13h</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário de Mensagem -->
+    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px;">
+      <h3 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--purple-900);">Envie uma Mensagem</h3>
+
+      <form action="/contato" method="POST">
+        <div style="display:none;"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+
+        <div class="form-group">
+          <label for="name" class="form-label">Seu Nome *</label>
+          <input type="text" id="name" name="name" required class="form-control" placeholder="Seu nome">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email" class="form-label">Seu E-mail *</label>
+            <input type="email" id="email" name="email" required class="form-control" placeholder="seu@email.com">
+          </div>
+          <div class="form-group">
+            <label for="phone" class="form-label">Telefone / WhatsApp</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="(00) 00000-0000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subject" class="form-label">Assunto</label>
+          <input type="text" id="subject" name="subject" class="form-control" placeholder="Ex: Dúvida sobre tamanho do vestido">
+        </div>
+
+        <div class="form-group">
+          <label for="message" class="form-label">Mensagem *</label>
+          <textarea id="message" name="message" rows="4" required class="form-control" placeholder="Como podemos ajudar você?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

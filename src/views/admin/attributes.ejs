@@ -1,0 +1,57 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <h1 style="font-size: 1.8rem;">Tamanhos &amp; Cores</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Cadastre atributos reutilizáveis para agilizar a criação de produtos</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+  <!-- Gestão de Tamanhos -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 16px; color: var(--purple-900);">Tamanhos Cadastrados</h3>
+
+    <form action="/admin/atributos" method="POST" style="display: flex; gap: 8px; margin-bottom: 20px;">
+      <input type="hidden" name="type" value="size">
+      <input type="text" name="name" required placeholder="Novo tamanho (ex: GG, 42)" class="form-control" style="flex: 1;">
+      <input type="number" name="order" placeholder="Ordem" value="10" class="form-control" style="width: 80px;">
+      <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
+    </form>
+
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <% sizes.forEach(function(s) { %>
+        <div style="background: var(--lilac-50); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 8px;">
+          <strong><%= s.name %></strong>
+          <form action="/admin/atributos/<%= s._id %>/excluir" method="POST" style="display: inline;">
+            <button type="submit" style="color: var(--danger); font-size: 1rem; line-height: 1;">&times;</button>
+          </form>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Gestão de Cores -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 16px; color: var(--purple-900);">Cores Cadastradas</h3>
+
+    <form action="/admin/atributos" method="POST" style="display: flex; gap: 8px; margin-bottom: 20px;">
+      <input type="hidden" name="type" value="color">
+      <input type="text" name="name" required placeholder="Nome (ex: Roxo Nobre)" class="form-control" style="flex: 1;">
+      <input type="color" name="value" value="#4C1D95" title="Seletor de cor hexadecimal" style="height: 44px; width: 44px; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; padding: 2px;">
+      <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
+    </form>
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <% colors.forEach(function(c) { %>
+        <div style="background: var(--lilac-50); border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 8px;">
+          <span style="width: 14px; height: 14px; border-radius: 999px; background: <%= c.value || '#000' %>; border: 1px solid #ddd;"></span>
+          <strong><%= c.name %></strong>
+          <form action="/admin/atributos/<%= c._id %>/excluir" method="POST" style="display: inline;">
+            <button type="submit" style="color: var(--danger); font-size: 1rem; line-height: 1;">&times;</button>
+          </form>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<%- include('admin-footer') %>

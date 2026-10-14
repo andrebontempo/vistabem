@@ -1,0 +1,9 @@
+.git
+.github
+node_modules
+npm-debug.log
+data
+.env
+public/uploads
+README.md
+DOCUMENTACAO.md

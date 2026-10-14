@@ -1,0 +1,65 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <a href="/admin/categorias" style="font-size: 0.85rem; color: var(--purple-700); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;">
+    <%- icon('chevron-left', 16) %> Voltar para Categorias
+  </a>
+  <h1 style="font-size: 1.8rem;"><%= category._id ? 'Editar Categoria' : 'Nova Categoria' %></h1>
+</div>
+
+<div class="admin-card" style="max-width: 640px;">
+  <form action="<%= category._id ? '/admin/categorias/' + category._id + '/editar' : '/admin/categorias/nova' %>" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label class="form-label">Nome da Categoria *</label>
+      <input type="text" name="name" required value="<%= category.name || '' %>" class="form-control" placeholder="Ex: Vestidos">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Categoria Mãe (opcional se for principal)</label>
+      <select name="parent" class="form-control">
+        <option value="">Nenhuma (Esta é uma Categoria Principal)</option>
+        <% parentCategories.forEach(function(p) { %>
+          <option value="<%= p._id %>" <%= (category.parent && category.parent.toString() === p._id.toString()) ? 'selected' : '' %>>
+            <%= p.name %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descrição Breve</label>
+      <textarea name="description" rows="2" class="form-control" placeholder="Texto para SEO e vitrine"><%= category.description || '' %></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Ordem de Exibição no Menu</label>
+        <input type="number" name="order" value="<%= category.order || 99 %>" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <div style="margin-top: 10px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" name="active" <%= (category.active !== false) ? 'checked' : '' %>>
+            <span>Categoria Ativa</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Imagem de Capa (opcional)</label>
+      <% if (category.image) { %>
+        <div style="margin-bottom: 8px;">
+          <img src="<%= category.image %>" alt="" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+          <input type="hidden" name="existingImage" value="<%= category.image %>">
+        </div>
+      <% } %>
+      <input type="file" name="image" accept="image/*" class="form-control" style="padding: 8px;">
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 14px;">Salvar Categoria</button>
+  </form>
+</div>
+
+<%- include('admin-footer') %>

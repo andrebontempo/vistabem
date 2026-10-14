@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 50px 20px 90px; max-width: 860px;">
+  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 24px; color: var(--purple-900);"><%= sectionTitle %></h1>
+
+    <div style="font-size: 1rem; color: var(--text-main); line-height: 1.8;">
+      <% if (type === 'shipping') { %>
+        <p style="margin-bottom: 16px;">Na <strong>Vista Bem</strong>, prezamos pela pontualidade e integridade no envio das suas peças.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">1. Prazos de Envio</h3>
+        <p style="margin-bottom: 16px;">Após a confirmação do pagamento, seu pedido entra em processo de separação e embalagem, sendo despachado em até 1 a 2 dias úteis.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">2. Frete Grátis</h3>
+        <p style="margin-bottom: 16px;">Oferecemos Frete Grátis para todo o território nacional nas compras com valor final a partir de <strong>R$ 299,00</strong>.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">3. Rastreamento</h3>
+        <p>Você receberá por e-mail o código de rastreamento assim que o pacote for coletado pela transportadora ou Correios.</p>
+      
+      <% } else if (type === 'returns') { %>
+        <p style="margin-bottom: 16px;">Queremos que você se sinta completamente satisfeita com suas escolhas. Se precisar trocar ou devolver, nosso processo é simples e rápido.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">1. Prazo de Troca</h3>
+        <p style="margin-bottom: 16px;">Você tem até <strong>30 dias corridos</strong> a partir da data de entrega para solicitar a troca da sua peça, e até <strong>7 dias corridos</strong> para desistência ou devolução com estorno integral.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">2. Condições da Peça</h3>
+        <p style="margin-bottom: 16px;">A peça deve estar em perfeito estado, sem sinais de uso, lavagem ou odores, com a etiqueta original fixada.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">3. Como Solicitar</h3>
+        <p>Basta entrar em contato pelo nosso e-mail ou WhatsApp informando o número do pedido e a peça que deseja trocar.</p>
+
+      <% } else if (type === 'privacy') { %>
+        <p style="margin-bottom: 16px;">Esta Política de Privacidade descreve como a <strong>Vista Bem</strong> coleta, utiliza e protege os seus dados pessoais, em total conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">1. Coleta de Dados</h3>
+        <p style="margin-bottom: 16px;">Coletamos apenas as informações estritamente necessárias para processar suas compras, faturamento e entrega segura (nome, CPF, endereço, e-mail e telefone).</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">2. Segurança Bancária</h3>
+        <p style="margin-bottom: 16px;">Não armazenamos nenhum dado de cartão de crédito em nossos servidores. Todos os pagamentos são processados de forma criptografada pelo <strong>Mercado Pago</strong>.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">3. Direitos do Titular</h3>
+        <p>Você pode a qualquer momento solicitar a confirmação, correção ou exclusão dos seus dados cadastrais enviando uma mensagem para nossa central de atendimento.</p>
+
+      <% } else { %>
+        <p style="margin-bottom: 16px;">Bem-vinda aos Termos e Condições de Uso da <strong>Vista Bem</strong>.</p>
+        <p style="margin-bottom: 16px;">Ao navegar e adquirir produtos em nossa loja online, você declara estar de acordo com as diretrizes e regras aqui estipuladas.</p>
+        <h3 style="font-size: 1.25rem; margin: 24px 0 10px; color: var(--purple-700);">Propriedade Intelectual</h3>
+        <p>Todas as fotos, ilustrações, logomarcas e textos presentes no site são de propriedade exclusiva da Vista Bem ou devidamente licenciados, sendo vedada a reprodução sem autorização prévia.</p>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

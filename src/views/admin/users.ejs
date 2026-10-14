@@ -1,0 +1,43 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <h1 style="font-size: 1.8rem;">Clientes Cadastrados</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Lista de usuários e compradores da loja</p>
+</div>
+
+<div class="admin-card">
+  <% if (users && users.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Tipo / Perfil</th>
+          <th>Origem</th>
+          <th>Data de Cadastro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function(u) { %>
+          <tr>
+            <td><strong><%= u.name %></strong></td>
+            <td><%= u.email %></td>
+            <td><%= u.phone || '—' %></td>
+            <td>
+              <span class="badge-status <%= u.role === 'admin' ? 'primary' : 'muted' %>">
+                <%= u.role === 'admin' ? 'Administrador' : 'Cliente' %>
+              </span>
+            </td>
+            <td><span style="text-transform: capitalize;"><%= u.authProvider %></span></td>
+            <td><%= dateTime(u.createdAt) %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="color: var(--text-muted);">Nenhum usuário cadastrado.</p>
+  <% } %>
+</div>
+
+<%- include('admin-footer') %>

@@ -1,0 +1,28 @@
+<!-- Gaveta Lateral da Sacola (Mini Carrinho) -->
+<div id="cart-drawer-overlay" class="cart-drawer-overlay"></div>
+<aside id="cart-drawer" class="cart-drawer" aria-label="Sacola de Compras">
+  <div class="drawer-header">
+    <div class="drawer-title">
+      <%- icon('bag', 22) %>
+      <span>Sua Sacola</span>
+    </div>
+    <button type="button" id="close-cart-btn" class="action-btn" aria-label="Fechar Sacola">
+      <%- icon('x', 20) %>
+    </button>
+  </div>
+
+  <div id="drawer-cart-body" class="drawer-body">
+    <!-- Preenchido dinamicamente via JavaScript -->
+  </div>
+
+  <div id="drawer-cart-footer" class="drawer-footer" style="display: none;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+      <span style="font-weight: 600; color: var(--text-muted);">Subtotal:</span>
+      <span id="drawer-subtotal" style="font-size: 1.2rem; font-weight: 800; color: var(--purple-900);">R$ 0,00</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <a href="/checkout" class="btn btn-primary btn-block">Finalizar Pedido</a>
+      <a href="/carrinho" class="btn btn-secondary btn-block">Ver Sacola Completa</a>
+    </div>
+  </div>
+</aside>

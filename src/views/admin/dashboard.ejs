@@ -1,0 +1,106 @@
+<%- include('admin-header') %>
+
+<div class="admin-stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon"><%- icon('card', 26) %></div>
+    <div>
+      <div class="stat-val"><%= money(stats.todayRevenue) %></div>
+      <div class="stat-label">Vendas de Hoje</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon"><%- icon('chart', 26) %></div>
+    <div>
+      <div class="stat-val"><%= money(stats.monthRevenue) %></div>
+      <div class="stat-label">Vendas do Mês</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon"><%- icon('package', 26) %></div>
+    <div>
+      <div class="stat-val"><%= stats.pendingOrders %></div>
+      <div class="stat-label">Pedidos Pendentes</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon"><%- icon('sparkles', 26) %></div>
+    <div>
+      <div class="stat-val"><%= money(stats.averageTicket) %></div>
+      <div class="stat-label">Ticket Médio</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pedidos Recentes & Estoque Baixo -->
+<div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px;">
+  <!-- Tabela de Pedidos Recentes -->
+  <div class="admin-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3 style="font-size: 1.2rem;">Últimos Pedidos</h3>
+      <a href="/admin/pedidos" style="color: var(--purple-700); font-weight: 700; font-size: 0.88rem;">Ver todos</a>
+    </div>
+
+    <% if (recentOrders && recentOrders.length > 0) { %>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentOrders.forEach(function(o) { %>
+            <tr>
+              <td><strong><%= o.orderNumber %></strong></td>
+              <td><%= o.customer.name %></td>
+              <td><strong><%= money(o.total) %></strong></td>
+              <td>
+                <span class="badge-status <%= STATUS_CLASS[o.orderStatus] || 'primary' %>"><%= o.orderStatus %></span>
+              </td>
+              <td>
+                <a href="/admin/pedidos/<%= o._id %>" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.78rem;">Ver</a>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p style="color: var(--text-muted); padding: 20px 0;">Nenhum pedido registrado ainda.</p>
+    <% } %>
+  </div>
+
+  <!-- Alerta de Estoque Baixo -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 20px; color: var(--danger);">Atenção ao Estoque</h3>
+
+    <% if (lowStockProducts && lowStockProducts.length > 0) { %>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <% lowStockProducts.forEach(function(prod) { %>
+          <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 700; font-size: 0.92rem;"><%= prod.name %></div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">
+                <% prod.variants.forEach(function(v) { %>
+                  <% if (v.stock <= 3) { %>
+                    <span style="color: var(--danger); font-weight: 600;">[Tam <%= v.size %>: <%= v.stock %> un] </span>
+                  <% } %>
+                <% }); %>
+              </div>
+            </div>
+            <a href="/admin/produtos/<%= prod._id %>/editar" class="btn btn-secondary btn-sm" style="padding: 4px 8px;">Editar</a>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="color: var(--text-muted);">Todos os produtos estão com estoque regular.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('admin-footer') %>

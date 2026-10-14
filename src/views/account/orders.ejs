@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 40px 20px 80px;">
+  <div style="margin-bottom: 24px;">
+    <nav style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
+      <a href="/minha-conta">Minha Conta</a> &rsaquo; <span>Meus Pedidos</span>
+    </nav>
+    <h1 style="font-size: 2rem;">Histórico de Pedidos</h1>
+  </div>
+
+  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px;">
+    <% if (orders && orders.length > 0) { %>
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <% orders.forEach(function(order) { %>
+          <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="font-weight: 800; font-size: 1.15rem; color: var(--purple-900);">
+                Pedido <%= order.orderNumber %>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                Data: <%= dateTime(order.createdAt) %> · <%= order.items.length %> <%= order.items.length === 1 ? 'peça' : 'peças' %>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                Pagamento: <strong><%= order.paymentMethod %></strong> (<%= order.paymentStatus %>)
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 20px;">
+              <span class="badge-status <%= STATUS_CLASS[order.orderStatus] || 'primary' %>" style="font-size: 0.82rem; padding: 6px 14px;">
+                <%= order.orderStatus %>
+              </span>
+              <div style="font-weight: 800; font-size: 1.25rem; color: var(--purple-900);">
+                <%= money(order.total) %>
+              </div>
+              <a href="/minha-conta/pedidos/<%= order._id %>" class="btn btn-secondary btn-sm">Ver Detalhes</a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div style="text-align: center; padding: 40px 0;">
+        <%- icon('package', 48, 'text-muted') %>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin: 16px 0;">Você ainda não possui pedidos registrados.</p>
+        <a href="/loja" class="btn btn-primary">Ir para a Loja</a>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

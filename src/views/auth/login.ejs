@@ -1,0 +1,57 @@
+<%- include('../partials/header') %>
+
+<main class="container" style="padding: 50px 20px 90px; max-width: 480px;">
+  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm);">
+    
+    <div style="text-align: center; margin-bottom: 28px;">
+      <h1 style="font-size: 1.8rem; margin-bottom: 6px;">Acesse sua Conta</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Acompanhe pedidos, favoritos e agilize suas compras</p>
+    </div>
+
+    <!-- Botão Oficial Google OAuth se habilitado -->
+    <% if (locals.googleEnabled) { %>
+      <div style="margin-bottom: 24px;">
+        <a href="/auth/google" class="btn btn-secondary btn-block" style="border-color: #DADCE0; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; background: #fff; color: #3c4043;">
+          <%- GOOGLE_ICON %>
+          <span>Continuar com o Google</span>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; text-align: center; margin: 20px 0; color: var(--text-light); font-size: 0.85rem;">
+        <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+        <span style="padding: 0 12px;">ou com seu e-mail</span>
+        <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+      </div>
+    <% } %>
+
+    <!-- Formulário Local -->
+    <form action="/login" method="POST">
+      <!-- Honeypot -->
+      <div style="display:none;"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+      <input type="hidden" name="redirect" value="<%= redirect %>">
+
+      <div class="form-group">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" id="email" name="email" required autofocus class="form-control" placeholder="seu@email.com">
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <label for="password" class="form-label" style="margin-bottom: 0;">Senha</label>
+          <a href="/esqueci-senha" style="font-size: 0.82rem; color: var(--purple-600); font-weight: 600;">Esqueceu a senha?</a>
+        </div>
+        <input type="password" id="password" name="password" required class="form-control" placeholder="Sua senha secreta">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 24px;">
+        <span>Entrar</span>
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 0.9rem;">
+      Ainda não tem conta? <a href="/cadastro<%= redirect ? '?redirect=' + encodeURIComponent(redirect) : '' %>" style="color: var(--purple-700); font-weight: 700;">Criar uma conta gratuita</a>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

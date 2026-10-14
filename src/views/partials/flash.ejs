@@ -1,0 +1,7 @@
+<% if (locals.flash) { %>
+  <div id="flash-container" class="flash-container">
+    <div class="flash-alert flash-<%= flash.type %>">
+      <span><%= flash.message %></span>
+    </div>
+  </div>
+<% } %>

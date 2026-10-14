@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
+  <rect width="600" height="750" fill="#F8F5FE"/>
+  <!-- Cabide sutil de fundo -->
+  <path d="M 300 240 C 300 215 315 200 330 200 C 345 200 355 210 355 225 C 355 240 340 250 325 260 L 325 275" stroke="#EDE6FA" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M 325 275 L 120 400 C 105 410 115 430 135 430 L 465 430 C 485 430 495 410 480 400 Z" stroke="#EDE6FA" stroke-width="8" stroke-linejoin="round" fill="#FAF7FE"/>
+  
+  <g transform="translate(190, 480)">
+    <!-- Monograma VB -->
+    <path d="M 12 15 L 24 15 L 42 60 L 56 15 L 68 15 L 45 70 L 35 70 Z" fill="#B79CF2"/>
+    <path d="M 52 15 L 80 15 C 92 15 100 21 100 31 C 100 38 94 44 85 45 C 96 47 104 53 104 63 C 104 74 93 78 79 78 L 52 78 Z M 62 23 L 62 40 L 78 40 C 84 40 89 37 89 31 C 89 25 84 23 78 23 Z M 62 48 L 62 69 L 80 69 C 87 69 92 65 92 59 C 92 52 87 48 80 48 Z" fill="#7C3AED"/>
+    <text x="110" y="80" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="600" letter-spacing="2" fill="#7C3AED">VISTA BEM</text>
+  </g>
+  <text x="300" y="600" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="500" fill="#9E8C82" text-anchor="middle">Imagem em alta definição em breve</text>
+</svg>

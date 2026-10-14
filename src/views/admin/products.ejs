@@ -1,0 +1,85 @@
+<%- include('admin-header') %>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h1 style="font-size: 1.8rem;">Catálogo de Produtos</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Gerencie peças, fotos, variações de tamanho, cor e estoques</p>
+  </div>
+  <a href="/admin/produtos/novo" class="btn btn-primary">
+    <%- icon('plus', 18) %>
+    <span>Cadastrar Novo Produto</span>
+  </a>
+</div>
+
+<div class="admin-card">
+  <% if (products && products.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Preço</th>
+          <th>Variações / Estoque</th>
+          <th>Status</th>
+          <th style="text-align: right;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(function(p) { %>
+          <tr>
+            <td style="width: 60px;">
+              <img src="<%= (p.images && p.images[0]) || '/images/placeholder.svg' %>" alt="" style="width: 48px; height: 60px; object-fit: cover; border-radius: 6px;">
+            </td>
+            <td>
+              <strong><%= p.name %></strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">SKU base: <%= p.slug %></div>
+            </td>
+            <td><%= p.category ? p.category.name : '—' %></td>
+            <td>
+              <% if (p.salePrice > 0 && p.salePrice < p.price) { %>
+                <span style="text-decoration: line-through; color: var(--text-light); font-size: 0.82rem;"><%= money(p.price) %></span><br>
+                <strong style="color: var(--purple-700);"><%= money(p.salePrice) %></strong>
+              <% } else { %>
+                <strong><%= money(p.price) %></strong>
+              <% } %>
+            </td>
+            <td>
+              <div style="font-size: 0.85rem;">
+                Total: <strong><%= p.totalStock %> un</strong>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">
+                <% (p.variants || []).slice(0, 4).forEach(function(v) { %>
+                  <span><%= v.size %> (<%= v.stock %>) </span>
+                <% }); %>
+              </div>
+            </td>
+            <td>
+              <% if (p.active) { %>
+                <span class="badge-status success">Ativo</span>
+              <% } else { %>
+                <span class="badge-status muted">Inativo</span>
+              <% } %>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <a href="/admin/produtos/<%= p._id %>/editar" class="btn btn-secondary btn-sm" title="Editar">
+                  <%- icon('edit', 16) %>
+                </a>
+                <form action="/admin/produtos/<%= p._id %>/excluir" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger);" title="Excluir">
+                    <%- icon('trash', 16) %>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">Nenhum produto cadastrado ainda.</p>
+  <% } %>
+</div>
+
+<%- include('admin-footer') %>

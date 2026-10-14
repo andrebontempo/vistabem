@@ -1,0 +1,130 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <a href="/admin/pedidos" style="font-size: 0.85rem; color: var(--purple-700); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;">
+    <%- icon('chevron-left', 16) %> Voltar para Pedidos
+  </a>
+  <h1 style="font-size: 1.8rem;">Gerenciar Pedido <%= order.orderNumber %></h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 24px;">
+  <!-- Coluna Esquerda: Itens e Endereço -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <!-- Itens do Pedido -->
+    <div class="admin-card">
+      <h3 style="font-size: 1.2rem; margin-bottom: 16px;">Itens Comprados</h3>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Tamanho / Cor</th>
+            <th>Preço Un.</th>
+            <th>Qtd</th>
+            <th style="text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.items.forEach(function(item) { %>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <img src="<%= item.image || '/images/placeholder.svg' %>" alt="" style="width: 40px; height: 50px; object-fit: cover; border-radius: 4px;">
+                  <strong><%= item.name %></strong>
+                </div>
+              </td>
+              <td><%= item.size %> <%= item.color ? '· ' + item.color : '' %></td>
+              <td><%= money(item.price) %></td>
+              <td><%= item.quantity %></td>
+              <td style="text-align: right;"><strong><%= money(item.price * item.quantity) %></strong></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+
+      <div style="text-align: right; margin-top: 20px; font-size: 0.95rem;">
+        <div>Subtotal: <%= money(order.subtotal) %></div>
+        <% if (order.discount > 0) { %>
+          <div style="color: var(--success);">Descontos: - <%= money(order.discount) %></div>
+        <% } %>
+        <div>Frete: <%= order.shippingFee === 0 ? 'GRÁTIS' : money(order.shippingFee) %></div>
+        <div style="font-size: 1.3rem; font-weight: 800; color: var(--purple-900); margin-top: 8px;">
+          Total: <%= money(order.total) %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados do Cliente e Envio -->
+    <div class="admin-card">
+      <h3 style="font-size: 1.2rem; margin-bottom: 14px;">Dados do Cliente &amp; Endereço</h3>
+      <p style="font-size: 0.92rem; line-height: 1.7; color: var(--text-main);">
+        <strong>Nome:</strong> <%= order.customer.name %><br>
+        <strong>E-mail:</strong> <%= order.customer.email %><br>
+        <strong>Telefone:</strong> <%= order.customer.phone || 'Não informado' %><br>
+        <strong>CPF:</strong> <%= order.customer.cpf || 'Não informado' %><br>
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 12px 0;">
+        <strong>Endereço de Entrega:</strong><br>
+        <%= order.shippingAddress.street %>, <%= order.shippingAddress.number %> <%= order.shippingAddress.complement %><br>
+        <%= order.shippingAddress.neighborhood %> — <%= order.shippingAddress.city %>/<%= order.shippingAddress.state %><br>
+        CEP: <%= order.shippingAddress.zipCode %>
+      </p>
+    </div>
+  </div>
+
+  <!-- Coluna Direita: Alterar Status e Rastreio -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div class="admin-card">
+      <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Atualizar Status</h3>
+
+      <form action="/admin/pedidos/<%= order._id %>/status" method="POST">
+        <div class="form-group">
+          <label class="form-label">Status do Pedido</label>
+          <select name="orderStatus" class="form-control">
+            <% orderStatuses.forEach(function(st) { %>
+              <option value="<%= st %>" <%= order.orderStatus === st ? 'selected' : '' %>><%= st %></option>
+            <% }); %>
+          </select>
+          <span style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; display: block;">
+            Mudar para "Em Separação", "Enviado" ou "Entregue" dispara e-mail automático ao cliente.
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status do Pagamento</label>
+          <select name="paymentStatus" class="form-control">
+            <% paymentStatuses.forEach(function(pst) { %>
+              <option value="<%= pst %>" <%= order.paymentStatus === pst ? 'selected' : '' %>><%= pst %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Código de Rastreamento (Correios/Transportadora)</label>
+          <input type="text" name="trackingCode" value="<%= order.trackingCode || '' %>" placeholder="Ex: QB123456789BR" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Anotação Interna / Histórico</label>
+          <textarea name="note" rows="2" class="form-control" placeholder="Motivo da alteração ou observação..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Salvar Alterações</button>
+      </form>
+    </div>
+
+    <!-- Histórico de Atualizações -->
+    <div class="admin-card">
+      <h3 style="font-size: 1.15rem; margin-bottom: 14px;">Linha do Tempo</h3>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem;">
+        <% (order.statusHistory || []).reverse().forEach(function(h) { %>
+          <li style="border-left: 2px solid var(--purple-700); padding-left: 12px;">
+            <div style="font-weight: 700; color: var(--purple-900);"><%= h.status %></div>
+            <div style="color: var(--text-muted);"><%= h.note %></div>
+            <div style="font-size: 0.75rem; color: var(--text-light);"><%= dateTime(h.at) %></div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<%- include('admin-footer') %>

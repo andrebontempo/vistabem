@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Vista Bem — Moda Contemporânea & Estilo' %></title>
+  <meta name="description" content="Moda feminina, masculina, infantil e acessórios com qualidade, estilo e entrega rápida para todo o Brasil.">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#2A0F4A">
+  <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
+</head>
+<body>
+
+  <!-- Topbar com Aviso & Acessibilidade -->
+  <aside class="topbar" aria-label="Avisos e Acessibilidade">
+    <div class="container">
+      <div class="topbar-notice">
+        <%- icon('sparkles', 16) %>
+        <span><%= (settings && settings.storeNotice) || 'Frete grátis nas compras acima de R$ 299 · Parcele em até 6x sem juros' %></span>
+      </div>
+
+      <div class="topbar-actions">
+        <!-- Controles de Acessibilidade (Aumentar / Diminuir Fonte) -->
+        <div class="accessibility-ctrls" title="Ajustar tamanho da fonte">
+          <span style="font-size: 0.75rem; color: #EDE6FA; margin-right: 4px;">Texto:</span>
+          <button type="button" id="btn-font-decrease" class="accessibility-btn" aria-label="Diminuir tamanho do texto">A-</button>
+          <button type="button" id="btn-font-increase" class="accessibility-btn" aria-label="Aumentar tamanho do texto">A+</button>
+        </div>
+
+        <!-- Alternador de Modo Escuro / Claro -->
+        <button type="button" id="theme-toggle" class="theme-toggle accessibility-btn" aria-label="Alternar modo escuro" title="Modo Escuro / Claro">
+          <%- icon('moon', 16) %>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Header Principal Fixo -->
+  <header class="header-main">
+    <div class="container">
+      <div class="header-inner">
+        <!-- Logomarca Oficial -->
+        <a href="/" class="logo" aria-label="Página Inicial Vista Bem">
+          <img src="/images/logo.svg" alt="Vista Bem Moda" width="200" height="52">
+        </a>
+
+        <!-- Menu de Categorias Dinâmico -->
+        <nav class="nav-wrapper" aria-label="Navegação Principal">
+          <ul class="nav-menu">
+            <li><a href="/" class="nav-link <%= currentPath === '/' ? 'active' : '' %>">Início</a></li>
+            <li><a href="/loja" class="nav-link <%= currentPath === '/loja' ? 'active' : '' %>">Coleções</a></li>
+            <% if (locals.menu && locals.menu.length > 0) { %>
+              <% menu.forEach(function(cat) { %>
+                <li>
+                  <a href="/categoria/<%= cat.slug %>" class="nav-link <%= currentPath === '/categoria/' + cat.slug ? 'active' : '' %>">
+                    <%= cat.name %>
+                  </a>
+                </li>
+              <% }); %>
+            <% } else { %>
+              <li><a href="/categoria/feminino" class="nav-link">Feminino</a></li>
+              <li><a href="/categoria/masculino" class="nav-link">Masculino</a></li>
+              <li><a href="/categoria/infantil" class="nav-link">Infantil</a></li>
+              <li><a href="/categoria/acessorios" class="nav-link">Acessórios</a></li>
+            <% } %>
+            <li><a href="/loja?sort=novidades" class="nav-link highlight">Novidades</a></li>
+          </ul>
+        </nav>
+
+        <!-- Barra de Busca Rápida -->
+        <form action="/busca" method="GET" class="search-form" role="search">
+          <span class="search-icon"><%- icon('search', 18) %></span>
+          <input type="search" name="q" class="search-input" placeholder="Buscar vestidos, calças..." value="<%= locals.query && locals.query.q ? locals.query.q : '' %>" aria-label="Buscar produtos">
+        </form>
+
+        <!-- Ações do Usuário: Conta, Favoritos, Sacola -->
+        <div class="header-actions">
+          <% if (locals.user) { %>
+            <a href="<%= user.role === 'admin' ? '/admin' : '/minha-conta' %>" class="action-btn" title="Olá, <%= user.firstName %>">
+              <%- icon('user', 22) %>
+            </a>
+          <% } else { %>
+            <a href="/login" class="action-btn" title="Entrar na minha conta">
+              <%- icon('user', 22) %>
+            </a>
+          <% } %>
+
+          <a href="/favoritos" class="action-btn" title="Meus Favoritos">
+            <%- icon('heart', 22) %>
+            <% if (locals.wishlistIds && locals.wishlistIds.length > 0) { %>
+              <span class="badge-count"><%= wishlistIds.length %></span>
+            <% } %>
+          </a>
+
+          <button type="button" class="action-btn open-cart-btn" aria-label="Abrir Sacola de Compras" title="Sacola">
+            <%- icon('bag', 22) %>
+            <span id="cart-badge" class="badge-count cart-badge-count"><%= locals.cartCount || 0 %></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <%- include('flash') %>
+  <%- include('cart-drawer') %>

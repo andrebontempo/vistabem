@@ -1,0 +1,54 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <h1 style="font-size: 1.8rem;">Moderação de Avaliações</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Aprove ou remova comentários e notas deixados por clientes</p>
+</div>
+
+<div class="admin-card">
+  <% if (reviews && reviews.length > 0) { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Cliente</th>
+          <th>Nota</th>
+          <th>Comentário</th>
+          <th>Status</th>
+          <th style="text-align: right;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reviews.forEach(function(r) { %>
+          <tr>
+            <td><strong><%= r.product ? r.product.name : 'Produto removido' %></strong></td>
+            <td><%= r.user ? r.user.name : 'Anônimo' %></td>
+            <td>⭐ <%= r.rating %> / 5</td>
+            <td style="max-width: 320px;"><%= r.comment %></td>
+            <td>
+              <span class="badge-status <%= r.approved ? 'success' : 'warning' %>">
+                <%= r.approved ? 'Aprovada' : 'Pendente' %>
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <form action="/admin/avaliacoes/<%= r._id %>/aprovar" method="POST">
+                  <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 0.78rem;">
+                    <%= r.approved ? 'Ocultar' : 'Aprovar' %>
+                  </button>
+                </form>
+                <form action="/admin/avaliacoes/<%= r._id %>/excluir" method="POST" onsubmit="return confirm('Excluir esta avaliação?');">
+                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); font-size: 0.78rem;">Excluir</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">Nenhuma avaliação registrada ainda.</p>
+  <% } %>
+</div>
+
+<%- include('admin-footer') %>

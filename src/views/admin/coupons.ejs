@@ -1,0 +1,99 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <h1 style="font-size: 1.8rem;">Cupons de Desconto</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Crie códigos promocionais em porcentagem ou valor fixo</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 30px; align-items: start;">
+  <!-- Formulário de Novo Cupom -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Criar Novo Cupom</h3>
+
+    <form action="/admin/cupons" method="POST">
+      <div class="form-group">
+        <label class="form-label">Código do Cupom *</label>
+        <input type="text" name="code" required placeholder="Ex: VISTABEM10" class="form-control" style="text-transform: uppercase; font-weight: 700;">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo de Desconto</label>
+          <select name="type" class="form-control">
+            <option value="percent">Porcentagem (%)</option>
+            <option value="fixed">Valor Fixo (R$)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor do Desconto *</label>
+          <input type="number" step="0.01" name="value" required placeholder="Ex: 10 ou 25.00" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Valor Mínimo do Pedido (R$)</label>
+          <input type="number" step="0.01" name="minAmount" value="0" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Limite de Usos (0 = ilimitado)</label>
+          <input type="number" name="maxUses" value="0" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Data de Expiração (opcional)</label>
+        <input type="date" name="expiresAt" class="form-control">
+      </div>
+
+      <div style="margin: 16px 0;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" name="active" checked>
+          <span style="font-weight: 600;">Cupom Ativo Imediatamente</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Salvar Cupom</button>
+    </form>
+  </div>
+
+  <!-- Lista de Cupons -->
+  <div class="admin-card">
+    <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Cupons Existentes</h3>
+
+    <% if (coupons && coupons.length > 0) { %>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Desconto</th>
+            <th>Mínimo</th>
+            <th>Usos</th>
+            <th>Status</th>
+            <th style="text-align: right;">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% coupons.forEach(function(c) { %>
+            <tr>
+              <td><strong><%= c.code %></strong></td>
+              <td><%= c.type === 'percent' ? c.value + '%' : money(c.value) %></td>
+              <td><%= money(c.minAmount) %></td>
+              <td><%= c.usedCount %> <%= c.maxUses > 0 ? '/ ' + c.maxUses : '' %></td>
+              <td><span class="badge-status <%= c.active ? 'success' : 'muted' %>"><%= c.active ? 'Ativo' : 'Inativo' %></span></td>
+              <td style="text-align: right;">
+                <form action="/admin/cupons/<%= c._id %>/excluir" method="POST" onsubmit="return confirm('Excluir este cupom?');">
+                  <button type="submit" style="color: var(--danger); font-size: 0.85rem; font-weight: 700;">Excluir</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p style="color: var(--text-muted);">Nenhum cupom cadastrado.</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('admin-footer') %>
