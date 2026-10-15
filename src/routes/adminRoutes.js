@@ -78,6 +78,7 @@ router.post('/avaliacoes/:id/excluir', adminController.deleteReview);
 
 // Clientes
 router.get('/clientes', adminController.getUsers);
+router.post('/clientes/:id/role', adminController.postUpdateUserRole);
 
 // Configurações
 router.get('/configuracoes', adminController.getSettings);

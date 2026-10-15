@@ -593,6 +593,53 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+exports.postUpdateUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!['customer', 'admin'].includes(role)) {
+      req.flash('danger', 'Perfil de usuário inválido.');
+      return res.redirect('/admin/clientes');
+    }
+
+    const targetUser = await User.findById(id);
+    if (!targetUser) {
+      req.flash('danger', 'Usuário não encontrado.');
+      return res.redirect('/admin/clientes');
+    }
+
+    // Não permitir que o usuário logado altere o próprio papel
+    if (targetUser._id.toString() === req.user._id.toString()) {
+      req.flash('warning', 'Você não pode alterar o perfil da sua própria conta conectada.');
+      return res.redirect('/admin/clientes');
+    }
+
+    // Se estiver despromovendo para customer, garantir que ainda haja ao menos 1 outro administrador ativo
+    if (role === 'customer' && targetUser.role === 'admin') {
+      const adminCount = await User.countDocuments({ role: 'admin' });
+      if (adminCount <= 1) {
+        req.flash('danger', 'Não é possível despromover este administrador. O sistema precisa ter pelo menos um administrador ativo.');
+        return res.redirect('/admin/clientes');
+      }
+    }
+
+    targetUser.role = role;
+    await targetUser.save();
+
+    if (role === 'admin') {
+      req.flash('success', `O usuário "${targetUser.name}" foi promovido a Administrador com sucesso.`);
+    } else {
+      req.flash('success', `As permissões de Administrador de "${targetUser.name}" foram revogadas. O usuário agora é Cliente.`);
+    }
+
+    res.redirect('/admin/clientes');
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 /**
  * CONFIGURAÇÕES
  */
