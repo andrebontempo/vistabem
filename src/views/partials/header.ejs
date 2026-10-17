@@ -37,12 +37,6 @@
           <button type="button" id="btn-font-decrease" class="accessibility-btn" aria-label="Diminuir tamanho do texto">A-</button>
           <button type="button" id="btn-font-increase" class="accessibility-btn" aria-label="Aumentar tamanho do texto">A+</button>
         </div>
-
-        <!-- Alternador de Modo Claro / Escuro na Topbar -->
-        <button type="button" id="theme-toggle" class="theme-toggle-pill js-theme-toggle" aria-label="Alternar entre modo claro e escuro" title="Alternar tema Claro / Escuro">
-          <span class="theme-icon-light"><%- icon('moon', 14) %> <span>Escuro</span></span>
-          <span class="theme-icon-dark"><%- icon('sun', 14) %> <span>Claro</span></span>
-        </button>
       </div>
     </div>
   </aside>
@@ -93,7 +87,7 @@
 
         <!-- Ações do Usuário: Tema, Conta, Favoritos, Sacola -->
         <div class="header-actions">
-          <button type="button" class="action-btn js-theme-toggle header-theme-btn" aria-label="Alternar tema Claro / Escuro" title="Alternar tema Claro / Escuro">
+          <button type="button" id="theme-toggle" class="action-btn js-theme-toggle header-theme-btn" aria-label="Alternar tema Claro / Escuro" title="Alternar tema Claro / Escuro">
             <span class="theme-icon-light"><%- icon('moon', 20) %></span>
             <span class="theme-icon-dark"><%- icon('sun', 20) %></span>
           </button>
@@ -194,13 +188,6 @@
           </a>
         </li>
       </ul>
-    </div>
-
-    <div class="mobile-nav-footer">
-      <button type="button" class="btn btn-secondary btn-sm btn-block js-theme-toggle" style="gap: 8px;">
-        <span class="theme-icon-light"><%- icon('moon', 16) %> Mudar para Modo Escuro</span>
-        <span class="theme-icon-dark"><%- icon('sun', 16) %> Mudar para Modo Claro</span>
-      </button>
     </div>
   </aside>
 
