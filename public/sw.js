@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vistabem-v1';
+const CACHE_NAME = 'vistabem-v3';
 const STATIC_ASSETS = [
   '/',
   '/css/style.css',

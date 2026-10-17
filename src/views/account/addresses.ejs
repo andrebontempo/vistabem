@@ -7,7 +7,7 @@
 
   <h1 style="font-size: 2rem; margin-bottom: 24px;">Meus Endereços de Entrega</h1>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+  <div class="addresses-layout">
     <!-- Lista de Endereços Salvos -->
     <div style="display: flex; flex-direction: column; gap: 16px;">
       <% if (user.addresses && user.addresses.length > 0) { %>
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Formulário de Novo Endereço -->
-    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px;">
+    <div class="surface-box">
       <h3 style="font-size: 1.25rem; margin-bottom: 20px;">Adicionar Novo Endereço</h3>
       <form action="/minha-conta/enderecos" method="POST">
         <div class="form-group">
@@ -50,7 +50,7 @@
             <label class="form-label">CEP</label>
             <input type="text" name="zipCode" id="zipCode" maxlength="9" required class="form-control" placeholder="00000-000">
           </div>
-          <div class="form-group" style="grid-column: span 2;">
+          <div class="form-group col-span-2">
             <label class="form-label">Rua / Logradouro</label>
             <input type="text" name="street" id="street" required class="form-control">
           </div>

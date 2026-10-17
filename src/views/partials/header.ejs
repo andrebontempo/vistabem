@@ -1,43 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title !== 'undefined' ? title : 'Vista Bem — Moda Contemporânea & Estilo' %></title>
   <meta name="description" content="Moda feminina, masculina, infantil e acessórios com qualidade, estilo e entrega rápida para todo o Brasil.">
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=<%= assetVersion %>">
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#07020D">
+  <meta name="theme-color" id="meta-theme-color" content="#231236">
   <script>
     try {
-      var savedTheme = localStorage.getItem('vb_theme') || 'dark';
+      var savedTheme = localStorage.getItem('vb_theme_v2') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
+      var savedScale = parseFloat(localStorage.getItem('vb_font_scale'));
+      if (savedScale && savedScale >= 0.85 && savedScale <= 1.35) {
+        document.documentElement.style.setProperty('--font-scale', savedScale);
+      }
     } catch(e) {}
   </script>
   <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
 </head>
 <body>
 
-  <!-- Topbar com Aviso & Acessibilidade -->
+  <!-- Topbar Institucional & Acessibilidade -->
   <aside class="topbar" aria-label="Avisos e Acessibilidade">
     <div class="container">
       <div class="topbar-notice">
-        <%- icon('sparkles', 16) %>
+        <%- icon('sparkles', 15) %>
         <span><%= (settings && settings.storeNotice) || 'Frete grátis nas compras acima de R$ 299 · Parcele em até 6x sem juros' %></span>
       </div>
 
       <div class="topbar-actions">
         <!-- Controles de Acessibilidade (Aumentar / Diminuir Fonte) -->
         <div class="accessibility-ctrls" title="Ajustar tamanho da fonte">
-          <span style="font-size: 0.75rem; color: #EDE6FA; margin-right: 4px;">Texto:</span>
+          <span class="accessibility-label">Texto:</span>
           <button type="button" id="btn-font-decrease" class="accessibility-btn" aria-label="Diminuir tamanho do texto">A-</button>
           <button type="button" id="btn-font-increase" class="accessibility-btn" aria-label="Aumentar tamanho do texto">A+</button>
         </div>
 
-        <!-- Alternador de Modo Escuro / Claro -->
-        <button type="button" id="theme-toggle" class="theme-toggle accessibility-btn" aria-label="Alternar modo de cor" title="Alternar Modo Escuro / Claro">
-          <span class="theme-icon-dark" title="Mudar para Modo Claro"><%- icon('sun', 16) %></span>
-          <span class="theme-icon-light" title="Mudar para Modo Escuro"><%- icon('moon', 16) %></span>
+        <!-- Alternador de Modo Claro / Escuro na Topbar -->
+        <button type="button" id="theme-toggle" class="theme-toggle-pill js-theme-toggle" aria-label="Alternar entre modo claro e escuro" title="Alternar tema Claro / Escuro">
+          <span class="theme-icon-light"><%- icon('moon', 14) %> <span>Escuro</span></span>
+          <span class="theme-icon-dark"><%- icon('sun', 14) %> <span>Claro</span></span>
         </button>
       </div>
     </div>
@@ -47,12 +51,18 @@
   <header class="header-main">
     <div class="container">
       <div class="header-inner">
-        <!-- Logomarca Oficial -->
+        <!-- Botão Menu Mobile (Hambúrguer) -->
+        <button type="button" id="open-mobile-menu" class="action-btn mobile-menu-btn" aria-label="Abrir menu de navegação" aria-expanded="false">
+          <%- icon('menu', 24) %>
+        </button>
+
+        <!-- Logomarca Oficial (Alterna automaticamente entre Claro e Escuro) -->
         <a href="/" class="logo" aria-label="Página Inicial Vista Bem">
-          <img src="/images/logo.svg" alt="Vista Bem Moda" width="200" height="52">
+          <img src="/images/logo.svg?v=<%= assetVersion %>" alt="Vista Bem Moda" class="logo-img logo-for-light" width="190" height="50">
+          <img src="/images/logo-white.svg?v=<%= assetVersion %>" alt="Vista Bem Moda" class="logo-img logo-for-dark" width="190" height="50">
         </a>
 
-        <!-- Menu de Categorias Dinâmico -->
+        <!-- Menu de Categorias Dinâmico (Desktop) -->
         <nav class="nav-wrapper" aria-label="Navegação Principal">
           <ul class="nav-menu">
             <li><a href="/" class="nav-link <%= currentPath === '/' ? 'active' : '' %>">Início</a></li>
@@ -75,39 +85,124 @@
           </ul>
         </nav>
 
-        <!-- Barra de Busca Rápida -->
+        <!-- Barra de Busca Rápida (Desktop) -->
         <form action="/busca" method="GET" class="search-form" role="search">
-          <span class="search-icon"><%- icon('search', 18) %></span>
-          <input type="search" name="q" class="search-input" placeholder="Buscar vestidos, calças..." value="<%= locals.query && locals.query.q ? locals.query.q : '' %>" aria-label="Buscar produtos">
+          <span class="search-icon"><%- icon('search', 17) %></span>
+          <input type="search" name="q" class="search-input" placeholder="Buscar peças..." value="<%= locals.query && locals.query.q ? locals.query.q : '' %>" aria-label="Buscar produtos">
         </form>
 
-        <!-- Ações do Usuário: Conta, Favoritos, Sacola -->
+        <!-- Ações do Usuário: Tema, Conta, Favoritos, Sacola -->
         <div class="header-actions">
+          <button type="button" class="action-btn js-theme-toggle header-theme-btn" aria-label="Alternar tema Claro / Escuro" title="Alternar tema Claro / Escuro">
+            <span class="theme-icon-light"><%- icon('moon', 20) %></span>
+            <span class="theme-icon-dark"><%- icon('sun', 20) %></span>
+          </button>
+
           <% if (locals.user) { %>
             <a href="<%= user.role === 'admin' ? '/admin' : '/minha-conta' %>" class="action-btn" title="Olá, <%= user.firstName %>">
-              <%- icon('user', 22) %>
+              <%- icon('user', 21) %>
             </a>
           <% } else { %>
             <a href="/login" class="action-btn" title="Entrar na minha conta">
-              <%- icon('user', 22) %>
+              <%- icon('user', 21) %>
             </a>
           <% } %>
 
           <a href="/favoritos" class="action-btn" title="Meus Favoritos">
-            <%- icon('heart', 22) %>
+            <%- icon('heart', 21) %>
             <% if (locals.wishlistIds && locals.wishlistIds.length > 0) { %>
               <span class="badge-count"><%= wishlistIds.length %></span>
             <% } %>
           </a>
 
           <button type="button" class="action-btn open-cart-btn" aria-label="Abrir Sacola de Compras" title="Sacola">
-            <%- icon('bag', 22) %>
+            <%- icon('bag', 21) %>
             <span id="cart-badge" class="badge-count cart-badge-count"><%= locals.cartCount || 0 %></span>
           </button>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Gaveta de Navegação Mobile -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay"></div>
+  <aside id="mobile-nav-drawer" class="mobile-nav-drawer" aria-label="Menu Mobile">
+    <div class="mobile-nav-header">
+      <a href="/" class="logo" aria-label="Página Inicial Vista Bem">
+        <img src="/images/logo.svg?v=<%= assetVersion %>" alt="Vista Bem" class="logo-img logo-for-light" width="150" height="40">
+        <img src="/images/logo-white.svg?v=<%= assetVersion %>" alt="Vista Bem" class="logo-img logo-for-dark" width="150" height="40">
+      </a>
+      <button type="button" id="close-mobile-menu" class="action-btn" aria-label="Fechar menu">
+        <%- icon('x', 22) %>
+      </button>
+    </div>
+
+    <div class="mobile-nav-body">
+      <!-- Busca no Celular -->
+      <form action="/busca" method="GET" class="mobile-search-form" role="search">
+        <span class="search-icon"><%- icon('search', 18) %></span>
+        <input type="search" name="q" class="search-input" placeholder="Buscar vestidos, camisas, bolsas..." value="<%= locals.query && locals.query.q ? locals.query.q : '' %>" aria-label="Buscar produtos">
+      </form>
+
+      <!-- Links de Navegação Mobile -->
+      <ul class="mobile-nav-list">
+        <li><a href="/" class="mobile-nav-link <%= currentPath === '/' ? 'active' : '' %>">Início</a></li>
+        <li><a href="/loja" class="mobile-nav-link <%= currentPath === '/loja' ? 'active' : '' %>">Todas as Coleções</a></li>
+        <% if (locals.menu && locals.menu.length > 0) { %>
+          <% menu.forEach(function(cat) { %>
+            <li>
+              <a href="/categoria/<%= cat.slug %>" class="mobile-nav-link <%= currentPath === '/categoria/' + cat.slug ? 'active' : '' %>">
+                <span><%= cat.name %></span>
+                <%- icon('chevron-right', 16) %>
+              </a>
+            </li>
+          <% }); %>
+        <% } else { %>
+          <li><a href="/categoria/feminino" class="mobile-nav-link"><span>Feminino</span> <%- icon('chevron-right', 16) %></a></li>
+          <li><a href="/categoria/masculino" class="mobile-nav-link"><span>Masculino</span> <%- icon('chevron-right', 16) %></a></li>
+          <li><a href="/categoria/infantil" class="mobile-nav-link"><span>Infantil</span> <%- icon('chevron-right', 16) %></a></li>
+          <li><a href="/categoria/acessorios" class="mobile-nav-link"><span>Acessórios</span> <%- icon('chevron-right', 16) %></a></li>
+        <% } %>
+        <li><a href="/loja?sort=novidades" class="mobile-nav-link highlight"><span>Novidades da Estação</span> <%- icon('sparkles', 16) %></a></li>
+      </ul>
+
+      <div class="mobile-nav-divider"></div>
+
+      <!-- Acesso Rápido Conta & Favoritos -->
+      <ul class="mobile-nav-list secondary">
+        <% if (locals.user) { %>
+          <li>
+            <a href="<%= user.role === 'admin' ? '/admin' : '/minha-conta' %>" class="mobile-nav-link">
+              <span style="display:flex;align-items:center;gap:10px;"><%- icon('user', 18) %> Minha Conta (<%= user.firstName %>)</span>
+            </a>
+          </li>
+        <% } else { %>
+          <li>
+            <a href="/login" class="mobile-nav-link">
+              <span style="display:flex;align-items:center;gap:10px;"><%- icon('user', 18) %> Entrar ou Cadastrar</span>
+            </a>
+          </li>
+        <% } %>
+        <li>
+          <a href="/favoritos" class="mobile-nav-link">
+            <span style="display:flex;align-items:center;gap:10px;"><%- icon('heart', 18) %> Meus Favoritos</span>
+          </a>
+        </li>
+        <li>
+          <a href="/contato" class="mobile-nav-link">
+            <span style="display:flex;align-items:center;gap:10px;"><%- icon('mail', 18) %> Fale Conosco</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mobile-nav-footer">
+      <button type="button" class="btn btn-secondary btn-sm btn-block js-theme-toggle" style="gap: 8px;">
+        <span class="theme-icon-light"><%- icon('moon', 16) %> Mudar para Modo Escuro</span>
+        <span class="theme-icon-dark"><%- icon('sun', 16) %> Mudar para Modo Claro</span>
+      </button>
+    </div>
+  </aside>
 
   <%- include('flash') %>
   <%- include('cart-drawer') %>

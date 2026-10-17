@@ -70,11 +70,11 @@ async function seed() {
     { type: 'size', name: 'Único', order: 11 },
   ];
   const colors = [
-    { type: 'color', name: 'Roxo Nobre', value: '#4C1D95', order: 1 },
-    { type: 'color', name: 'Lilás Névoa', value: '#B79CF2', order: 2 },
-    { type: 'color', name: 'Ciano Elétrico', value: '#00F0FF', order: 3 },
+    { type: 'color', name: 'Roxo Nobre', value: '#4A2570', order: 1 },
+    { type: 'color', name: 'Lilás Névoa', value: '#B89CE0', order: 2 },
+    { type: 'color', name: 'Dourado Champanhe', value: '#C5A059', order: 3 },
     { type: 'color', name: 'Preto Clássico', value: '#1E1B26', order: 4 },
-    { type: 'color', name: 'Off-White', value: '#F8F5FE', order: 5 },
+    { type: 'color', name: 'Off-White', value: '#FAF8F5', order: 5 },
     { type: 'color', name: 'Terracota', value: '#9A3412', order: 6 },
   ];
   await Attribute.insertMany([...sizes, ...colors]);
@@ -123,7 +123,7 @@ async function seed() {
     { name: 'Vestidos', slug: 'vestidos', parent: catFeminino._id, order: 1 },
     { name: 'Conjuntos & Blazers', slug: 'conjuntos-blazers', parent: catFeminino._id, order: 2 },
     { name: 'Camisas Masculinas', slug: 'camisas-masculinas', parent: catMasculino._id, order: 1 },
-    { name: 'Streetwear & Jaquetas', slug: 'streetwear-jaquetas', parent: catMasculino._id, order: 2 },
+    { name: 'Casacos & Jaquetas', slug: 'streetwear-jaquetas', parent: catMasculino._id, order: 2 },
     { name: 'Bolsas', slug: 'bolsas', parent: catAcessorios._id, order: 1 },
   ]);
   console.log('✅ Categorias principais e subcategorias criadas.');
@@ -134,8 +134,8 @@ async function seed() {
     {
       name: 'Vestido Midi Canelado Elegance Roxo Nobre',
       slug: 'vestido-midi-canelado-elegance-roxo-nobre',
-      shortDescription: 'Caimento fluido com decote suave e cinto fino em fivela ciano elétrico.',
-      description: 'Confeccionado em malha canelada de alta densidade que não marca e não desbota. Acompanha cinto fino contemporâneo com fivela e detalhes em ciano elétrico. Perfeito para quem busca sofisticação em eventos sociais ou ambiente de trabalho.',
+      shortDescription: 'Caimento fluido com decote suave e cinto fino com fivela dourado champanhe.',
+      description: 'Confeccionado em malha canelada de alta densidade que não marca e não desbota. Acompanha cinto fino clássico com fivela e acabamentos em dourado champanhe. Perfeito para quem busca sofisticação em eventos sociais ou ambiente de trabalho.',
       category: catFeminino._id,
       price: 289.9,
       salePrice: 249.9,
@@ -149,17 +149,17 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'VEST-ELEG-P', size: 'P', color: 'Roxo Nobre', colorHex: '#4C1D95', stock: 8 },
-        { sku: 'VEST-ELEG-M', size: 'M', color: 'Roxo Nobre', colorHex: '#4C1D95', stock: 12 },
-        { sku: 'VEST-ELEG-G', size: 'G', color: 'Roxo Nobre', colorHex: '#4C1D95', stock: 6 },
-        { sku: 'VEST-ELEG-GG', size: 'GG', color: 'Roxo Nobre', colorHex: '#4C1D95', stock: 4 },
+        { sku: 'VEST-ELEG-P', size: 'P', color: 'Roxo Nobre', colorHex: '#4A2570', stock: 8 },
+        { sku: 'VEST-ELEG-M', size: 'M', color: 'Roxo Nobre', colorHex: '#4A2570', stock: 12 },
+        { sku: 'VEST-ELEG-G', size: 'G', color: 'Roxo Nobre', colorHex: '#4A2570', stock: 6 },
+        { sku: 'VEST-ELEG-GG', size: 'GG', color: 'Roxo Nobre', colorHex: '#4A2570', stock: 4 },
       ],
     },
     {
       name: 'Blazer Alfaiataria Estruturado Lilás Névoa',
       slug: 'blazer-alfaiataria-estruturado-lilas-nevoa',
-      shortDescription: 'Corte acinturado contemporâneo com botões forrados e pesponto ciano.',
-      description: 'O clássico reinventado em tom lilás luminoso e forro acetinado. Lapela alongada de corte impecável e abotoamento duplo com detalhe em ciano neon sutil.',
+      shortDescription: 'Corte acinturado contemporâneo com botões forrados e pesponto dourado.',
+      description: 'O clássico reinventado em tom lilás suave e forro acetinado. Lapela alongada de corte impecável e abotoamento duplo com acabamento em dourado champanhe.',
       category: catFeminino._id,
       price: 389.0,
       salePrice: 0,
@@ -170,9 +170,9 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'BLAZ-NEV-38', size: '38', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 5 },
-        { sku: 'BLAZ-NEV-40', size: '40', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 7 },
-        { sku: 'BLAZ-NEV-42', size: '42', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 3 },
+        { sku: 'BLAZ-NEV-38', size: '38', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 5 },
+        { sku: 'BLAZ-NEV-40', size: '40', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 7 },
+        { sku: 'BLAZ-NEV-42', size: '42', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 3 },
       ],
     },
     {
@@ -190,8 +190,8 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'VEST-GALA-38', size: '38', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 4 },
-        { sku: 'VEST-GALA-40', size: '40', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 5 },
+        { sku: 'VEST-GALA-38', size: '38', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 4 },
+        { sku: 'VEST-GALA-40', size: '40', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 5 },
       ],
     },
     {
@@ -229,16 +229,16 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'CAM-LIN-M', size: 'M', color: 'Off-White', colorHex: '#F8F5FE', stock: 10 },
-        { sku: 'CAM-LIN-G', size: 'G', color: 'Off-White', colorHex: '#F8F5FE', stock: 8 },
-        { sku: 'CAM-LIN-GG', size: 'GG', color: 'Off-White', colorHex: '#F8F5FE', stock: 4 },
+        { sku: 'CAM-LIN-M', size: 'M', color: 'Off-White', colorHex: '#FAF8F5', stock: 10 },
+        { sku: 'CAM-LIN-G', size: 'G', color: 'Off-White', colorHex: '#FAF8F5', stock: 8 },
+        { sku: 'CAM-LIN-GG', size: 'GG', color: 'Off-White', colorHex: '#FAF8F5', stock: 4 },
       ],
     },
     {
-      name: 'Jaqueta Corta-Vento Streetwear Ciano Neon',
+      name: 'Jaqueta Corta-Vento Casual Luxe Champanhe',
       slug: 'jaqueta-corta-vento-streetwear-ciano-neon',
-      shortDescription: 'Design esportivo de luxo com tecido repelente à água e recortes geométricos.',
-      description: 'Peça statement com visual cyberpunk contemporâneo. Conta com zíper impermeável ciano luminoso, capuz anatômico e bolsos laterais com fechamento seguro.',
+      shortDescription: 'Design casual de luxo com tecido repelente à água e recortes em tom champanhe.',
+      description: 'Peça versátil com acabamento sóbrio e contemporâneo. Conta com zíper metálico dourado champanhe, capuz anatômico e bolsos laterais com fechamento seguro.',
       category: catMasculino._id,
       price: 349.0,
       salePrice: 299.0,
@@ -249,15 +249,15 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'JAQ-CIAN-P', size: 'P', color: 'Ciano Elétrico', colorHex: '#00F0FF', stock: 6 },
-        { sku: 'JAQ-CIAN-M', size: 'M', color: 'Ciano Elétrico', colorHex: '#00F0FF', stock: 9 },
-        { sku: 'JAQ-CIAN-G', size: 'G', color: 'Ciano Elétrico', colorHex: '#00F0FF', stock: 5 },
+        { sku: 'JAQ-CIAN-P', size: 'P', color: 'Dourado Champanhe', colorHex: '#C5A059', stock: 6 },
+        { sku: 'JAQ-CIAN-M', size: 'M', color: 'Dourado Champanhe', colorHex: '#C5A059', stock: 9 },
+        { sku: 'JAQ-CIAN-G', size: 'G', color: 'Dourado Champanhe', colorHex: '#C5A059', stock: 5 },
       ],
     },
     {
       name: 'Conjunto Algodão Prime Infantil Menina',
       slug: 'conjunto-algodao-prime-infantil-menina',
-      shortDescription: 'Blusinha charmosa com fru-fru nos ombros e shortinho com lacinho ciano.',
+      shortDescription: 'Blusinha charmosa com babado nos ombros e shortinho com laço dourado.',
       description: 'Confeccionado em algodão egípcio puro e antialérgico, garantindo liberdade total para brincar com muito estilo e frescor.',
       category: catInfantil._id,
       price: 149.9,
@@ -269,15 +269,15 @@ async function seed() {
       isNewArrival: true,
       active: true,
       variants: [
-        { sku: 'CONJ-INF-04', size: '4 anos', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 6 },
-        { sku: 'CONJ-INF-06', size: '6 anos', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 6 },
-        { sku: 'CONJ-INF-08', size: '8 anos', color: 'Lilás Névoa', colorHex: '#B79CF2', stock: 4 },
+        { sku: 'CONJ-INF-04', size: '4 anos', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 6 },
+        { sku: 'CONJ-INF-06', size: '6 anos', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 6 },
+        { sku: 'CONJ-INF-08', size: '8 anos', color: 'Lilás Névoa', colorHex: '#B89CE0', stock: 4 },
       ],
     },
     {
-      name: 'Bolsa Baguette Couro Legítimo com Alça Metálica Ciano',
+      name: 'Bolsa Baguette Couro Legítimo com Alça Dourada',
       slug: 'bolsa-baguette-couro-legitimo-com-alca-metalica-ciano',
-      shortDescription: 'Design italiano com fecho monograma VB em banho ciano espelhado.',
+      shortDescription: 'Design italiano com fecho monograma VB em banho dourado champanhe.',
       description: 'Bolsa compacta e ultra elegante com espaço ideal para smartphone, carteira e maquiagem. Alça em corrente articulada e couro de acabamento acetinado nobre.',
       category: catAcessorios._id,
       price: 320.0,
@@ -290,7 +290,7 @@ async function seed() {
       active: true,
       variants: [
         { sku: 'BOL-BAG-PRETA', size: 'Único', color: 'Preto Clássico', colorHex: '#1E1B26', stock: 5 },
-        { sku: 'BOL-BAG-ROXA', size: 'Único', color: 'Roxo Nobre', colorHex: '#4C1D95', stock: 4 },
+        { sku: 'BOL-BAG-ROXA', size: 'Único', color: 'Roxo Nobre', colorHex: '#4A2570', stock: 4 },
       ],
     },
   ];
@@ -332,7 +332,58 @@ async function autoSeedIfEmpty() {
     if (adminCount === 0) {
       console.log('🌱 Banco de dados inicial vazio. Executando auto-seed...');
       await seed(false);
+      return;
     }
+
+    // Migração suave de textos/cores dos itens de demonstração para paleta sóbria
+    await Attribute.updateMany({ name: 'Ciano Elétrico' }, { $set: { name: 'Dourado Champanhe', value: '#C5A059' } });
+    await Product.updateOne(
+      { slug: 'vestido-midi-canelado-elegance-roxo-nobre' },
+      {
+        $set: {
+          shortDescription: 'Caimento fluido com decote suave e cinto fino com fivela dourado champanhe.',
+          description: 'Confeccionado em malha canelada de alta densidade que não marca e não desbota. Acompanha cinto fino clássico com fivela e acabamentos em dourado champanhe. Perfeito para quem busca sofisticação em eventos sociais ou ambiente de trabalho.',
+        },
+      }
+    );
+    await Product.updateOne(
+      { slug: 'blazer-alfaiataria-estruturado-lilas-nevoa' },
+      {
+        $set: {
+          shortDescription: 'Corte acinturado contemporâneo com botões forrados e pesponto dourado.',
+          description: 'O clássico reinventado em tom lilás suave e forro acetinado. Lapela alongada de corte impecável e abotoamento duplo com acabamento em dourado champanhe.',
+        },
+      }
+    );
+    await Product.updateOne(
+      { slug: 'jaqueta-corta-vento-streetwear-ciano-neon' },
+      {
+        $set: {
+          name: 'Jaqueta Corta-Vento Casual Luxe Champanhe',
+          shortDescription: 'Design casual de luxo com tecido repelente à água e recortes em tom champanhe.',
+          description: 'Peça versátil com acabamento sóbrio e contemporâneo. Conta com zíper metálico dourado champanhe, capuz anatômico e bolsos laterais com fechamento seguro.',
+          'variants.$[].color': 'Dourado Champanhe',
+          'variants.$[].colorHex': '#C5A059',
+        },
+      }
+    );
+    await Product.updateOne(
+      { slug: 'conjunto-algodao-prime-infantil-menina' },
+      {
+        $set: {
+          shortDescription: 'Blusinha charmosa com babado nos ombros e shortinho com laço dourado.',
+        },
+      }
+    );
+    await Product.updateOne(
+      { slug: 'bolsa-baguette-couro-legitimo-com-alca-metalica-ciano' },
+      {
+        $set: {
+          name: 'Bolsa Baguette Couro Legítimo com Alça Dourada',
+          shortDescription: 'Design italiano com fecho monograma VB em banho dourado champanhe.',
+        },
+      }
+    );
   } catch (err) {
     console.error('⚠️  Não foi possível executar auto-seed:', err.message);
   }

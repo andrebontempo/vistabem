@@ -28,7 +28,7 @@
         </div>
 
         <div class="hero-visual">
-          <img src="/images/hero-art.svg" alt="Clientes elegantes Vista Bem" class="hero-art-img" width="440" height="480">
+          <img src="/images/hero-art.svg?v=<%= assetVersion %>" alt="Clientes elegantes Vista Bem" class="hero-art-img" width="440" height="480">
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
       <div class="bento-grid">
         <!-- Card Grande: Feminino -->
         <a href="/categoria/feminino" class="bento-card large">
-          <img src="/images/categories/categoria-feminino.svg" alt="Moda Feminina Vista Bem" class="bento-bg" loading="lazy">
+          <img src="/images/categories/categoria-feminino.svg?v=<%= assetVersion %>" alt="Moda Feminina Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
             <span class="badge badge-gold" style="margin-bottom: 8px;">Destaque</span>
@@ -95,7 +95,7 @@
 
         <!-- Card: Masculino -->
         <a href="/categoria/masculino" class="bento-card">
-          <img src="/images/categories/categoria-masculino.svg" alt="Moda Masculina Vista Bem" class="bento-bg" loading="lazy">
+          <img src="/images/categories/categoria-masculino.svg?v=<%= assetVersion %>" alt="Moda Masculina Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
             <h3 class="bento-title">Moda Masculina</h3>
@@ -105,7 +105,7 @@
 
         <!-- Card: Infantil -->
         <a href="/categoria/infantil" class="bento-card">
-          <img src="/images/categories/categoria-infantil.svg" alt="Moda Infantil Vista Bem" class="bento-bg" loading="lazy">
+          <img src="/images/categories/categoria-infantil.svg?v=<%= assetVersion %>" alt="Moda Infantil Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
             <h3 class="bento-title">Moda Infantil</h3>
@@ -114,8 +114,8 @@
         </a>
 
         <!-- Card: Acessórios -->
-        <a href="/categoria/acessorios" class="bento-card" style="grid-column: span 2;">
-          <img src="/images/categories/categoria-acessorios.svg" alt="Bolsas e Acessórios Vista Bem" class="bento-bg" loading="lazy">
+        <a href="/categoria/acessorios" class="bento-card wide">
+          <img src="/images/categories/categoria-acessorios.svg?v=<%= assetVersion %>" alt="Bolsas e Acessórios Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
             <h3 class="bento-title">Bolsas &amp; Acessórios</h3>
@@ -200,13 +200,13 @@
   </section>
 
   <!-- Banner Editorial Meio de Página -->
-  <section style="background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700) 100%); color: #fff; padding: 70px 0; text-align: center;">
+  <section class="editorial-banner">
     <div class="container" style="max-width: 760px;">
       <span class="badge badge-gold" style="margin-bottom: 16px;">Exclusividade Vista Bem</span>
-      <h2 style="color: #fff; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 16px;">
+      <h2 class="editorial-banner-title">
         Vista-se de confiança todos os dias
       </h2>
-      <p style="color: var(--lilac-100); font-size: 1.1rem; margin-bottom: 30px;">
+      <p class="editorial-banner-desc">
         Acreditamos que o bom vestir transforma a autoestima. Peças atemporais, versáteis e com a elegância que acompanha a sua rotina.
       </p>
       <a href="/loja" class="btn btn-gold">Conhecer a Coleção Completa</a>

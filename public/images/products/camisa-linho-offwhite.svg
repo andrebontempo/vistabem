@@ -1,74 +1,65 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
   <defs>
     <radialGradient id="studioShirt" cx="50%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#180C2C" stop-opacity="0.95"/>
-      <stop offset="65%" stop-color="#0E041A" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#07020D" stop-opacity="1"/>
+      <stop offset="0%" stop-color="#2E1B46" stop-opacity="0.95"/>
+      <stop offset="65%" stop-color="#1C102B" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#130B1E" stop-opacity="1"/>
     </radialGradient>
     <linearGradient id="linenOffWhite" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="60%" stop-color="#F1ECF8"/>
-      <stop offset="100%" stop-color="#E2DAEE"/>
+      <stop offset="0%" stop-color="#FAF8F5"/>
+      <stop offset="60%" stop-color="#EFECE6"/>
+      <stop offset="100%" stop-color="#E2DDD3"/>
     </linearGradient>
     <filter id="shirtShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.65"/>
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#09040E" flood-opacity="0.6"/>
     </filter>
   </defs>
 
   <rect width="600" height="750" rx="16" fill="url(#studioShirt)"/>
+  <circle cx="300" cy="350" r="160" fill="#C5A059" fill-opacity="0.06"/>
 
-  <!-- Halo de Luz Sutil -->
-  <circle cx="300" cy="350" r="160" fill="#00F0FF" fill-opacity="0.06"/>
-
-  <!-- Tag Editorial Masculino -->
   <g transform="translate(40, 40)">
-    <rect width="100" height="26" rx="13" fill="#140626" stroke="#00F0FF" stroke-width="1.2"/>
-    <text x="50" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#00F0FF" letter-spacing="1.5" text-anchor="middle">PURE LINEN</text>
+    <rect width="104" height="26" rx="13" fill="#1F1230" stroke="#C5A059" stroke-width="1"/>
+    <text x="52" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#D4B475" letter-spacing="1.5" text-anchor="middle">PURO LINHO</text>
   </g>
 
-  <!-- CAMISA DE LINHO MASCULINA -->
   <g filter="url(#shirtShadow)">
-    <!-- Cabide de Madeira Nobre e Metal Ciano -->
-    <path d="M 300,95 C 300,80 315,75 315,90 C 315,105 300,108 300,122" stroke="#00F0FF" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <path d="M 170,170 L 300,122 L 430,170" stroke="#380C6E" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <!-- Cabide de Madeira & Latão Dourado -->
+    <path d="M 300,95 C 300,80 315,75 315,90 C 315,105 300,108 300,122" stroke="#D4B475" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+    <path d="M 170,170 L 300,122 L 430,170" stroke="#9E7B3B" stroke-width="5.5" stroke-linecap="round" fill="none"/>
 
     <!-- Mangas -->
     <path d="M 175,170 L 125,270 L 155,480 L 200,470 L 205,270" fill="url(#linenOffWhite)"/>
     <path d="M 425,170 L 475,270 L 445,480 L 400,470 L 395,270" fill="url(#linenOffWhite)"/>
 
-    <!-- Punhos Dobrados com Pesponto -->
-    <rect x="155" y="450" width="45" height="25" rx="3" fill="#F8F5FE" stroke="#CBD5E1" stroke-width="1.5"/>
-    <circle cx="177" cy="462" r="3" fill="#00F0FF"/>
-    <rect x="400" y="450" width="45" height="25" rx="3" fill="#F8F5FE" stroke="#CBD5E1" stroke-width="1.5"/>
-    <circle cx="423" cy="462" r="3" fill="#00F0FF"/>
+    <!-- Punhos -->
+    <rect x="155" y="450" width="45" height="25" rx="3" fill="#FAF8F5" stroke="#D1CBC0" stroke-width="1.4"/>
+    <circle cx="177" cy="462" r="2.8" fill="#B68D40"/>
+    <rect x="400" y="450" width="45" height="25" rx="3" fill="#FAF8F5" stroke="#D1CBC0" stroke-width="1.4"/>
+    <circle cx="423" cy="462" r="2.8" fill="#B68D40"/>
 
     <!-- Corpo da Camisa -->
     <path d="M 195,180 L 195,540 C 235,555 365,555 405,540 L 405,180 Z" fill="url(#linenOffWhite)"/>
 
-    <!-- Colarinho Italiano Estruturado -->
-    <path d="M 230,175 L 300,225 L 265,165 Z" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2"/>
-    <path d="M 370,175 L 300,225 L 335,165 Z" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.2"/>
+    <!-- Colarinho Italiano -->
+    <path d="M 230,175 L 300,225 L 265,165 Z" fill="#FAF8F5" stroke="#B8B0A4" stroke-width="1.2"/>
+    <path d="M 370,175 L 300,225 L 335,165 Z" fill="#FAF8F5" stroke="#B8B0A4" stroke-width="1.2"/>
 
-    <!-- Vista Frontal de Botões com Linha Ciano sutil -->
-    <rect x="290" y="215" width="20" height="325" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Vista Frontal -->
+    <rect x="290" y="215" width="20" height="325" fill="#F5F2EC" stroke="#DFD9CE" stroke-width="1"/>
     
-    <!-- Botões em Madre-Pérola com Costura Cruzada Ciano -->
-    <circle cx="300" cy="245" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
-    <circle cx="300" cy="295" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
-    <circle cx="300" cy="345" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
-    <circle cx="300" cy="395" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
-    <circle cx="300" cy="445" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
-    <circle cx="300" cy="495" r="5" fill="#FFFFFF" stroke="#00F0FF" stroke-width="1.5"/>
+    <!-- Botões em Madre-Pérola & Ouro -->
+    <circle cx="300" cy="245" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
+    <circle cx="300" cy="295" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
+    <circle cx="300" cy="345" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
+    <circle cx="300" cy="395" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
+    <circle cx="300" cy="445" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
+    <circle cx="300" cy="495" r="4.5" fill="#FAF8F5" stroke="#B68D40" stroke-width="1.4"/>
 
-    <!-- Bolso Frontal Esquerdo no Peito com Detalhe Ciano -->
-    <path d="M 230,265 L 270,265 L 270,310 L 250,325 L 230,310 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
-    <line x1="230" y1="268" x2="270" y2="268" stroke="#00F0FF" stroke-width="1.8"/>
-
-    <!-- Textura sutil do Linho Puro -->
-    <line x1="205" y1="360" x2="395" y2="360" stroke="#CBD5E1" stroke-width="0.8" stroke-dasharray="3 4"/>
-    <line x1="205" y1="410" x2="395" y2="410" stroke="#CBD5E1" stroke-width="0.8" stroke-dasharray="3 4"/>
+    <!-- Bolso Frontal -->
+    <path d="M 230,265 L 270,265 L 270,310 L 250,325 L 230,310 Z" fill="#FAF8F5" stroke="#D1CBC0" stroke-width="1.2"/>
+    <line x1="230" y1="268" x2="270" y2="268" stroke="#C5A059" stroke-width="1.6"/>
   </g>
 
-  <!-- Assinatura Editorial -->
-  <text x="300" y="718" font-family="'Bodoni Moda', serif" font-size="16" font-weight="600" fill="#EDE6FA" letter-spacing="4" text-anchor="middle">MASCULINO CONTEMPORÂNEO</text>
+  <text x="300" y="718" font-family="'Bodoni Moda', Georgia, serif" font-size="15" font-weight="600" fill="#DFD3EE" letter-spacing="4" text-anchor="middle">MASCULINO CONTEMPORÂNEO</text>
 </svg>

@@ -1,35 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 90" width="340" height="90" fill="none">
-  <defs>
-    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-
-  <!-- Monograma VB com Cabide Integrado & Destaque Ciano -->
+  <!-- Monograma VB com Cabide Integrado & Destaque Champanhe Sóbrio (Modo Claro) -->
   <g transform="translate(10, 5)">
-    <!-- Cabide de Roupa Estilizado em Traço Lilás & Ciano -->
-    <path d="M 40,32 C 40,26 43,22 47,22 C 51,22 54,25 54,28 C 54,32 50,34 46,37 L 46,40" stroke="#00F0FF" stroke-width="2.5" stroke-linecap="round" fill="none" filter="url(#cyanGlow)"/>
-    <path d="M 46,40 L 8,66 C 5,68 7,72 11,72 L 81,72 C 85,72 87,68 84,66 Z" stroke="#B77BFA" stroke-width="2.2" stroke-linejoin="round" fill="rgba(124, 36, 224, 0.25)"/>
+    <!-- Cabide de Roupa Estilizado em Traço Ameixa & Dourado Champanhe -->
+    <path d="M 40,32 C 40,26 43,22 47,22 C 51,22 54,25 54,28 C 54,32 50,34 46,37 L 46,40" stroke="#B68D40" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M 46,40 L 8,66 C 5,68 7,72 11,72 L 81,72 C 85,72 87,68 84,66 Z" stroke="#8C73A8" stroke-width="2" stroke-linejoin="round" fill="rgba(74, 37, 112, 0.06)"/>
     
     <!-- Letra V Clássica Didone -->
-    <path d="M 12,25 L 22,25 L 36,65 L 48,25 L 56,25 L 38,71 L 30,71 Z" fill="#FFFFFF"/>
+    <path d="M 12,25 L 22,25 L 36,65 L 48,25 L 56,25 L 38,71 L 30,71 Z" fill="#231236"/>
     <!-- Detalhe da serifa fina do V -->
-    <path d="M 10,24 L 24,24" stroke="#FFFFFF" stroke-width="1.5"/>
-    <path d="M 33,25 L 54,25" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 10,24 L 24,24" stroke="#231236" stroke-width="1.5"/>
+    <path d="M 33,25 L 54,25" stroke="#B68D40" stroke-width="1.8"/>
 
     <!-- Letra B Didone Entrelaçada -->
-    <path d="M 43,25 L 64,25 C 73,25 79,29 79,36 C 79,42 74,46 67,47 C 76,48 82,53 82,61 C 82,70 74,72 63,72 L 43,72 Z M 50,31 L 50,44 L 62,44 C 67,44 71,42 71,38 C 71,33 67,31 62,31 Z M 50,50 L 50,66 L 63,66 C 69,66 73,63 73,58 C 73,53 69,50 63,50 Z" fill="#D8B4FE"/>
-    <!-- Brilho Ciano Neon de Destaque -->
-    <circle cx="79" cy="36" r="3" fill="#00F0FF" filter="url(#cyanGlow)"/>
+    <path d="M 43,25 L 64,25 C 73,25 79,29 79,36 C 79,42 74,46 67,47 C 76,48 82,53 82,61 C 82,70 74,72 63,72 L 43,72 Z M 50,31 L 50,44 L 62,44 C 67,44 71,42 71,38 C 71,33 67,31 62,31 Z M 50,50 L 50,66 L 63,66 C 69,66 73,63 73,58 C 73,53 69,50 63,50 Z" fill="#4A2570"/>
+    <!-- Ponto Dourado Champanhe de Destaque -->
+    <circle cx="79" cy="36" r="2.5" fill="#B68D40"/>
   </g>
 
   <!-- Tipografia da Marca "VISTA BEM" -->
   <g transform="translate(105, 10)">
-    <text x="0" y="42" font-family="'Bodoni Moda', 'Playfair Display', Georgia, serif" font-size="30" font-weight="700" letter-spacing="4" fill="#FFFFFF">
+    <text x="0" y="42" font-family="'Bodoni Moda', 'Playfair Display', Georgia, serif" font-size="30" font-weight="700" letter-spacing="4" fill="#231236">
       VISTA BEM
     </text>
-    <text x="2" y="62" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5" font-weight="700" letter-spacing="5" fill="#00F0FF">
+    <text x="2" y="62" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5" font-weight="600" letter-spacing="5" fill="#8C6B2F">
       MODA &amp; ESTILO
     </text>
   </g>

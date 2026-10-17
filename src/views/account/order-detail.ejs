@@ -53,7 +53,7 @@
     </div>
 
     <!-- Endereço e Totais -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div class="order-summary-grid">
       <div>
         <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Endereço de Entrega</h4>
         <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
@@ -64,7 +64,7 @@
         </p>
       </div>
 
-      <div style="text-align: right;">
+      <div class="order-totals-col">
         <div style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 6px;">Subtotal: <%= money(order.subtotal) %></div>
         <% if (order.discount > 0) { %>
           <div style="font-size: 0.95rem; color: var(--success); margin-bottom: 6px;">Descontos: - <%= money(order.discount) %></div>

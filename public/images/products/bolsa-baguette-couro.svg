@@ -1,78 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
   <defs>
     <radialGradient id="studioBag" cx="50%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#1A0A33" stop-opacity="0.95"/>
-      <stop offset="65%" stop-color="#0E041A" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#07020D" stop-opacity="1"/>
+      <stop offset="0%" stop-color="#2E1B46" stop-opacity="0.95"/>
+      <stop offset="65%" stop-color="#1C102B" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#130B1E" stop-opacity="1"/>
     </radialGradient>
     <linearGradient id="leatherGloss" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2D1152"/>
-      <stop offset="45%" stop-color="#16062B"/>
-      <stop offset="100%" stop-color="#080210"/>
+      <stop offset="0%" stop-color="#381D56"/>
+      <stop offset="45%" stop-color="#221036"/>
+      <stop offset="100%" stop-color="#130820"/>
     </linearGradient>
-    <linearGradient id="cyanMetal" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#E0F7FA"/>
-      <stop offset="40%" stop-color="#00F0FF"/>
-      <stop offset="80%" stop-color="#0891B2"/>
-      <stop offset="100%" stop-color="#00E5FF"/>
+    <linearGradient id="goldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3E3B8"/>
+      <stop offset="45%" stop-color="#C5A059"/>
+      <stop offset="100%" stop-color="#8C6B2F"/>
     </linearGradient>
-    <filter id="bagGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
     <filter id="bagShadow" x="-15%" y="-15%" width="130%" height="135%">
-      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.8"/>
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#09040E" flood-opacity="0.7"/>
     </filter>
   </defs>
 
   <rect width="600" height="750" rx="16" fill="url(#studioBag)"/>
+  <circle cx="300" cy="390" r="175" fill="#C5A059" fill-opacity="0.06"/>
 
-  <!-- Halo de Luz Ciano e Roxo -->
-  <circle cx="300" cy="380" r="180" fill="#7C24E0" fill-opacity="0.12" filter="url(#bagGlow)"/>
-  <circle cx="300" cy="420" r="120" fill="#00F0FF" fill-opacity="0.08" filter="url(#bagGlow)"/>
-
-  <!-- Tag Editorial Acessórios -->
   <g transform="translate(40, 40)">
-    <rect width="120" height="26" rx="13" fill="#140626" stroke="#00F0FF" stroke-width="1.2"/>
-    <text x="60" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#00F0FF" letter-spacing="1.5" text-anchor="middle">LEATHER LINE</text>
+    <rect width="120" height="26" rx="13" fill="#1F1230" stroke="#C5A059" stroke-width="1"/>
+    <text x="60" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#D4B475" letter-spacing="1.5" text-anchor="middle">COURO LEGÍTIMO</text>
   </g>
 
-  <!-- Sombra no Chão / Pedestal -->
-  <ellipse cx="300" cy="620" rx="200" ry="24" fill="#000000" fill-opacity="0.85" filter="url(#bagGlow)"/>
+  <ellipse cx="300" cy="618" rx="185" ry="20" fill="#09040E" fill-opacity="0.65"/>
 
-  <!-- BOLSA BAGUETTE ESTRUTURADA -->
   <g filter="url(#bagShadow)">
-    <!-- Alça de Ombro em Corrente Articulada Ciano Metálico -->
-    <!-- Elos da Corrente Ciano Neon -->
-    <path d="M 170,360 C 170,160 430,160 430,360" stroke="url(#cyanMetal)" stroke-width="8" stroke-linecap="round" fill="none" filter="url(#bagGlow)"/>
-    <path d="M 170,360 C 170,160 430,160 430,360" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="8 12" stroke-linecap="round" fill="none"/>
+    <!-- Alça em Corrente Dourado Champanhe -->
+    <path d="M 170,360 C 170,160 430,160 430,360" stroke="url(#goldMetal)" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M 170,360 C 170,160 430,160 430,360" stroke="#FAF8F5" stroke-width="1.6" stroke-dasharray="8 12" stroke-linecap="round" fill="none" stroke-opacity="0.7"/>
 
-    <!-- Fixadores Laterais da Alça com Argola Dupla -->
-    <circle cx="170" cy="365" r="14" fill="#07020D" stroke="url(#cyanMetal)" stroke-width="4"/>
-    <circle cx="430" cy="365" r="14" fill="#07020D" stroke="url(#cyanMetal)" stroke-width="4"/>
+    <circle cx="170" cy="365" r="13" fill="#170B26" stroke="url(#goldMetal)" stroke-width="3.5"/>
+    <circle cx="430" cy="365" r="13" fill="#170B26" stroke="url(#goldMetal)" stroke-width="3.5"/>
 
-    <!-- CORPO DA BOLSA BAGUETTE (Formato Curvado Geométrico Chic) -->
-    <!-- Fundo Estruturado -->
+    <!-- Corpo da Bolsa Baguette -->
     <path d="M 150,380 C 145,510 180,560 300,560 C 420,560 455,510 450,380 Z" fill="url(#leatherGloss)"/>
 
-    <!-- Pesponto Periférico de Alta-Costura em Linha Ciano -->
-    <path d="M 158,385 C 154,495 185,548 300,548 C 415,548 446,495 442,385" stroke="#00F0FF" stroke-width="1.5" stroke-dasharray="5 5" fill="none" stroke-opacity="0.8"/>
+    <!-- Pesponto em Linha Dourada -->
+    <path d="M 158,385 C 154,495 185,548 300,548 C 415,548 446,495 442,385" stroke="#D4B475" stroke-width="1.4" stroke-dasharray="5 5" fill="none" stroke-opacity="0.65"/>
 
-    <!-- Aba Frontal Transpassada (Flap) -->
-    <path d="M 148,375 C 220,385 380,385 452,375 L 435,465 C 370,495 230,495 165,465 Z" fill="#240A4E" stroke="#3C1569" stroke-width="2"/>
+    <!-- Aba Frontal -->
+    <path d="M 148,375 C 220,385 380,385 452,375 L 435,465 C 370,495 230,495 165,465 Z" fill="#2A1442" stroke="#4A2570" stroke-width="1.8"/>
 
-    <!-- Reflexo de Verniz / Couro Nobre -->
-    <path d="M 175,400 C 230,410 370,410 425,400 C 415,445 375,470 300,470 C 225,470 185,445 175,400 Z" fill="rgba(255, 255, 255, 0.05)"/>
+    <!-- Reflexo Sutil do Couro -->
+    <path d="M 175,400 C 230,410 370,410 425,400 C 415,445 375,470 300,470 C 225,470 185,445 175,400 Z" fill="rgba(255, 255, 255, 0.04)"/>
 
-    <!-- FECHO GEOMÉTRICO "VB" EM METAL CIANO POLIDO -->
-    <g transform="translate(270, 440)" filter="url(#bagGlow)">
-      <rect width="60" height="42" rx="10" fill="#07020D" stroke="url(#cyanMetal)" stroke-width="3"/>
-      <!-- Monograma V B Gravado a Laser -->
-      <path d="M 22,12 L 28,12 L 34,26 L 40,12 L 46,12 L 36,30 L 32,30 Z" fill="url(#cyanMetal)"/>
-      <circle cx="30" cy="34" r="2.5" fill="#00F0FF"/>
+    <!-- Fecho Monograma VB em Ouro Champanhe -->
+    <g transform="translate(270, 440)">
+      <rect width="60" height="42" rx="8" fill="#170B26" stroke="url(#goldMetal)" stroke-width="2.8"/>
+      <path d="M 22,12 L 28,12 L 34,26 L 40,12 L 46,12 L 36,30 L 32,30 Z" fill="url(#goldMetal)"/>
+      <circle cx="30" cy="34" r="2.2" fill="#D4B475"/>
     </g>
   </g>
 
-  <!-- Assinatura Editorial -->
-  <text x="300" y="700" font-family="'Bodoni Moda', serif" font-size="16" font-weight="600" fill="#EDE6FA" letter-spacing="4" text-anchor="middle">ACESSÓRIOS DE LUXO VISTA BEM</text>
+  <text x="300" y="700" font-family="'Bodoni Moda', Georgia, serif" font-size="15" font-weight="600" fill="#DFD3EE" letter-spacing="4" text-anchor="middle">ACESSÓRIOS VISTA BEM</text>
 </svg>

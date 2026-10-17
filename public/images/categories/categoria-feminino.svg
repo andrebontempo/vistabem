@@ -1,82 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" fill="none">
   <defs>
-    <radialGradient id="catFemBg" cx="60%" cy="40%" r="70%">
-      <stop offset="0%" stop-color="#2A0B54"/>
-      <stop offset="45%" stop-color="#140626"/>
-      <stop offset="100%" stop-color="#07020D"/>
+    <radialGradient id="catFemBg" cx="55%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#351C52"/>
+      <stop offset="55%" stop-color="#211133"/>
+      <stop offset="100%" stop-color="#140A20"/>
     </radialGradient>
     <linearGradient id="silkFlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#D8B4FE"/>
-      <stop offset="40%" stop-color="#9B4AF8"/>
-      <stop offset="85%" stop-color="#5814A8"/>
-      <stop offset="100%" stop-color="#240A4E"/>
+      <stop offset="0%" stop-color="#E6DCF2"/>
+      <stop offset="45%" stop-color="#9A78C2"/>
+      <stop offset="85%" stop-color="#4A2570"/>
+      <stop offset="100%" stop-color="#28133D"/>
     </linearGradient>
-    <linearGradient id="cyanGlowFem" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F0FF"/>
-      <stop offset="100%" stop-color="#06B6D4"/>
+    <linearGradient id="goldBelt" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#B68D40"/>
+      <stop offset="50%" stop-color="#E5CA93"/>
+      <stop offset="100%" stop-color="#B68D40"/>
     </linearGradient>
-    <filter id="softGlowFem" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="16" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
     <filter id="shadowFem" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.8"/>
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#09040E" flood-opacity="0.65"/>
     </filter>
   </defs>
 
-  <!-- Fundo Atmosférico de Alta-Costura -->
+  <!-- Fundo Editorial Sóbrio -->
   <rect width="800" height="800" fill="url(#catFemBg)"/>
 
-  <!-- Halo de Luz Neon & Ciano -->
-  <circle cx="500" cy="380" r="280" fill="#7C24E0" fill-opacity="0.18" filter="url(#softGlowFem)"/>
-  <circle cx="520" cy="340" r="160" fill="#00F0FF" fill-opacity="0.12" filter="url(#softGlowFem)"/>
+  <!-- Arco Arquitetônico Clássico de Fundo -->
+  <path d="M 220,760 L 220,300 C 220,160 320,80 440,80 C 560,80 660,160 660,300 L 660,760" stroke="#C5A059" stroke-width="1.2" stroke-opacity="0.3" fill="rgba(255, 255, 255, 0.02)"/>
+  <circle cx="440" cy="340" r="210" fill="#C5A059" fill-opacity="0.06"/>
 
-  <!-- Formas Geométricas & Sparkles de Fundo -->
-  <circle cx="640" cy="180" r="120" stroke="#00F0FF" stroke-width="1.5" stroke-opacity="0.3" stroke-dasharray="6 8"/>
-  <path d="M 680 120 L 684 132 L 696 136 L 684 140 L 680 152 L 676 140 L 664 136 L 676 132 Z" fill="#00F0FF" filter="url(#softGlowFem)"/>
-  <path d="M 320 220 L 322 228 L 330 230 L 322 232 L 320 240 L 318 232 L 310 230 L 318 228 Z" fill="#D8B4FE"/>
+  <!-- SILHUETA EDITORIAL FEMININA BEM ENQUADRADA -->
+  <g filter="url(#shadowFem)" transform="translate(150, 30)">
+    <!-- Chapéu de Alfaiataria -->
+    <ellipse cx="290" cy="135" rx="125" ry="22" fill="#1A0D29" stroke="#C5A059" stroke-width="2"/>
+    <path d="M 235,130 C 230,82 350,82 345,130" fill="#2A1542" stroke="#D4B475" stroke-width="1.6"/>
 
-  <!-- SILHUETA EDITORIAL FEMININA -->
-  <g filter="url(#shadowFem)" transform="translate(180, 40)">
-    <!-- Chapéu Alta-Costura / Silhueta Elegante -->
-    <ellipse cx="280" cy="140" rx="140" ry="24" fill="#0E031E" stroke="#00F0FF" stroke-width="2.5"/>
-    <path d="M 220,135 C 215,80 345,80 340,135" fill="#1B0733" stroke="#B77BFA" stroke-width="2"/>
+    <!-- Linha do Rosto e Cabelo -->
+    <path d="M 290,145 C 270,175 260,210 250,248 C 265,258 295,240 305,220" stroke="#FAF8F5" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <path d="M 305,145 C 325,178 330,228 340,265" stroke="#DFD3EE" stroke-width="2" stroke-linecap="round" fill="none"/>
 
-    <!-- Linha do Rosto e Cabelo Ondulado -->
-    <path d="M 280,150 C 260,180 250,220 240,260 C 255,270 285,250 295,230" stroke="#EDE6FA" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <path d="M 295,150 C 315,185 320,240 330,280" stroke="#D8B4FE" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <!-- Brinco Clássico Pérola & Ouro -->
+    <circle cx="265" cy="208" r="4" fill="#D4B475"/>
+    <line x1="265" y1="212" x2="265" y2="232" stroke="#D4B475" stroke-width="1.8"/>
+    <circle cx="265" cy="235" r="4.5" fill="#FAF8F5"/>
 
-    <!-- Brinco Ponto de Luz em Ciano -->
-    <circle cx="255" cy="215" r="5" fill="#00F0FF" filter="url(#softGlowFem)"/>
-    <line x1="255" y1="220" x2="255" y2="245" stroke="#00F0FF" stroke-width="2"/>
-    <circle cx="255" cy="247" r="4" fill="#FFFFFF"/>
-
-    <!-- Vestido de Gala com Silhueta Marcada -->
-    <!-- Busto com Decote Estruturado -->
-    <path d="M 225,240 Q 280,270 335,240 L 330,340 Q 280,355 230,340 Z" fill="url(#silkFlow)"/>
+    <!-- Vestido Midi/Longo de Alfaiataria Fluida -->
+    <path d="M 238,232 Q 290,260 342,232 L 336,325 Q 290,338 244,325 Z" fill="url(#silkFlow)"/>
     
-    <!-- Cinto Fino Esculpido Ciano -->
-    <path d="M 230,340 Q 280,355 330,340" stroke="#00F0FF" stroke-width="6" stroke-linecap="round" filter="url(#softGlowFem)"/>
-    <rect x="270" y="338" width="20" height="18" rx="4" fill="#07020D" stroke="#00F0FF" stroke-width="2.5"/>
+    <!-- Cinto Fino Dourado Champanhe -->
+    <path d="M 244,325 Q 290,338 336,325" stroke="url(#goldBelt)" stroke-width="5" stroke-linecap="round"/>
+    <rect x="281" y="322" width="18" height="15" rx="3" fill="#1A0D29" stroke="#D4B475" stroke-width="2"/>
 
-    <!-- Saia Fluida Evasê em Cascata de Seda -->
-    <path d="M 230,345 C 220,440 160,580 110,720 C 210,745 390,745 470,720 C 430,580 340,440 330,345 Z" fill="url(#silkFlow)"/>
+    <!-- Saia Evasê Fluida -->
+    <path d="M 244,330 C 234,420 180,545 135,675 C 225,698 395,698 465,675 C 425,545 346,420 336,330 Z" fill="url(#silkFlow)"/>
 
-    <!-- Pregas e Movimento Fluido com Brilhos -->
-    <path d="M 240,350 C 230,460 190,590 160,725" stroke="#EDE6FA" stroke-width="2.5" stroke-opacity="0.8" stroke-linecap="round"/>
-    <path d="M 275,355 C 275,470 260,600 245,730" stroke="#240A4E" stroke-width="4" stroke-linecap="round"/>
-    <path d="M 305,355 C 315,470 335,600 350,730" stroke="#EDE6FA" stroke-width="2.5" stroke-opacity="0.8" stroke-linecap="round"/>
-    <path d="M 325,350 C 345,460 395,590 425,725" stroke="#240A4E" stroke-width="4" stroke-linecap="round"/>
+    <!-- Pregas de Caimento -->
+    <path d="M 254,335 C 244,435 205,555 178,680" stroke="#FAF8F5" stroke-width="2" stroke-opacity="0.65" stroke-linecap="round"/>
+    <path d="M 285,340 C 285,445 270,565 256,685" stroke="#231138" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 312,340 C 322,445 340,565 354,685" stroke="#FAF8F5" stroke-width="2" stroke-opacity="0.65" stroke-linecap="round"/>
 
-    <!-- Fenda Lateral Ousada com Glow Ciano -->
-    <path d="M 310,480 L 370,728" stroke="#00F0FF" stroke-width="3.5" stroke-linecap="round" filter="url(#softGlowFem)"/>
-    <polygon points="310,480 370,728 340,730" fill="rgba(0, 240, 255, 0.2)"/>
-
-    <!-- Sapato Salto Fino Ciano -->
-    <path d="M 345,680 L 340,710 L 355,720 L 370,718 Z" fill="#00F0FF"/>
-    <line x1="340" y1="710" x2="338" y2="735" stroke="#00F0FF" stroke-width="3"/>
+    <!-- Detalhe de Fenda Discreta em Dourado -->
+    <path d="M 318,465 L 372,682" stroke="#D4B475" stroke-width="2.2" stroke-linecap="round"/>
   </g>
 
-  <!-- Assinatura Gráfica -->
-  <text x="740" y="760" font-family="'Bodoni Moda', serif" font-size="28" font-weight="700" fill="rgba(255, 255, 255, 0.15)" letter-spacing="6" text-anchor="end">FEMININE</text>
+  <text x="740" y="755" font-family="'Bodoni Moda', Georgia, serif" font-size="22" font-weight="600" fill="rgba(250, 248, 245, 0.2)" letter-spacing="6" text-anchor="end">ATELIER FEMININO</text>
 </svg>

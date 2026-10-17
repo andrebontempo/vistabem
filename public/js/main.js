@@ -35,19 +35,53 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('vb_font_scale', scale);
   }
 
-  // ─── 2. Modo Escuro / Claro (Dark Mode Padrão) ───────────────────────
-  const savedTheme = localStorage.getItem('vb_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  // ─── 2. Modo Claro / Escuro Sóbrio ───────────────────────────────────
+  const savedTheme = localStorage.getItem('vb_theme_v2') || 'light';
+  applyTheme(savedTheme);
 
-  const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  const themeToggleBtns = document.querySelectorAll('.js-theme-toggle, #theme-toggle');
+  themeToggleBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('vb_theme', newTheme);
+      applyTheme(newTheme);
     });
+  });
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('vb_theme_v2', theme);
+    localStorage.setItem('vb_theme', theme);
+    const metaTheme = document.getElementById('meta-theme-color');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'dark' ? '#131118' : '#231236');
+    }
   }
+
+  // ─── 2.5 Menu Mobile (Gaveta de Navegação) ───────────────────────────
+  const openMobileMenuBtn = document.getElementById('open-mobile-menu');
+  const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
+  const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+  const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+
+  function openMobileMenu() {
+    mobileNavOverlay?.classList.add('active');
+    mobileNavDrawer?.classList.add('active');
+    openMobileMenuBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileMenu() {
+    mobileNavOverlay?.classList.remove('active');
+    mobileNavDrawer?.classList.remove('active');
+    openMobileMenuBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  openMobileMenuBtn?.addEventListener('click', openMobileMenu);
+  closeMobileMenuBtn?.addEventListener('click', closeMobileMenu);
+  mobileNavOverlay?.addEventListener('click', closeMobileMenu);
 
   // ─── 3. Drawer da Sacola (Mini Carrinho) ─────────────────────────────
   const drawerOverlay = document.getElementById('cart-drawer-overlay');
@@ -56,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeCartBtn = document.getElementById('close-cart-btn');
 
   function openCart() {
+    closeMobileMenu();
     drawerOverlay?.classList.add('active');
     drawer?.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -75,6 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeCartBtn?.addEventListener('click', closeCart);
   drawerOverlay?.addEventListener('click', closeCart);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileMenu();
+      closeCart();
+    }
+  });
 
   async function loadMiniCart() {
     const body = document.getElementById('drawer-cart-body');
@@ -100,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (body) {
         body.innerHTML = `
           <div style="text-align:center;padding:40px 0;">
-            <svg class="icon" width="48" height="48" style="color:var(--text-light);margin-bottom:12px;"><path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+            <svg class="icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-light);margin:0 auto 12px;"><path d="M6 7h12l1 14H5L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
             <p style="font-weight:600;margin-bottom:6px;">Sua sacola está vazia</p>
             <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:20px;">Explore nossas coleções e encontre o look perfeito!</p>
             <a href="/loja" class="btn btn-primary btn-sm">Ver Coleções</a>
@@ -118,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="cart-item-info">
             <h4 class="cart-item-title">${item.product.name}</h4>
             <div class="cart-item-variant">Tam: <strong>${item.variant.size}</strong>${item.variant.color ? ' · ' + item.variant.color : ''}</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
               <span style="font-weight:700;color:var(--purple-900);">R$ ${item.unitPrice.toFixed(2).replace('.', ',')}</span>
               <div class="qty-control">
                 <button type="button" class="qty-btn" onclick="updateCartItem('${item.key}', ${item.quantity - 1})">-</button>

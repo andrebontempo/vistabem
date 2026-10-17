@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title !== 'undefined' ? title : 'Painel de Gestão — Vista Bem' %></title>
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
-  <meta name="theme-color" content="#07020D">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=<%= assetVersion %>">
+  <meta name="theme-color" content="#131118">
   <link rel="stylesheet" href="/css/style.css?v=<%= assetVersion %>">
   <link rel="stylesheet" href="/css/admin.css?v=<%= assetVersion %>">
 </head>
@@ -14,9 +14,9 @@
   <aside class="admin-sidebar">
     <div class="admin-brand">
       <a href="/admin">
-        <img src="/images/logo-white.svg" alt="Vista Bem Admin" width="160" height="42">
+        <img src="/images/logo-white.svg?v=<%= assetVersion %>" alt="Vista Bem Admin" width="160" height="42">
       </a>
-      <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--cyan-400); margin-top: 8px; font-weight: 700;">
+      <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--gold-400); margin-top: 8px; font-weight: 700;">
         PAINEL DE GESTÃO
       </div>
     </div>

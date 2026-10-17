@@ -1,79 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" width="600" height="750" fill="none">
   <defs>
     <radialGradient id="studioJacket" cx="50%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#150826" stop-opacity="0.95"/>
-      <stop offset="65%" stop-color="#0E041A" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#07020D" stop-opacity="1"/>
+      <stop offset="0%" stop-color="#2E1B46" stop-opacity="0.95"/>
+      <stop offset="65%" stop-color="#1C102B" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#130B1E" stop-opacity="1"/>
     </radialGradient>
-    <linearGradient id="jacketCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00F0FF"/>
-      <stop offset="60%" stop-color="#00D2E0"/>
-      <stop offset="100%" stop-color="#0891B2"/>
+    <linearGradient id="jacketSandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EAE3D5"/>
+      <stop offset="55%" stop-color="#D5C8B0"/>
+      <stop offset="100%" stop-color="#B8A482"/>
     </linearGradient>
-    <filter id="jacketGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="10" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
     <filter id="jacketShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#000000" flood-opacity="0.75"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#09040E" flood-opacity="0.65"/>
     </filter>
   </defs>
 
   <rect width="600" height="750" rx="16" fill="url(#studioJacket)"/>
+  <circle cx="300" cy="350" r="170" fill="#C5A059" fill-opacity="0.06"/>
 
-  <!-- Halo Neon Ciano -->
-  <circle cx="300" cy="350" r="170" fill="#00F0FF" fill-opacity="0.12" filter="url(#jacketGlow)"/>
-
-  <!-- Tag Editorial Streetwear -->
   <g transform="translate(40, 40)">
-    <rect width="115" height="26" rx="13" fill="#140626" stroke="#00F0FF" stroke-width="1.2"/>
-    <text x="57" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#00F0FF" letter-spacing="1.5" text-anchor="middle">STREETWEAR</text>
+    <rect width="115" height="26" rx="13" fill="#1F1230" stroke="#C5A059" stroke-width="1"/>
+    <text x="57" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" fill="#D4B475" letter-spacing="1.5" text-anchor="middle">CASUAL LUXE</text>
   </g>
 
-  <!-- JAQUETA CORTA-VENTO -->
+  <!-- JAQUETA CORTA-VENTO SÓBRIA (AMEIXA & CHAMPANHE AREIA) -->
   <g filter="url(#jacketShadow)">
-    <!-- Cabide Técnico Preto & Ciano -->
-    <path d="M 300,95 C 300,80 315,75 315,90 C 315,105 300,108 300,122" stroke="#00F0FF" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <path d="M 160,170 L 300,122 L 440,170" stroke="#07020D" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M 300,95 C 300,80 315,75 315,90 C 315,105 300,108 300,122" stroke="#D4B475" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+    <path d="M 160,170 L 300,122 L 440,170" stroke="#231236" stroke-width="7" stroke-linecap="round" fill="none"/>
 
-    <!-- Mangas Colorblock (Roxo Profundo + Recorte Ciano) -->
     <!-- Manga Esquerda -->
-    <path d="M 165,170 L 115,260 L 135,500 L 195,490 L 210,280" fill="#1B0A33"/>
-    <polygon points="125,320 185,310 175,410 130,420" fill="url(#jacketCyanGrad)"/>
-    <!-- Punho Elástico -->
-    <rect x="135" y="480" width="60" height="20" rx="4" fill="#07020D" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 165,170 L 115,260 L 135,500 L 195,490 L 210,280" fill="#26143B"/>
+    <polygon points="125,320 185,310 175,410 130,420" fill="url(#jacketSandGrad)"/>
+    <rect x="135" y="480" width="60" height="20" rx="4" fill="#1A0D29" stroke="#C5A059" stroke-width="1.6"/>
 
     <!-- Manga Direita -->
-    <path d="M 435,170 L 485,260 L 465,500 L 405,490 L 390,280" fill="#1B0A33"/>
-    <polygon points="475,320 415,310 425,410 470,420" fill="url(#jacketCyanGrad)"/>
-    <!-- Punho Elástico -->
-    <rect x="405" y="480" width="60" height="20" rx="4" fill="#07020D" stroke="#00F0FF" stroke-width="2"/>
+    <path d="M 435,170 L 485,260 L 465,500 L 405,490 L 390,280" fill="#26143B"/>
+    <polygon points="475,320 415,310 425,410 470,420" fill="url(#jacketSandGrad)"/>
+    <rect x="405" y="480" width="60" height="20" rx="4" fill="#1A0D29" stroke="#C5A059" stroke-width="1.6"/>
 
-    <!-- Capuz Estruturado por Trás -->
-    <path d="M 230,165 C 230,100 370,100 370,165" fill="#240C40" stroke="#00F0FF" stroke-width="2"/>
+    <!-- Capuz Estruturado -->
+    <path d="M 230,165 C 230,100 370,100 370,165" fill="#2A1542" stroke="#C5A059" stroke-width="1.6"/>
 
-    <!-- Corpo Principal da Jaqueta -->
-    <!-- Bloco Superior Roxo Profundo -->
-    <path d="M 200,175 L 200,320 L 400,320 L 400,175 Z" fill="#2E1054"/>
-    <!-- Bloco Inferior Ciano Neon -->
-    <path d="M 200,320 L 200,530 C 240,545 360,545 400,530 L 400,320 Z" fill="url(#jacketCyanGrad)"/>
+    <!-- Corpo Principal -->
+    <path d="M 200,175 L 200,320 L 400,320 L 400,175 Z" fill="#321A4D"/>
+    <path d="M 200,320 L 200,530 C 240,545 360,545 400,530 L 400,320 Z" fill="url(#jacketSandGrad)"/>
 
-    <!-- Gola Alta Corta-Vento -->
-    <path d="M 245,150 L 355,150 L 350,195 L 250,195 Z" fill="#0F051D" stroke="#00F0FF" stroke-width="2"/>
+    <!-- Gola Alta -->
+    <path d="M 245,150 L 355,150 L 350,195 L 250,195 Z" fill="#1F1030" stroke="#C5A059" stroke-width="1.6"/>
 
-    <!-- Zíper Central Impermeável Ciano Neon -->
-    <line x1="300" y1="150" x2="300" y2="538" stroke="#00F0FF" stroke-width="4" filter="url(#jacketGlow)"/>
-    <!-- Puxador do Zíper Emborrachado -->
-    <rect x="296" y="240" width="8" height="24" rx="2" fill="#07020D" stroke="#00F0FF" stroke-width="1.5"/>
+    <!-- Zíper Central em Latão Dourado -->
+    <line x1="300" y1="150" x2="300" y2="538" stroke="#C5A059" stroke-width="3.5"/>
+    <rect x="296" y="240" width="8" height="22" rx="2" fill="#1F1030" stroke="#D4B475" stroke-width="1.5"/>
 
-    <!-- Bolsos Frontais com Zíper Invertido -->
-    <line x1="220" y1="410" x2="270" y2="445" stroke="#07020D" stroke-width="3" stroke-linecap="round"/>
-    <line x1="380" y1="410" x2="330" y2="445" stroke="#07020D" stroke-width="3" stroke-linecap="round"/>
+    <!-- Bolsos Frontais -->
+    <line x1="220" y1="410" x2="270" y2="445" stroke="#26143B" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="380" y1="410" x2="330" y2="445" stroke="#26143B" stroke-width="2.5" stroke-linecap="round"/>
 
-    <!-- Estampa Refletiva Peito "VISTA BEM PERFORMANCE" -->
-    <text x="240" y="260" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="2">VB TECH</text>
+    <text x="235" y="260" font-family="'Bodoni Moda', Georgia, serif" font-size="10" font-weight="700" fill="#D4B475" letter-spacing="2">VISTA BEM</text>
   </g>
 
-  <!-- Assinatura Editorial -->
-  <text x="300" y="718" font-family="'Bodoni Moda', serif" font-size="16" font-weight="600" fill="#EDE6FA" letter-spacing="4" text-anchor="middle">STREETWEAR VISTA BEM</text>
+  <text x="300" y="718" font-family="'Bodoni Moda', Georgia, serif" font-size="15" font-weight="600" fill="#DFD3EE" letter-spacing="4" text-anchor="middle">CASUAL LUXE VISTA BEM</text>
 </svg>

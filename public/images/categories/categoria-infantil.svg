@@ -1,73 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450" fill="none">
   <defs>
-    <radialGradient id="catKidsBg" cx="70%" cy="30%" r="75%">
-      <stop offset="0%" stop-color="#280D4C"/>
-      <stop offset="50%" stop-color="#120424"/>
-      <stop offset="100%" stop-color="#07020D"/>
+    <radialGradient id="catKidsBg" cx="65%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#361E52"/>
+      <stop offset="55%" stop-color="#201132"/>
+      <stop offset="100%" stop-color="#130A1E"/>
     </radialGradient>
     <linearGradient id="kidsDressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F3E8FF"/>
-      <stop offset="50%" stop-color="#D8B4FE"/>
-      <stop offset="100%" stop-color="#A855F7"/>
+      <stop offset="0%" stop-color="#FAF8F5"/>
+      <stop offset="50%" stop-color="#E6DCF2"/>
+      <stop offset="100%" stop-color="#B89CE0"/>
     </linearGradient>
-    <filter id="kidsGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
     <filter id="kidsShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.75"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#09040E" flood-opacity="0.6"/>
     </filter>
   </defs>
 
   <rect width="600" height="450" fill="url(#catKidsBg)"/>
 
-  <!-- Halo Lúdico Lilás & Ciano -->
-  <circle cx="440" cy="200" r="160" fill="#B77BFA" fill-opacity="0.14" filter="url(#kidsGlow)"/>
-  <circle cx="460" cy="180" r="80" fill="#00F0FF" fill-opacity="0.12" filter="url(#kidsGlow)"/>
+  <!-- Aura Suave Lavanda & Dourado Champanhe -->
+  <circle cx="415" cy="210" r="145" fill="#D4B475" fill-opacity="0.07"/>
+  <circle cx="415" cy="210" r="132" stroke="#D4B475" stroke-width="1" stroke-opacity="0.22"/>
 
-  <!-- Elementos Lúdicos: Balões, Estrelas e Corações -->
-  <!-- Balão 1 Ciano -->
-  <path d="M 480,90 C 460,90 450,110 450,130 C 450,150 480,180 480,180 C 480,180 510,150 510,130 C 510,110 500,90 480,90 Z" fill="#00F0FF" fill-opacity="0.4" stroke="#00F0FF" stroke-width="1.5"/>
-  <line x1="480" y1="180" x2="475" y2="240" stroke="#00F0FF" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- Estrelinhas Delicadas em Ouro Champanhe -->
+  <path d="M 330 95 L 332 101 L 338 103 L 332 105 L 330 111 L 328 105 L 322 103 L 328 101 Z" fill="#D4B475" fill-opacity="0.75"/>
+  <path d="M 515 125 L 517 130 L 522 132 L 517 134 L 515 139 L 513 134 L 508 132 L 513 130 Z" fill="#E6DCF2" fill-opacity="0.7"/>
 
-  <!-- Balão 2 Lilás -->
-  <path d="M 525,120 C 510,120 500,135 500,150 C 500,165 525,190 525,190 C 525,190 550,165 550,150 C 550,135 540,120 525,120 Z" fill="#D8B4FE" fill-opacity="0.3" stroke="#D8B4FE" stroke-width="1.5"/>
-  <line x1="525" y1="190" x2="520" y2="250" stroke="#D8B4FE" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- SILHUETA INFANTIL CENTRALIZADA E PROPORCIONAL -->
+  <g filter="url(#kidsShadow)" transform="translate(215, 22) scale(0.88)">
+    <!-- Cabide Infantil em Dourado Champanhe -->
+    <path d="M 230,75 C 230,65 240,60 240,70 C 240,80 230,82 230,92" stroke="#D4B475" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <path d="M 162,120 L 230,92 L 298,120" stroke="#D4B475" stroke-width="2.5" stroke-linecap="round" fill="none"/>
 
-  <!-- Estrelinhas fofas -->
-  <path d="M 370 120 L 372 126 L 378 128 L 372 130 L 370 136 L 368 130 L 362 128 L 368 126 Z" fill="#00F0FF" filter="url(#kidsGlow)"/>
-  <path d="M 540 260 L 542 265 L 547 267 L 542 269 L 540 274 L 538 269 L 533 267 L 538 265 Z" fill="#D8B4FE"/>
-
-  <!-- SILHUETA EDITORIAL INFANTIL (CONJUNTO FOFO VISTA BEM) -->
-  <g filter="url(#kidsShadow)" transform="translate(190, 50)">
-    <!-- Cabide Infantil em Ciano Neon -->
-    <path d="M 230,85 C 230,75 240,70 240,80 C 240,90 230,92 230,102" stroke="#00F0FF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-    <path d="M 160,130 L 230,102 L 300,130" stroke="#00F0FF" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-
-    <!-- Vestidinho / Blusinha com Babado -->
-    <!-- Ombros fru-fru -->
-    <path d="M 160,135 C 145,145 140,165 155,175 C 165,170 170,155 175,140 Z" fill="#F3E8FF"/>
-    <path d="M 300,135 C 315,145 320,165 305,175 C 295,170 290,155 285,140 Z" fill="#F3E8FF"/>
+    <!-- Ombros com Babado Suave -->
+    <path d="M 162,125 C 147,135 142,155 157,165 C 167,160 172,145 177,130 Z" fill="#FAF8F5"/>
+    <path d="M 298,125 C 313,135 318,155 303,165 C 293,160 288,145 283,130 Z" fill="#FAF8F5"/>
 
     <!-- Corpo do Vestidinho Rodado -->
-    <path d="M 175,135 L 180,210 C 180,210 140,320 120,350 C 170,365 290,365 340,350 C 320,320 280,210 280,210 L 285,135 Z" fill="url(#kidsDressGrad)"/>
+    <path d="M 175,125 L 180,200 C 180,200 142,305 122,335 C 172,350 288,350 338,335 C 318,305 280,200 280,200 L 285,125 Z" fill="url(#kidsDressGrad)"/>
 
-    <!-- Decote com Lacinho Ciano -->
-    <path d="M 200,135 Q 230,155 260,135" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
-    <!-- Laço Ciano -->
-    <path d="M 230,150 L 220,144 L 223,154 Z" fill="#00F0FF"/>
-    <path d="M 230,150 L 240,144 L 237,154 Z" fill="#00F0FF"/>
-    <circle cx="230" cy="150" r="2.5" fill="#FFFFFF"/>
+    <!-- Decote com Lacinho Dourado Champanhe -->
+    <path d="M 200,125 Q 230,145 260,125" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M 230,142 L 218,135 L 221,147 Z" fill="#C5A059"/>
+    <path d="M 230,142 L 242,135 L 239,147 Z" fill="#C5A059"/>
+    <circle cx="230" cy="142" r="2.8" fill="#FAF8F5"/>
 
-    <!-- Pregas e Barra Rendada da Saia -->
-    <path d="M 190,215 C 185,260 165,310 150,355" stroke="#EDE6FA" stroke-width="2" stroke-opacity="0.8"/>
-    <path d="M 230,215 C 230,265 230,315 230,360" stroke="#5814A8" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M 270,215 C 275,260 295,310 310,355" stroke="#EDE6FA" stroke-width="2" stroke-opacity="0.8"/>
+    <!-- Pregas Delicadas -->
+    <path d="M 192,205 C 186,250 168,295 154,340" stroke="#FAF8F5" stroke-width="2" stroke-opacity="0.8"/>
+    <path d="M 230,205 C 230,255 230,300 230,344" stroke="#6E4499" stroke-width="2" stroke-linecap="round" stroke-opacity="0.5"/>
+    <path d="M 268,205 C 274,250 292,295 306,340" stroke="#FAF8F5" stroke-width="2" stroke-opacity="0.8"/>
 
-    <!-- Babado da Barra com Pesponto Ciano -->
-    <path d="M 120,350 Q 140,362 160,350 Q 180,362 200,350 Q 220,362 240,350 Q 260,362 280,350 Q 300,362 320,350 Q 330,358 340,350" stroke="#00F0FF" stroke-width="2.5" fill="none"/>
+    <!-- Barra Bordada em Dourado Champanhe -->
+    <path d="M 122,335 Q 142,346 162,335 Q 182,346 202,335 Q 222,346 242,335 Q 262,346 282,335 Q 302,346 322,335 Q 330,342 338,335" stroke="#C5A059" stroke-width="2.2" fill="none"/>
   </g>
 
-  <!-- Assinatura Gráfica -->
-  <text x="560" y="420" font-family="'Bodoni Moda', serif" font-size="22" font-weight="700" fill="rgba(255, 255, 255, 0.15)" letter-spacing="5" text-anchor="end">PETIT</text>
+  <text x="565" y="422" font-family="'Bodoni Moda', Georgia, serif" font-size="18" font-weight="600" fill="rgba(250, 248, 245, 0.2)" letter-spacing="5" text-anchor="end">LINHA PETIT</text>
 </svg>

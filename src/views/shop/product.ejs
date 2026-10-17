@@ -240,23 +240,25 @@
 </main>
 
 <!-- Modal: Guia de Medidas -->
-<dialog id="size-modal" style="border: none; border-radius: var(--radius-lg); padding: 32px; max-width: 600px; box-shadow: var(--shadow-lg);">
+<dialog id="size-modal" class="size-guide-modal">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <h3 style="font-size: 1.4rem;">Tabela de Medidas (cm)</h3>
     <button type="button" onclick="document.getElementById('size-modal').close()" class="action-btn"><%- icon('x', 20) %></button>
   </div>
-  <table class="admin-table" style="font-size: 0.9rem;">
-    <thead>
-      <tr><th>Tamanho</th><th>Busto</th><th>Cintura</th><th>Quadril</th></tr>
-    </thead>
-    <tbody>
-      <tr><td><strong>PP (36)</strong></td><td>82 - 86</td><td>64 - 68</td><td>90 - 94</td></tr>
-      <tr><td><strong>P (38)</strong></td><td>86 - 90</td><td>68 - 72</td><td>94 - 98</td></tr>
-      <tr><td><strong>M (40)</strong></td><td>90 - 96</td><td>72 - 78</td><td>98 - 104</td></tr>
-      <tr><td><strong>G (42)</strong></td><td>96 - 102</td><td>78 - 84</td><td>104 - 110</td></tr>
-      <tr><td><strong>GG (44)</strong></td><td>102 - 108</td><td>84 - 90</td><td>110 - 116</td></tr>
-    </tbody>
-  </table>
+  <div class="admin-table-wrapper">
+    <table class="admin-table" style="font-size: 0.9rem;">
+      <thead>
+        <tr><th>Tamanho</th><th>Busto</th><th>Cintura</th><th>Quadril</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>PP (36)</strong></td><td>82 - 86</td><td>64 - 68</td><td>90 - 94</td></tr>
+        <tr><td><strong>P (38)</strong></td><td>86 - 90</td><td>68 - 72</td><td>94 - 98</td></tr>
+        <tr><td><strong>M (40)</strong></td><td>90 - 96</td><td>72 - 78</td><td>98 - 104</td></tr>
+        <tr><td><strong>G (42)</strong></td><td>96 - 102</td><td>78 - 84</td><td>104 - 110</td></tr>
+        <tr><td><strong>GG (44)</strong></td><td>102 - 108</td><td>84 - 90</td><td>110 - 116</td></tr>
+      </tbody>
+    </table>
+  </div>
   <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 16px;">* Medidas corporais aproximadas em centímetros. Para mais detalhes, fale com nossa equipe no WhatsApp.</p>
 </dialog>
 
@@ -279,7 +281,7 @@
       const data = await res.json();
       if (data.success) {
         resBox.innerHTML = `
-          <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid var(--border-color);margin-top:6px;">
+          <div style="background:var(--bg-card);padding:12px;border-radius:8px;border:1px solid var(--border-color);margin-top:6px;">
             <div style="display:flex;justify-content:space-between;font-weight:700;">
               <span>${data.method} (${data.regionName}):</span>
               <span style="color:var(--purple-700)">${data.fee === 0 ? 'GRÁTIS' : 'R$ ' + data.fee.toFixed(2).replace('.', ',')}</span>

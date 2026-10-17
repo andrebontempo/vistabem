@@ -18,7 +18,7 @@
           </h2>
 
           <div class="form-row">
-            <div class="form-group" style="grid-column: span 2;">
+            <div class="form-group col-span-2">
               <label for="name" class="form-label">Nome Completo *</label>
               <input type="text" id="name" name="name" required value="<%= user ? user.name : '' %>" class="form-control" placeholder="Seu nome completo">
             </div>
@@ -42,7 +42,7 @@
         </div>
 
         <!-- 2. Endereço de Entrega -->
-        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 24px;">
+        <div class="surface-box" style="margin-bottom: 24px;">
           <h2 style="font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
             <%- icon('pin', 20) %>
             <span>2. Endereço de Entrega</span>
@@ -54,7 +54,7 @@
               <input type="text" id="zipCode" name="zipCode" required maxlength="9" value="<%= cart.cep || (user && user.addresses && user.addresses[0] ? user.addresses[0].zipCode : '') %>" class="form-control" placeholder="00000-000">
               <span style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; display: block;">Digite o CEP para buscar o endereço automaticamente</span>
             </div>
-            <div class="form-group" style="grid-column: span 2;">
+            <div class="form-group col-span-2">
               <label for="street" class="form-label">Logradouro / Rua *</label>
               <input type="text" id="street" name="street" required value="<%= user && user.addresses && user.addresses[0] ? user.addresses[0].street : '' %>" class="form-control" placeholder="Rua, Avenida...">
             </div>
@@ -88,7 +88,7 @@
         </div>
 
         <!-- 3. Forma de Pagamento -->
-        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px;">
+        <div class="surface-box">
           <h2 style="font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
             <%- icon('card', 20) %>
             <span>3. Forma de Pagamento</span>
@@ -128,7 +128,7 @@
       </div>
 
       <!-- Coluna da Direita: Resumo do Pedido -->
-      <aside style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; position: sticky; top: 100px;">
+      <aside class="surface-box checkout-summary-sidebar">
         <h3 style="font-size: 1.25rem; margin-bottom: 20px;">Resumo da Sacola</h3>
 
         <!-- Itens Miniatura -->
