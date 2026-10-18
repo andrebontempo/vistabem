@@ -11,6 +11,7 @@ const connectDB = require('./config/db');
 const configurePassport = require('./config/passport');
 const { loadContext } = require('./middleware/auth');
 const { mongoSanitize } = require('./middleware/security');
+const maintenanceMiddleware = require('./middleware/maintenance');
 const flash = require('./middleware/flash');
 const helpers = require('./utils/helpers');
 const stockService = require('./services/stockService');
@@ -64,6 +65,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok', uptime: process.uptime
 
 app.use(flash);
 app.use(loadContext);
+app.use(maintenanceMiddleware);
 
 // Redirecionamentos de compatibilidade com o antigo WordPress
 app.get(['/wp-login.php', '/wp-login'], (req, res) => res.redirect(301, '/login'));

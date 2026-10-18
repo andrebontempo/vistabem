@@ -50,7 +50,14 @@
         <a href="/admin/clientes"><%- icon('users', 18) %> <span>Clientes</span></a>
       </li>
       <li class="admin-nav-item <%= currentPath.startsWith('/admin/configuracoes') ? 'active' : '' %>">
-        <a href="/admin/configuracoes"><%- icon('settings', 18) %> <span>Configurações</span></a>
+        <a href="/admin/configuracoes" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <%- icon('settings', 18) %> <span>Configurações</span>
+          </div>
+          <% if (locals.settings && locals.settings.isMaintenanceMode) { %>
+            <span title="Modo de Manutenção Ativo" style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block; box-shadow: 0 0 8px #F59E0B;"></span>
+          <% } %>
+        </a>
       </li>
     </ul>
 
@@ -68,10 +75,28 @@
       <div class="admin-topbar-title">
         <%= typeof title !== 'undefined' ? title : 'Painel de Gestão' %>
       </div>
-      <div class="admin-topbar-user">
+      <div class="admin-topbar-user" style="display: flex; align-items: center; gap: 16px;">
+        <% if (locals.settings && locals.settings.isMaintenanceMode) { %>
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4);">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: #F59E0B;"></span>
+            MANUTENÇÃO ATIVA
+          </span>
+        <% } %>
         <span>Conectada como <strong><%= user ? user.name : 'Administradora' %></strong></span>
       </div>
     </header>
+
+    <% if (locals.settings && locals.settings.isMaintenanceMode) { %>
+      <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #FBBF24; padding: 12px 24px; margin: 20px 32px 0 32px; border-radius: 10px; font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="color: #F59E0B; display: flex;"><%- icon('tools', 20) %></span>
+          <span><strong>ATENÇÃO:</strong> A loja virtual está em <strong>Modo de Manutenção</strong>. Clientes externos estão vendo a tela de aviso (HTTP 503).</span>
+        </div>
+        <a href="/admin/configuracoes" class="btn btn-sm" style="background: #D97706; color: #FFF; border: none; font-size: 0.78rem; padding: 5px 14px; border-radius: 6px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          Ajustar / Desativar <%- icon('arrow-right', 12) %>
+        </a>
+      </div>
+    <% } %>
 
     <%- include('../partials/flash') %>
     <main class="admin-content">

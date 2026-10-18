@@ -139,3 +139,21 @@ Conforme a regra do projeto, **não realizamos acesso SSH manual na VPS**. O dep
   ```bash
   docker logs -f vistabem-app
   ```
+
+---
+
+## 🛠️ 8. Modo de Manutenção Programada
+
+O e-commerce conta com um sistema de manutenção inteligente e seguro, desenvolvido com as melhores práticas de SEO e experiência do usuário:
+
+- **Ativação Simples via Painel**: Pode ser ativado ou desativado em **Painel Administrativo > Configurações Gerais**.
+- **Preservação de SEO (Google)**: Visitantes e robôs de busca recebem status **HTTP 503 (Service Unavailable)** juntamente com o cabeçalho `Retry-After: 3600` (1 hora) e meta tags `noindex, nofollow, noarchive`, garantindo que indexações, palavras-chave e posições no Google não sejam perdidas durante manutenções.
+- **Bypass de Administrador (Pré-visualização)**: Usuários logados com papel de `admin` continuam navegando normalmente por toda a loja virtual, com um banner indicativo no topo informando que a loja está em modo de pré-visualização.
+- **Áreas Sempre Liberadas**: As rotas de login (`/login`, `/auth`, etc.), o painel de gestão (`/admin`), o health check (`/health`) e os assets estáticos continuam sempre acessíveis.
+- **Personalização Dinâmica**:
+  - Título customizado da página.
+  - Mensagem explicativa aos clientes.
+  - Previsão de retorno opcional (ex: "Hoje às 20h").
+  - Botões de contato direto para suporte no WhatsApp e acompanhamento no Instagram.
+- **Ativação por Variável de Ambiente (Opcional)**: Também pode ser forçado via `.env` definindo `MAINTENANCE_MODE=true`.
+

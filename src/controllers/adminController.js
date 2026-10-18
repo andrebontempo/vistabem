@@ -670,6 +670,12 @@ exports.postSettings = async (req, res, next) => {
       companyName,
       cnpj,
       address,
+      // Modo de manutenção
+      isMaintenanceMode,
+      maintenanceTitle,
+      maintenanceMessage,
+      maintenanceEstimatedReturn,
+      maintenanceSettingsIncluded,
       // Tabela de frete
       shippingN_fee, shippingN_days,
       shippingNE_fee, shippingNE_days,
@@ -691,13 +697,25 @@ exports.postSettings = async (req, res, next) => {
       companyName: (companyName || '').trim(),
       cnpj: (cnpj || '').trim(),
       address: (address || '').trim(),
-      shipping: {
-        N: { fee: Number(shippingN_fee) || 39.9, days: shippingN_days || '8 a 12 dias' },
-        NE: { fee: Number(shippingNE_fee) || 34.9, days: shippingNE_days || '7 a 10 dias' },
-        CO: { fee: Number(shippingCO_fee) || 29.9, days: shippingCO_days || '5 a 8 dias' },
-        SE: { fee: Number(shippingSE_fee) || 22.9, days: shippingSE_days || '3 a 6 dias' },
-        S: { fee: Number(shippingS_fee) || 26.9, days: shippingS_days || '4 a 7 dias' },
-      },
+    };
+
+    if (maintenanceSettingsIncluded === '1') {
+      data.isMaintenanceMode = isMaintenanceMode === 'true' || isMaintenanceMode === 'on' || isMaintenanceMode === '1';
+      if (typeof maintenanceTitle !== 'undefined') data.maintenanceTitle = (maintenanceTitle || '').trim();
+      if (typeof maintenanceMessage !== 'undefined') data.maintenanceMessage = (maintenanceMessage || '').trim();
+      if (typeof maintenanceEstimatedReturn !== 'undefined') {
+        data.maintenanceEstimatedReturn = (maintenanceEstimatedReturn || '').trim();
+      }
+    } else if (typeof isMaintenanceMode !== 'undefined') {
+      data.isMaintenanceMode = isMaintenanceMode === 'true' || isMaintenanceMode === 'on' || isMaintenanceMode === '1';
+    }
+
+    data.shipping = {
+      N: { fee: Number(shippingN_fee) || 39.9, days: shippingN_days || '8 a 12 dias' },
+      NE: { fee: Number(shippingNE_fee) || 34.9, days: shippingNE_days || '7 a 10 dias' },
+      CO: { fee: Number(shippingCO_fee) || 29.9, days: shippingCO_days || '5 a 8 dias' },
+      SE: { fee: Number(shippingSE_fee) || 22.9, days: shippingSE_days || '3 a 6 dias' },
+      S: { fee: Number(shippingS_fee) || 26.9, days: shippingS_days || '4 a 7 dias' },
     };
 
     let s = await Setting.findOne();

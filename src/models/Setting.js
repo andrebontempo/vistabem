@@ -23,6 +23,14 @@ const settingSchema = new mongoose.Schema(
     companyName: { type: String, default: 'Vista Bem Moda' },
     cnpj: { type: String, default: '' },
     address: { type: String, default: '' },
+    // Modo de Manutenção
+    isMaintenanceMode: { type: Boolean, default: false },
+    maintenanceTitle: { type: String, default: 'Estamos em Manutenção Programada' },
+    maintenanceMessage: {
+      type: String,
+      default: 'Estamos aprimorando nossa loja com novas coleções exclusivas de moda. Em instantes estaremos de volta para você!',
+    },
+    maintenanceEstimatedReturn: { type: String, default: '' },
   },
   { timestamps: true }
 );

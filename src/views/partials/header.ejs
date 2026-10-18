@@ -22,6 +22,15 @@
 </head>
 <body>
 
+  <% if (locals.settings && locals.settings.isMaintenanceMode && locals.user && locals.user.role === 'admin') { %>
+    <div style="background: #FEF3C7; color: #92400E; padding: 10px 16px; font-size: 0.9rem; font-weight: 600; text-align: center; border-bottom: 2px solid #F59E0B; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; z-index: 9999; position: relative;">
+      <span style="display: inline-flex; align-items: center; gap: 6px;"><%- icon('tools', 16) %> <strong>MODO DE MANUTENÇÃO ATIVO:</strong> Os clientes estão vendo a página de manutenção. Você está navegando em modo de pré-visualização de Administrador.</span>
+      <a href="/admin/configuracoes" style="background: #92400E; color: #FFF; padding: 4px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;">
+        Gerenciar no Painel <%- icon('arrow-right', 14) %>
+      </a>
+    </div>
+  <% } %>
+
   <!-- Topbar Institucional & Acessibilidade -->
   <aside class="topbar" aria-label="Avisos e Acessibilidade">
     <div class="container">

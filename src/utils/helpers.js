@@ -53,6 +53,8 @@ const P = {
   tiktok: '<path d="M16 3a5 5 0 0 0 5 5v4a9 9 0 0 1-5-1.5V16a6 6 0 1 1-6-6v4a2 2 0 1 0 2 2V3Z"/>',
   whatsapp: '<path d="M3 21l1.7-5A9 9 0 1 1 8 19.4Z"/><path d="M9 10c0 2.5 2.5 5 5 5l1.5-1.5-2-1-1 .8c-1-.4-1.9-1.3-2.3-2.3l.8-1-1-2Z"/>',
   type: '<path d="M4 7V5h16v2M9 19h6M12 5v14"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  tools: '<path d="m15 12 6 6-3 3-6-6"/><path d="m14 7 3 3"/><path d="M9.5 7.5 4 13l3 3 5.5-5.5a2.12 2.12 0 1 0-3-3Z"/>',
 };
 
 function icon(name, size = 20, cls = '') {

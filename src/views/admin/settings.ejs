@@ -9,6 +9,48 @@
   <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px;">
     <!-- Coluna Esquerda: Regras Comerciais e Frete -->
     <div style="display: flex; flex-direction: column; gap: 24px;">
+      <input type="hidden" name="maintenanceSettingsIncluded" value="1">
+
+      <!-- Modo de Manutenção Programada -->
+      <div class="admin-card" style="border: 2px solid <%= settings.isMaintenanceMode ? '#F59E0B' : 'var(--border-color)' %>; background: <%= settings.isMaintenanceMode ? 'rgba(245, 158, 11, 0.05)' : 'var(--bg-card)' %>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <h3 style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+              <%- icon('tools', 20) %> Modo de Manutenção Programada
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+              Quando ativado, os clientes verão uma página elegante de manutenção (HTTP 503 com SEO preservado). Administradores logados continuam com acesso livre para pré-visualização.
+            </p>
+          </div>
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; background: <%= settings.isMaintenanceMode ? 'rgba(245, 158, 11, 0.2)' : 'rgba(21, 128, 61, 0.15)' %>; color: <%= settings.isMaintenanceMode ? '#D97706' : '#15803D' %>; white-space: nowrap;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: <%= settings.isMaintenanceMode ? '#D97706' : '#15803D' %>;"></span>
+            <%= settings.isMaintenanceMode ? 'MANUTENÇÃO ATIVA' : 'LOJA ONLINE' %>
+          </span>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 18px;">
+          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
+            <input type="checkbox" name="isMaintenanceMode" value="true" <%= settings.isMaintenanceMode ? 'checked' : '' %> style="width: 18px; height: 18px; accent-color: var(--purple-700); cursor: pointer;">
+            <span>Ativar Página de Manutenção (Bloquear visitantes comuns)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Título da Página de Manutenção</label>
+          <input type="text" name="maintenanceTitle" value="<%= settings.maintenanceTitle || 'Estamos em Manutenção Programada' %>" class="form-control" placeholder="Ex: Estamos em Manutenção Programada">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mensagem Explicativa aos Visitantes</label>
+          <textarea name="maintenanceMessage" rows="3" class="form-control" placeholder="Descreva brevemente a manutenção e prepare o cliente para as novidades..."><%= settings.maintenanceMessage || 'Estamos aprimorando nossa loja com novas coleções exclusivas de moda. Em instantes estaremos de volta para você!' %></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Previsão de Retorno (Opcional)</label>
+          <input type="text" name="maintenanceEstimatedReturn" value="<%= settings.maintenanceEstimatedReturn || '' %>" class="form-control" placeholder="Ex: Hoje às 20h00 ou Em aproximadamente 30 minutos">
+        </div>
+      </div>
+
       <!-- Dados Principais -->
       <div class="admin-card">
         <h3 style="font-size: 1.2rem; margin-bottom: 18px;">Informações da Marca</h3>
