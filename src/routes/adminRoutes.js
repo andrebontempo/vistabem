@@ -76,9 +76,13 @@ router.get('/avaliacoes', adminController.getReviews);
 router.post('/avaliacoes/:id/aprovar', adminController.toggleApproveReview);
 router.post('/avaliacoes/:id/excluir', adminController.deleteReview);
 
-// Clientes
+// Clientes & Gestão de Acessos
 router.get('/clientes', adminController.getUsers);
 router.post('/clientes/:id/role', adminController.postUpdateUserRole);
+router.post('/clientes/:id/senha', adminController.postUpdateUserPassword);
+
+// Alteração de senha do próprio administrador logado
+router.post('/perfil/senha', adminController.postUpdateAdminOwnPassword);
 
 // Configurações
 router.get('/configuracoes', adminController.getSettings);

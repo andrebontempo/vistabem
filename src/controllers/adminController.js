@@ -639,6 +639,75 @@ exports.postUpdateUserRole = async (req, res, next) => {
   }
 };
 
+exports.postUpdateUserPassword = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { new_password } = req.body;
+
+    const trimmedPassword = (new_password || '').trim();
+    if (!trimmedPassword || trimmedPassword.length < 6) {
+      req.flash('danger', 'A nova senha deve possuir no mínimo 6 caracteres.');
+      return res.redirect('/admin/clientes');
+    }
+
+    const targetUser = await User.findById(id).select('+password');
+    if (!targetUser) {
+      req.flash('danger', 'Usuário não encontrado.');
+      return res.redirect('/admin/clientes');
+    }
+
+    targetUser.password = trimmedPassword;
+    targetUser.authProvider = 'local';
+    await targetUser.save();
+
+    req.flash('success', `Senha do usuário "${targetUser.name}" (${targetUser.email}) atualizada com sucesso!`);
+    res.redirect('/admin/clientes');
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postUpdateAdminOwnPassword = async (req, res, next) => {
+  try {
+    const { current_password, new_password, confirm_password } = req.body;
+    const currentUser = await User.findById(req.user._id).select('+password');
+
+    if (!currentUser) {
+      req.flash('danger', 'Usuário administrador não encontrado.');
+      return res.redirect('/admin/configuracoes');
+    }
+
+    if (currentUser.password && current_password) {
+      const isMatch = await currentUser.matchPassword(current_password.trim());
+      if (!isMatch) {
+        req.flash('danger', 'A senha atual informada está incorreta.');
+        return res.redirect('/admin/configuracoes');
+      }
+    }
+
+    const trimmedNew = (new_password || '').trim();
+    const trimmedConfirm = (confirm_password || '').trim();
+
+    if (!trimmedNew || trimmedNew.length < 6) {
+      req.flash('danger', 'A nova senha deve possuir no mínimo 6 caracteres.');
+      return res.redirect('/admin/configuracoes');
+    }
+
+    if (trimmedNew !== trimmedConfirm) {
+      req.flash('danger', 'A confirmação de senha não coincide com a nova senha.');
+      return res.redirect('/admin/configuracoes');
+    }
+
+    currentUser.password = trimmedNew;
+    currentUser.authProvider = 'local';
+    await currentUser.save();
+
+    req.flash('success', 'Sua senha de administrador foi atualizada com sucesso!');
+    res.redirect('/admin/configuracoes');
+  } catch (err) {
+    next(err);
+  }
+};
 
 /**
  * CONFIGURAÇÕES

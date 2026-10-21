@@ -1,60 +1,73 @@
 <%- include('admin-header') %>
 
 <div style="margin-bottom: 24px;">
-  <h1 style="font-size: 1.8rem;">Clientes Cadastrados</h1>
-  <p style="color: var(--text-muted); font-size: 0.9rem;">Lista de usuários e compradores da loja</p>
+  <h1 style="font-size: 1.8rem;">Clientes e Administradores</h1>
+  <p style="color: var(--text-muted); font-size: 0.9rem;">Lista de usuários e administradores, gestão de perfis e alteração de senhas</p>
 </div>
 
 <div class="admin-card">
   <% if (users && users.length > 0) { %>
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th>Tipo / Perfil</th>
-          <th>Origem</th>
-          <th>Data de Cadastro</th>
-          <th style="text-align: right;">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% users.forEach(function(u) { %>
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
           <tr>
-            <td><strong><%= u.name %></strong></td>
-            <td><%= u.email %></td>
-            <td><%= u.phone || '—' %></td>
-            <td>
-              <span class="badge-status <%= u.role === 'admin' ? 'primary' : 'muted' %>">
-                <%= u.role === 'admin' ? 'Administrador' : 'Cliente' %>
-              </span>
-            </td>
-            <td><span style="text-transform: capitalize;"><%= u.authProvider %></span></td>
-            <td><%= dateTime(u.createdAt) %></td>
-            <td style="text-align: right;">
-              <% if (typeof user !== 'undefined' && user && u._id.toString() === user._id.toString()) { %>
-                <span class="badge-status muted" title="Você está logado com esta conta">Sua conta</span>
-              <% } else if (u.role === 'admin') { %>
-                <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja revogar as permissões de Administrador de <%= u.name %>? O usuário passará a ser Cliente.');">
-                  <input type="hidden" name="role" value="customer">
-                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto;" title="Revogar permissão de administrador">
-                    <%- icon('user', 14) %> <span>Remover Admin</span>
-                  </button>
-                </form>
-              <% } else { %>
-                <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja promover <%= u.name %> a Administrador? Ele terá acesso total ao painel de gestão.');">
-                  <input type="hidden" name="role" value="admin">
-                  <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--cyan-400); border-color: rgba(0, 240, 255, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto;" title="Conceder permissão de administrador">
-                    <%- icon('shield', 14) %> <span>Promover a Admin</span>
-                  </button>
-                </form>
-              <% } %>
-            </td>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Tipo / Perfil</th>
+            <th>Origem</th>
+            <th>Data de Cadastro</th>
+            <th style="text-align: right;">Ações &amp; Alterar Senha</th>
           </tr>
-        <% }); %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% users.forEach(function(u) { %>
+            <tr>
+              <td><strong><%= u.name %></strong></td>
+              <td><%= u.email %></td>
+              <td><%= u.phone || '—' %></td>
+              <td>
+                <span class="badge-status <%= u.role === 'admin' ? 'primary' : 'muted' %>">
+                  <%= u.role === 'admin' ? 'Administrador' : 'Cliente' %>
+                </span>
+              </td>
+              <td><span style="text-transform: capitalize;"><%= u.authProvider %></span></td>
+              <td><%= dateTime(u.createdAt) %></td>
+              <td style="text-align: right;">
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <% if (!u.googleId || u.authProvider === 'local') { %>
+                    <form action="/admin/clientes/<%= u._id %>/senha" method="POST" style="display: inline-flex; gap: 6px; align-items: center; margin: 0;">
+                      <input type="password" name="new_password" placeholder="Nova senha" required minlength="6" class="form-control" style="padding: 5px 8px; font-size: 0.78rem; width: 130px; height: 32px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
+                      <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 5px 10px; height: 32px; min-height: auto; white-space: nowrap; border-color: rgba(212, 180, 117, 0.4); color: var(--gold-400);" title="Alterar senha deste usuário">
+                        <%- icon('key', 13) %> <span>Alterar Senha</span>
+                      </button>
+                    </form>
+                  <% } %>
+
+                  <% if (typeof user !== 'undefined' && user && u._id.toString() === user._id.toString()) { %>
+                    <span class="badge-status muted" title="Você está conectado com esta conta">Sua conta</span>
+                  <% } else if (u.role === 'admin') { %>
+                    <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja revogar as permissões de Administrador de <%= u.name %>? O usuário passará a ser Cliente.');">
+                      <input type="hidden" name="role" value="customer">
+                      <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto; height: 32px;" title="Revogar permissão de administrador">
+                        <%- icon('user', 14) %> <span>Remover Admin</span>
+                      </button>
+                    </form>
+                  <% } else { %>
+                    <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja promover <%= u.name %> a Administrador? Ele terá acesso total ao painel de gestão.');">
+                      <input type="hidden" name="role" value="admin">
+                      <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--cyan-400); border-color: rgba(0, 240, 255, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto; height: 32px;" title="Conceder permissão de administrador">
+                        <%- icon('shield', 14) %> <span>Promover a Admin</span>
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
   <% } else { %>
     <p style="color: var(--text-muted);">Nenhum usuário cadastrado.</p>
   <% } %>

@@ -41,18 +41,31 @@ async function seed() {
   console.log('✅ Configurações salvas.');
 
   // 2. Usuário Administrador
-  await User.deleteMany({ role: 'admin' });
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@vistabem.com';
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vistabem.com.br').toLowerCase().trim();
   const adminPassword = process.env.ADMIN_PASSWORD || 'VistaBem@2026';
 
-  await User.create({
-    name: 'Administradora Vista Bem',
-    email: adminEmail,
-    password: adminPassword,
-    role: 'admin',
-    authProvider: 'local',
-  });
-  console.log(`✅ Administrador criado: ${adminEmail} (Senha: ${adminPassword})`);
+  let adminUser = await User.findOne({
+    $or: [{ role: 'admin' }, { email: adminEmail }],
+  }).select('+password');
+
+  if (adminUser) {
+    adminUser.name = 'Administradora Vista Bem';
+    adminUser.email = adminEmail;
+    adminUser.password = adminPassword;
+    adminUser.role = 'admin';
+    adminUser.authProvider = 'local';
+    await adminUser.save();
+    console.log(`✅ Administrador atualizado: ${adminEmail}`);
+  } else {
+    await User.create({
+      name: 'Administradora Vista Bem',
+      email: adminEmail,
+      password: adminPassword,
+      role: 'admin',
+      authProvider: 'local',
+    });
+    console.log(`✅ Administrador criado: ${adminEmail} (Senha: ${adminPassword})`);
+  }
 
   // 3. Atributos (Tamanhos e Cores)
   await Attribute.deleteMany({});
@@ -333,6 +346,30 @@ async function autoSeedIfEmpty() {
       console.log('🌱 Banco de dados inicial vazio. Executando auto-seed...');
       await seed(false);
       return;
+    }
+
+    // Sincroniza a senha do administrador caso ADMIN_PASSWORD esteja definido no .env
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vistabem.com.br').toLowerCase().trim();
+
+    if (adminPassword) {
+      const adminUser = await User.findOne({
+        $or: [{ role: 'admin' }, { email: adminEmail }],
+      }).select('+password');
+
+      if (adminUser) {
+        const isMatch = await adminUser.matchPassword(adminPassword);
+        if (!isMatch) {
+          adminUser.password = adminPassword;
+          if (process.env.ADMIN_EMAIL) {
+            adminUser.email = adminEmail;
+          }
+          adminUser.role = 'admin';
+          adminUser.authProvider = 'local';
+          await adminUser.save();
+          console.log(`🔐 Senha do administrador (${adminUser.email}) sincronizada com o .env com sucesso!`);
+        }
+      }
     }
 
     // Migração suave de textos/cores dos itens de demonstração para paleta sóbria

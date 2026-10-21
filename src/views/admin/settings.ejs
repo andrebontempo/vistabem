@@ -192,4 +192,35 @@
   </div>
 </form>
 
+<!-- Seção de Segurança: Alterar Senha do Administrador -->
+<div class="admin-card" style="margin-top: 32px; border: 1px solid rgba(212, 180, 117, 0.3); background: rgba(212, 180, 117, 0.02);">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px;">
+    <div>
+      <h3 style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px; color: var(--gold-400);">
+        <%- icon('lock', 20) %> Segurança &amp; Senha do Administrador
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+        Altere a senha de acesso da sua conta administradora (<strong style="color: #fff;"><%= user ? user.email : 'admin' %></strong>) diretamente pelo painel.
+      </p>
+    </div>
+    <span class="badge-status primary">Acesso Administrador</span>
+  </div>
+
+  <form action="/admin/perfil/senha" method="POST" style="max-width: 640px;">
+    <div class="form-row">
+      <div class="form-group" style="flex: 1;">
+        <label class="form-label">Nova Senha (Mínimo 6 caracteres)</label>
+        <input type="password" name="new_password" required minlength="6" class="form-control" placeholder="Digite sua nova senha">
+      </div>
+      <div class="form-group" style="flex: 1;">
+        <label class="form-label">Confirmar Nova Senha</label>
+        <input type="password" name="confirm_password" required minlength="6" class="form-control" placeholder="Confirme a nova senha">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-secondary btn-sm" style="border-color: rgba(212, 180, 117, 0.5); color: var(--gold-400); font-weight: 700; padding: 8px 18px; margin-top: 4px;">
+      <%- icon('key', 15) %> <span>Atualizar Minha Senha de Administrador</span>
+    </button>
+  </form>
+</div>
+
 <%- include('admin-footer') %>

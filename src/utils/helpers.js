@@ -55,6 +55,7 @@ const P = {
   type: '<path d="M4 7V5h16v2M9 19h6M12 5v14"/>',
   clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
   tools: '<path d="m15 12 6 6-3 3-6-6"/><path d="m14 7 3 3"/><path d="M9.5 7.5 4 13l3 3 5.5-5.5a2.12 2.12 0 1 0-3-3Z"/>',
+  key: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3M18.5 4.5l3 3"/>',
 };
 
 function icon(name, size = 20, cls = '') {
