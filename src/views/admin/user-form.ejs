@@ -1,0 +1,203 @@
+<%- include('admin-header') %>
+
+<div style="margin-bottom: 24px;">
+  <a href="/admin/clientes" style="font-size: 0.88rem; color: var(--gold-400); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; text-decoration: none;">
+    <%- icon('chevron-left', 16) %> Voltar para Usuários &amp; Clientes
+  </a>
+  <h1 style="font-size: 1.8rem; font-weight: 700; color: #F5F2EB; margin-bottom: 6px;">
+    <%= isEdit ? 'Editar Usuário / Cliente' : 'Adicionar Usuário / Cliente' %>
+  </h1>
+  <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0;">
+    Gerencie os dados de acesso, perfil de permissão (Cliente vs Admin) e endereço.
+  </p>
+</div>
+
+<div class="admin-card" style="max-width: 760px; padding: 32px; border-radius: 16px;">
+  <form action="<%= isEdit ? '/admin/clientes/' + targetUser._id + '/editar' : '/admin/clientes/novo' %>" method="POST">
+    
+    <!-- Nome Completo -->
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label class="form-label" for="userName" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+        Nome Completo *
+      </label>
+      <input type="text" id="userName" name="name" required value="<%= targetUser.name || '' %>" placeholder="Ex: Maria Fernanda Silva" class="form-control" style="height: 44px; border-radius: 8px;">
+    </div>
+
+    <!-- Linha 2 Colunas: E-mail e Perfil -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 20px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="userEmail" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+          E-mail de Acesso *
+        </label>
+        <input type="email" id="userEmail" name="email" required value="<%= targetUser.email || '' %>" placeholder="cliente@exemplo.com" class="form-control" style="height: 44px; border-radius: 8px;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="userRole" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+          Perfil / Permissão *
+        </label>
+        <select id="userRole" name="role" class="form-control" style="height: 44px; border-radius: 8px; background: var(--bg-surface); color: #fff;">
+          <option value="customer" <%= (targetUser.role === 'customer' || !targetUser.role) ? 'selected' : '' %>>
+            Cliente (Comprador)
+          </option>
+          <option value="admin" <%= (targetUser.role === 'admin') ? 'selected' : '' %>>
+            Administrador Geral
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Linha 2 Colunas: Senha e Telefone -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 28px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="userPassword" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+          <%= isEdit ? 'Senha (Deixe em branco para manter a atual)' : 'Senha de Acesso *' %>
+        </label>
+        <div style="position: relative;">
+          <input type="password" id="userPassword" name="password" <%= isEdit ? '' : 'required' %> minlength="6" placeholder="Mínimo 6 caracteres" class="form-control" style="height: 44px; border-radius: 8px; padding-right: 42px;">
+          <button type="button" onclick="togglePasswordVisibility('userPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; padding: 4px;" title="Visualizar / Ocultar">
+            <%- icon('eye', 16) %>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="userPhone" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+          Telefone / WhatsApp
+        </label>
+        <input type="tel" id="userPhone" name="phone" value="<%= targetUser.phone || '' %>" placeholder="(11) 99999-9999" class="form-control" style="height: 44px; border-radius: 8px;">
+      </div>
+    </div>
+
+    <!-- Seção de Endereço do Usuário -->
+    <div style="border-top: 1px solid var(--border-color); padding-top: 24px; margin-bottom: 24px;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--gold-400); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <%- icon('truck', 18) %> Endereço do Usuário
+      </h3>
+
+      <!-- CEP e Rua -->
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 18px; margin-bottom: 18px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userZipCode" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            CEP
+          </label>
+          <div style="position: relative;">
+            <input type="text" id="userZipCode" name="zipCode" value="<%= address.zipCode || '' %>" placeholder="00000-000" maxlength="9" class="form-control" style="height: 44px; border-radius: 8px;">
+            <span id="cepLoading" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--gold-400); display: none;">Buscando...</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userStreet" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            Rua / Logradouro
+          </label>
+          <input type="text" id="userStreet" name="street" value="<%= address.street || '' %>" placeholder="Rua das Flores" class="form-control" style="height: 44px; border-radius: 8px;">
+        </div>
+      </div>
+
+      <!-- Número e Bairro -->
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 18px; margin-bottom: 18px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userNumber" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            Número
+          </label>
+          <input type="text" id="userNumber" name="number" value="<%= address.number || '' %>" placeholder="123" class="form-control" style="height: 44px; border-radius: 8px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userNeighborhood" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            Bairro
+          </label>
+          <input type="text" id="userNeighborhood" name="neighborhood" value="<%= address.neighborhood || '' %>" placeholder="Centro" class="form-control" style="height: 44px; border-radius: 8px;">
+        </div>
+      </div>
+
+      <!-- Cidade e Estado -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 18px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userCity" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            Cidade
+          </label>
+          <input type="text" id="userCity" name="city" value="<%= address.city || '' %>" placeholder="São Paulo" class="form-control" style="height: 44px; border-radius: 8px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="userState" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+            Estado (UF)
+          </label>
+          <input type="text" id="userState" name="state" value="<%= address.state || '' %>" placeholder="SP" maxlength="2" class="form-control" style="height: 44px; border-radius: 8px; text-transform: uppercase;">
+        </div>
+      </div>
+
+      <!-- Complemento -->
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="userComplement" style="font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;">
+          Complemento (opcional)
+        </label>
+        <input type="text" id="userComplement" name="complement" value="<%= address.complement || '' %>" placeholder="Apto 42, Bloco B" class="form-control" style="height: 44px; border-radius: 8px;">
+      </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div style="display: flex; gap: 12px; align-items: center; margin-top: 32px;">
+      <button type="submit" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700; border-radius: 8px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+        <%- icon('check', 18) %>
+        <span><%= isEdit ? 'Salvar Alterações' : 'Cadastrar Usuário / Cliente' %></span>
+      </button>
+      <a href="/admin/clientes" class="btn btn-secondary" style="padding: 12px 20px; border-radius: 8px; font-size: 0.95rem;">
+        Cancelar
+      </a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.style.color = 'var(--gold-400)';
+  } else {
+    input.type = 'password';
+    btn.style.color = 'var(--text-muted)';
+  }
+}
+
+// Preenchimento automático de endereço via ViaCEP
+const cepInput = document.getElementById('userZipCode');
+if (cepInput) {
+  cepInput.addEventListener('blur', function() {
+    const rawCep = this.value.replace(/\D/g, '');
+    if (rawCep.length === 8) {
+      const loading = document.getElementById('cepLoading');
+      if (loading) loading.style.display = 'block';
+
+      fetch(`https://viacep.com.br/ws/${rawCep}/json/`)
+        .then(res => res.json())
+        .then(data => {
+          if (loading) loading.style.display = 'none';
+          if (!data.erro) {
+            const streetEl = document.getElementById('userStreet');
+            const neighborhoodEl = document.getElementById('userNeighborhood');
+            const cityEl = document.getElementById('userCity');
+            const stateEl = document.getElementById('userState');
+            const numberEl = document.getElementById('userNumber');
+
+            if (streetEl && data.logradouro) streetEl.value = data.logradouro;
+            if (neighborhoodEl && data.bairro) neighborhoodEl.value = data.bairro;
+            if (cityEl && data.localidade) cityEl.value = data.localidade;
+            if (stateEl && data.uf) stateEl.value = data.uf;
+            if (numberEl) numberEl.focus();
+          }
+        })
+        .catch(() => {
+          if (loading) loading.style.display = 'none';
+        });
+    }
+  });
+}
+</script>
+
+<%- include('admin-footer') %>

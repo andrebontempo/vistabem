@@ -78,7 +78,10 @@ router.post('/avaliacoes/:id/excluir', adminController.deleteReview);
 
 // Clientes & Gestão de Acessos
 router.get('/clientes', adminController.getUsers);
-router.post('/clientes/novo', adminController.postCreateUser);
+router.get('/clientes/novo', adminController.getUserForm);
+router.post('/clientes/novo', adminController.postUserForm);
+router.get('/clientes/:id/editar', adminController.getUserForm);
+router.post('/clientes/:id/editar', adminController.postUserForm);
 router.post('/clientes/:id/role', adminController.postUpdateUserRole);
 router.post('/clientes/:id/senha', adminController.postUpdateUserPassword);
 router.post('/clientes/:id/excluir', adminController.deleteUser);

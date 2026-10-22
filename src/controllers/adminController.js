@@ -584,6 +584,7 @@ exports.deleteReview = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   try {
     const { q, role } = req.query;
+    const Order = require('../models/Order');
 
     const filter = {};
     if (role && ['customer', 'admin'].includes(role)) {
@@ -599,16 +600,33 @@ exports.getUsers = async (req, res, next) => {
       ];
     }
 
-    const [users, totalUsers, totalAdmins, totalCustomers] = await Promise.all([
+    const [users, totalUsers, totalAdmins, totalCustomers, orderCounts, emailOrderCounts] = await Promise.all([
       User.find(filter).sort({ createdAt: -1 }),
       User.countDocuments(),
       User.countDocuments({ role: 'admin' }),
       User.countDocuments({ role: 'customer' }),
+      Order.aggregate([
+        { $match: { user: { $ne: null } } },
+        { $group: { _id: '$user', total: { $sum: 1 } } },
+      ]),
+      Order.aggregate([
+        { $match: { user: null, 'customer.email': { $exists: true, $ne: '' } } },
+        { $group: { _id: { $toLower: '$customer.email' }, total: { $sum: 1 } } },
+      ]),
     ]);
 
+    const orderCountMap = {};
+    orderCounts.forEach((o) => {
+      if (o._id) orderCountMap[o._id.toString()] = o.total;
+    });
+    emailOrderCounts.forEach((o) => {
+      if (o._id) orderCountMap[o._id.toLowerCase()] = o.total;
+    });
+
     res.render('admin/users', {
-      title: 'Gestão de Contas e Usuários — Vista Bem',
+      title: 'Gestão de Usuários e Clientes Cadastrados — Vista Bem',
       users,
+      orderCountMap,
       stats: {
         total: totalUsers,
         admins: totalAdmins,
@@ -622,53 +640,182 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-exports.postCreateUser = async (req, res, next) => {
+exports.getUserForm = async (req, res, next) => {
   try {
-    const { name, email, phone, role, password } = req.body;
+    const { id } = req.params;
+    let targetUser = null;
+
+    if (id) {
+      targetUser = await User.findById(id);
+      if (!targetUser) {
+        req.flash('danger', 'Usuário não encontrado.');
+        return res.redirect('/admin/clientes');
+      }
+    } else {
+      targetUser = {
+        name: '',
+        email: '',
+        phone: '',
+        role: 'customer',
+        addresses: [],
+      };
+    }
+
+    const defaultAddress =
+      (targetUser.addresses && targetUser.addresses.find((a) => a.isDefault)) ||
+      (targetUser.addresses && targetUser.addresses[0]) ||
+      {};
+
+    res.render('admin/user-form', {
+      title: id ? `Editar Usuário — ${targetUser.name}` : 'Adicionar Novo Usuário / Cliente — Vista Bem',
+      targetUser,
+      address: defaultAddress,
+      isEdit: !!id,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postUserForm = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const {
+      name,
+      email,
+      phone,
+      role,
+      password,
+      zipCode,
+      street,
+      number,
+      complement,
+      neighborhood,
+      city,
+      state,
+    } = req.body;
 
     const trimmedName = (name || '').trim();
     const trimmedEmail = (email || '').toLowerCase().trim();
     const trimmedPhone = (phone || '').trim();
     const trimmedPassword = (password || '').trim();
-    const userRole = role === 'admin' ? 'admin' : 'customer';
+    const selectedRole = role === 'admin' ? 'admin' : 'customer';
 
-    if (!trimmedName || !trimmedEmail || !trimmedPassword) {
-      req.flash('danger', 'Nome, e-mail e senha são obrigatórios.');
-      return res.redirect('/admin/clientes');
+    if (!trimmedName || !trimmedEmail) {
+      req.flash('danger', 'Nome completo e e-mail são obrigatórios.');
+      return res.redirect(id ? `/admin/clientes/${id}/editar` : '/admin/clientes/novo');
     }
 
-    if (trimmedPassword.length < 6) {
-      req.flash('danger', 'A senha deve possuir no mínimo 6 caracteres.');
-      return res.redirect('/admin/clientes');
+    // Se for novo usuário, senha é obrigatória
+    if (!id && (!trimmedPassword || trimmedPassword.length < 6)) {
+      req.flash('danger', 'Para novos usuários, a senha é obrigatória e deve possuir no mínimo 6 caracteres.');
+      return res.redirect('/admin/clientes/novo');
     }
 
-    const existingUser = await User.findOne({ email: trimmedEmail });
-    if (existingUser) {
-      req.flash('danger', `Já existe uma conta cadastrada com o e-mail "${trimmedEmail}".`);
-      return res.redirect('/admin/clientes');
+    // Se for edição e informou senha, deve ter ao menos 6 caracteres
+    if (id && trimmedPassword && trimmedPassword.length < 6) {
+      req.flash('danger', 'A nova senha deve possuir no mínimo 6 caracteres.');
+      return res.redirect(`/admin/clientes/${id}/editar`);
     }
 
-    const newUser = new User({
-      name: trimmedName,
-      email: trimmedEmail,
-      phone: trimmedPhone,
-      role: userRole,
-      password: trimmedPassword,
-      authProvider: 'local',
-      active: true,
-    });
+    // Checar duplicidade de e-mail
+    const emailConflictQuery = { email: trimmedEmail };
+    if (id) {
+      emailConflictQuery._id = { $ne: id };
+    }
+    const emailExists = await User.findOne(emailConflictQuery);
+    if (emailExists) {
+      req.flash('danger', `Já existe uma conta registrada com o e-mail "${trimmedEmail}".`);
+      return res.redirect(id ? `/admin/clientes/${id}/editar` : '/admin/clientes/novo');
+    }
 
-    await newUser.save();
+    let userToSave;
+
+    if (id) {
+      userToSave = await User.findById(id).select('+password');
+      if (!userToSave) {
+        req.flash('danger', 'Usuário não encontrado.');
+        return res.redirect('/admin/clientes');
+      }
+
+      // Validação de mudança de papel do próprio usuário conectado
+      if (userToSave._id.toString() === req.user._id.toString() && selectedRole !== userToSave.role) {
+        req.flash('warning', 'Você não pode alterar o perfil de permissão da sua própria conta logada.');
+      } else if (userToSave.role === 'admin' && selectedRole === 'customer') {
+        const adminCount = await User.countDocuments({ role: 'admin' });
+        if (adminCount <= 1) {
+          req.flash('danger', 'Operação bloqueada: o sistema precisa manter pelo menos um administrador ativo.');
+          return res.redirect(`/admin/clientes/${id}/editar`);
+        }
+        userToSave.role = selectedRole;
+      } else {
+        userToSave.role = selectedRole;
+      }
+
+      userToSave.name = trimmedName;
+      userToSave.email = trimmedEmail;
+      userToSave.phone = trimmedPhone;
+
+      if (trimmedPassword) {
+        userToSave.password = trimmedPassword;
+        userToSave.authProvider = 'local';
+      }
+    } else {
+      userToSave = new User({
+        name: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        role: selectedRole,
+        password: trimmedPassword,
+        authProvider: 'local',
+        active: true,
+      });
+    }
+
+    // Tratar endereço
+    const hasAddressData = (zipCode || street || city || neighborhood || number);
+    if (hasAddressData) {
+      if (!userToSave.addresses || userToSave.addresses.length === 0) {
+        userToSave.addresses = [
+          {
+            label: 'Principal',
+            zipCode: (zipCode || '').trim(),
+            street: (street || '').trim(),
+            number: (number || '').trim(),
+            complement: (complement || '').trim(),
+            neighborhood: (neighborhood || '').trim(),
+            city: (city || '').trim(),
+            state: (state || '').toUpperCase().trim(),
+            isDefault: true,
+          },
+        ];
+      } else {
+        const addr = userToSave.addresses.find((a) => a.isDefault) || userToSave.addresses[0];
+        addr.zipCode = (zipCode || '').trim();
+        addr.street = (street || '').trim();
+        addr.number = (number || '').trim();
+        addr.complement = (complement || '').trim();
+        addr.neighborhood = (neighborhood || '').trim();
+        addr.city = (city || '').trim();
+        addr.state = (state || '').toUpperCase().trim();
+      }
+    }
+
+    await userToSave.save();
 
     req.flash(
       'success',
-      `Conta de ${userRole === 'admin' ? 'Administrador' : 'Cliente'} criada com sucesso para "${newUser.name}".`
+      id
+        ? `Dados de "${userToSave.name}" atualizados com sucesso.`
+        : `Conta de ${selectedRole === 'admin' ? 'Administrador' : 'Cliente'} criada com sucesso para "${userToSave.name}".`
     );
     res.redirect('/admin/clientes');
   } catch (err) {
     next(err);
   }
 };
+
+exports.postCreateUser = exports.postUserForm;
 
 exports.deleteUser = async (req, res, next) => {
   try {
