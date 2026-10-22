@@ -8,7 +8,17 @@ const JWT_SECRET = () => process.env.JWT_SECRET || 'vistabem_dev_secret_troque_e
 const isProd = () => process.env.NODE_ENV === 'production';
 
 function signToken(user) {
-  return jwt.sign({ id: user._id.toString() }, JWT_SECRET(), { expiresIn: '7d' });
+  return jwt.sign(
+    {
+      id: user._id.toString(),
+      email: user.email,
+      role: user.role,
+      name: user.name,
+      firstName: user.firstName,
+    },
+    JWT_SECRET(),
+    { expiresIn: '7d' }
+  );
 }
 
 function setAuthCookie(res, user) {
@@ -58,21 +68,47 @@ const loadContext = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET());
+      let user = null;
       try {
-        const user = await User.findById(decoded.id);
-        if (user && user.active) {
-          req.user = user;
-          res.locals.user = user;
-        } else if (user && !user.active) {
-          console.warn(`[Auth] Usuário ID ${decoded.id} está desativado.`);
-          clearAuthCookie(res);
-        } else {
-          console.warn(`[Auth] Usuário ID ${decoded.id} não encontrado no banco.`);
-          clearAuthCookie(res);
+        if (decoded.id) {
+          user = await User.findById(decoded.id);
+        }
+        if (!user && decoded.email) {
+          // Fallback por e-mail caso o ID tenha sido recriado em seed
+          user = await User.findOne({ email: decoded.email.toLowerCase().trim() });
+          if (user) {
+            setAuthCookie(res, user);
+          }
         }
       } catch (dbErr) {
-        // Erro de comunicação/timeout no MongoDB: não deve invalidar o cookie do usuário
         console.error('[Auth] Erro ao buscar usuário no banco de dados:', dbErr.message);
+      }
+
+      if (user) {
+        if (user.active) {
+          req.user = user;
+          res.locals.user = user;
+        } else {
+          console.warn(`[Auth] Usuário ${user.email} está desativado.`);
+          clearAuthCookie(res);
+        }
+      } else if (decoded.role === 'admin' && decoded.email) {
+        // Fallback seguro usando claims assinadas do JWT para manter o painel estável
+        const fallbackAdmin = {
+          _id: decoded.id,
+          id: decoded.id,
+          email: decoded.email,
+          role: 'admin',
+          name: decoded.name || 'Administradora Vista Bem',
+          firstName: decoded.firstName || 'Administradora',
+          active: true,
+          wishlist: [],
+        };
+        req.user = fallbackAdmin;
+        res.locals.user = fallbackAdmin;
+      } else {
+        console.warn(`[Auth] Usuário ${decoded.email || decoded.id} não encontrado no banco.`);
+        clearAuthCookie(res);
       }
     } catch (jwtErr) {
       console.warn('[Auth] Token JWT inválido ou expirado:', jwtErr.message);

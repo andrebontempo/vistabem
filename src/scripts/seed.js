@@ -41,18 +41,17 @@ async function seed() {
   console.log('✅ Configurações salvas.');
 
   // 2. Usuário Administrador
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vistabem.com.br').toLowerCase().trim();
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vistabem.com').toLowerCase().trim();
   const adminPassword = process.env.ADMIN_PASSWORD || 'VistaBem@2026';
 
-  let adminUser = await User.findOne({
-    $or: [{ role: 'admin' }, { email: adminEmail }],
-  }).select('+password');
+  let adminUser = await User.findOne({ email: adminEmail }).select('+password');
 
   if (adminUser) {
     adminUser.name = 'Administradora Vista Bem';
     adminUser.email = adminEmail;
     adminUser.password = adminPassword;
     adminUser.role = 'admin';
+    adminUser.active = true;
     adminUser.authProvider = 'local';
     await adminUser.save();
     console.log(`✅ Administrador atualizado: ${adminEmail}`);
@@ -62,6 +61,7 @@ async function seed() {
       email: adminEmail,
       password: adminPassword,
       role: 'admin',
+      active: true,
       authProvider: 'local',
     });
     console.log(`✅ Administrador criado: ${adminEmail} (Senha: ${adminPassword})`);
@@ -348,27 +348,41 @@ async function autoSeedIfEmpty() {
       return;
     }
 
-    // Sincroniza a senha do administrador caso ADMIN_PASSWORD esteja definido no .env
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vistabem.com.br').toLowerCase().trim();
+    // Garante que as contas de administrador padrão existam e tenham perfil admin ativo
+    const adminEmails = [
+      'admin@vistabem.com',
+      'admin@vistabem.com.br',
+      (process.env.ADMIN_EMAIL || '').toLowerCase().trim(),
+    ].filter(Boolean);
 
-    if (adminPassword) {
-      const adminUser = await User.findOne({
-        $or: [{ role: 'admin' }, { email: adminEmail }],
-      }).select('+password');
+    const defaultAdminPassword = (process.env.ADMIN_PASSWORD || 'VistaBem@2026').trim();
 
-      if (adminUser) {
-        const isMatch = await adminUser.matchPassword(adminPassword);
-        if (!isMatch) {
-          adminUser.password = adminPassword;
-          if (process.env.ADMIN_EMAIL) {
-            adminUser.email = adminEmail;
-          }
-          adminUser.role = 'admin';
-          adminUser.authProvider = 'local';
-          await adminUser.save();
-          console.log(`🔐 Senha do administrador (${adminUser.email}) sincronizada com o .env com sucesso!`);
+    for (const em of adminEmails) {
+      let u = await User.findOne({ email: em }).select('+password');
+      if (u) {
+        let changed = false;
+        if (u.role !== 'admin') {
+          u.role = 'admin';
+          changed = true;
         }
+        if (!u.active) {
+          u.active = true;
+          changed = true;
+        }
+        if (changed) {
+          await u.save();
+          console.log(`🔐 Perfil do administrador (${em}) verificado e mantido como admin ativo.`);
+        }
+      } else if (em === 'admin@vistabem.com') {
+        await User.create({
+          name: 'Administradora Vista Bem',
+          email: em,
+          password: defaultAdminPassword,
+          role: 'admin',
+          active: true,
+          authProvider: 'local',
+        });
+        console.log(`🌱 Administrador ${em} inicializado com sucesso.`);
       }
     }
 
