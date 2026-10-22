@@ -78,8 +78,10 @@ router.post('/avaliacoes/:id/excluir', adminController.deleteReview);
 
 // Clientes & Gestão de Acessos
 router.get('/clientes', adminController.getUsers);
+router.post('/clientes/novo', adminController.postCreateUser);
 router.post('/clientes/:id/role', adminController.postUpdateUserRole);
 router.post('/clientes/:id/senha', adminController.postUpdateUserPassword);
+router.post('/clientes/:id/excluir', adminController.deleteUser);
 
 // Alteração de senha do próprio administrador logado
 router.post('/perfil/senha', adminController.postUpdateAdminOwnPassword);

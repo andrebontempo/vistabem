@@ -1,65 +1,225 @@
 <%- include('admin-header') %>
 
-<div style="margin-bottom: 24px;">
-  <h1 style="font-size: 1.8rem;">Clientes e Administradores</h1>
-  <p style="color: var(--text-muted); font-size: 0.9rem;">Lista de usuários e administradores, gestão de perfis e alteração de senhas</p>
+<!-- Topo da Página -->
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+  <div>
+    <h1 style="font-size: 1.8rem; margin-bottom: 4px; font-weight: 700; color: #F5F2EB;">Gestão de Contas e Usuários</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Controle centralizado de clientes, administradores, permissões de acesso e segurança.</p>
+  </div>
+  <button type="button" class="btn btn-primary" onclick="openCreateUserModal()" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 18px;">
+    <%- icon('plus', 16) %>
+    <span>Novo Usuário / Admin</span>
+  </button>
 </div>
 
-<div class="admin-card">
+<!-- Grid de Métricas / Contadores -->
+<div class="admin-stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 24px;">
+  <a href="/admin/clientes" style="text-decoration: none; color: inherit;">
+    <div class="stat-card" style="<%= currentRole === 'all' && !searchQuery ? 'border-color: var(--gold-400);' : '' %>">
+      <div class="stat-icon" style="background: rgba(212, 180, 117, 0.12); color: var(--gold-400);">
+        <%- icon('users', 24) %>
+      </div>
+      <div>
+        <div class="stat-val"><%= stats.total %></div>
+        <div class="stat-label">Total de Contas</div>
+      </div>
+    </div>
+  </a>
+
+  <a href="/admin/clientes?role=customer" style="text-decoration: none; color: inherit;">
+    <div class="stat-card" style="<%= currentRole === 'customer' ? 'border-color: var(--gold-400);' : '' %>">
+      <div class="stat-icon" style="background: rgba(148, 163, 184, 0.12); color: #94A3B8;">
+        <%- icon('user', 24) %>
+      </div>
+      <div>
+        <div class="stat-val"><%= stats.customers %></div>
+        <div class="stat-label">Clientes da Loja</div>
+      </div>
+    </div>
+  </a>
+
+  <a href="/admin/clientes?role=admin" style="text-decoration: none; color: inherit;">
+    <div class="stat-card" style="<%= currentRole === 'admin' ? 'border-color: var(--gold-400);' : '' %>">
+      <div class="stat-icon" style="background: rgba(212, 180, 117, 0.2); color: #F5D77F;">
+        <%- icon('shield', 24) %>
+      </div>
+      <div>
+        <div class="stat-val"><%= stats.admins %></div>
+        <div class="stat-label">Administradores</div>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- Card Principal com Tabela e Filtros -->
+<div class="admin-card" style="padding: 24px;">
+  <!-- Barra de Filtros e Busca -->
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+    <!-- Abas / Filtro de Perfil -->
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <a href="/admin/clientes<%= searchQuery ? '?q=' + encodeURIComponent(searchQuery) : '' %>" 
+         class="btn btn-sm <%= currentRole === 'all' ? 'btn-primary' : 'btn-secondary' %>"
+         style="border-radius: 9999px; padding: 6px 16px; font-size: 0.82rem;">
+        Todos (<%= stats.total %>)
+      </a>
+      <a href="/admin/clientes?role=customer<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>" 
+         class="btn btn-sm <%= currentRole === 'customer' ? 'btn-primary' : 'btn-secondary' %>"
+         style="border-radius: 9999px; padding: 6px 16px; font-size: 0.82rem;">
+        Clientes (<%= stats.customers %>)
+      </a>
+      <a href="/admin/clientes?role=admin<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>" 
+         class="btn btn-sm <%= currentRole === 'admin' ? 'btn-primary' : 'btn-secondary' %>"
+         style="border-radius: 9999px; padding: 6px 16px; font-size: 0.82rem;">
+        Administradores (<%= stats.admins %>)
+      </a>
+    </div>
+
+    <!-- Campo de Busca -->
+    <form action="/admin/clientes" method="GET" style="display: flex; gap: 8px; align-items: center; margin: 0; min-width: 280px; max-width: 100%;">
+      <% if (currentRole && currentRole !== 'all') { %>
+        <input type="hidden" name="role" value="<%= currentRole %>">
+      <% } %>
+      <div style="position: relative; width: 100%;">
+        <input type="text" name="q" value="<%= searchQuery %>" placeholder="Buscar por nome, e-mail ou tel..." 
+               class="form-control" 
+               style="height: 38px; font-size: 0.85rem; padding-left: 36px; padding-right: 12px; border-radius: 8px;">
+        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; display: flex;">
+          <%- icon('search', 16) %>
+        </span>
+      </div>
+      <button type="submit" class="btn btn-secondary btn-sm" style="height: 38px; padding: 0 14px; border-radius: 8px;" title="Buscar">
+        Buscar
+      </button>
+      <% if (searchQuery || (currentRole && currentRole !== 'all')) { %>
+        <a href="/admin/clientes" class="btn btn-secondary btn-sm" style="height: 38px; padding: 0 12px; border-radius: 8px; color: var(--text-muted);" title="Limpar filtros">
+          <%- icon('x', 14) %>
+        </a>
+      <% } %>
+    </form>
+  </div>
+
   <% if (users && users.length > 0) { %>
     <div class="admin-table-wrapper">
       <table class="admin-table">
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Tipo / Perfil</th>
-            <th>Origem</th>
+            <th>Usuário</th>
+            <th>Contato</th>
+            <th>Perfil de Acesso</th>
+            <th>Método de Login</th>
             <th>Data de Cadastro</th>
-            <th style="text-align: right;">Ações &amp; Alterar Senha</th>
+            <th style="text-align: right; min-width: 220px;">Ações</th>
           </tr>
         </thead>
         <tbody>
-          <% users.forEach(function(u) { %>
+          <% users.forEach(function(u) { 
+            const initials = (u.name || 'U').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+            const isSelf = typeof user !== 'undefined' && user && u._id.toString() === user._id.toString();
+          %>
             <tr>
-              <td><strong><%= u.name %></strong></td>
-              <td><%= u.email %></td>
-              <td><%= u.phone || '—' %></td>
+              <!-- Usuário -->
               <td>
-                <span class="badge-status <%= u.role === 'admin' ? 'primary' : 'muted' %>">
-                  <%= u.role === 'admin' ? 'Administrador' : 'Cliente' %>
-                </span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 38px; height: 38px; border-radius: 50%; background: <%= u.role === 'admin' ? 'linear-gradient(135deg, #4A2774, #2A1742)' : 'rgba(255,255,255,0.06)' %>; border: 1px solid <%= u.role === 'admin' ? 'rgba(212, 180, 117, 0.4)' : 'var(--border-color)' %>; color: <%= u.role === 'admin' ? 'var(--gold-400)' : '#EDE8DF' %>; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">
+                    <%= initials %>
+                  </div>
+                  <div>
+                    <div style="font-weight: 600; color: #FFFFFF; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+                      <span><%= u.name %></span>
+                      <% if (isSelf) { %>
+                        <span style="font-size: 0.68rem; background: rgba(212, 180, 117, 0.2); color: var(--gold-400); border: 1px solid rgba(212, 180, 117, 0.35); padding: 1px 6px; border-radius: 4px; font-weight: 600;">Você</span>
+                      <% } %>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                      <%= u.email %>
+                    </div>
+                  </div>
+                </div>
               </td>
-              <td><span style="text-transform: capitalize;"><%= u.authProvider %></span></td>
-              <td><%= dateTime(u.createdAt) %></td>
+
+              <!-- Contato -->
+              <td style="color: var(--text-muted); font-size: 0.88rem;">
+                <% if (u.phone) { %>
+                  <span style="color: #EDE8DF;"><%= u.phone %></span>
+                <% } else { %>
+                  <span style="opacity: 0.4;">—</span>
+                <% } %>
+              </td>
+
+              <!-- Perfil de Acesso -->
+              <td>
+                <% if (u.role === 'admin') { %>
+                  <span class="badge-status" style="background: rgba(212, 180, 117, 0.15); color: #F5D77F; border: 1px solid rgba(212, 180, 117, 0.35);">
+                    <%- icon('shield', 13) %> Administrador
+                  </span>
+                <% } else { %>
+                  <span class="badge-status muted">
+                    <%- icon('user', 13) %> Cliente
+                  </span>
+                <% } %>
+              </td>
+
+              <!-- Método de Login -->
+              <td>
+                <% if (u.googleId || u.authProvider === 'google') { %>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #EDE8DF;">
+                    <%- GOOGLE_ICON %> Google
+                  </span>
+                <% } else { %>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--text-muted);">
+                    <%- icon('lock', 13) %> E-mail e Senha
+                  </span>
+                <% } %>
+              </td>
+
+              <!-- Data de Cadastro -->
+              <td style="color: var(--text-muted); font-size: 0.84rem;">
+                <%= dateTime(u.createdAt) %>
+              </td>
+
+              <!-- Ações -->
               <td style="text-align: right;">
-                <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <!-- Redefinir Senha -->
                   <% if (!u.googleId || u.authProvider === 'local') { %>
-                    <form action="/admin/clientes/<%= u._id %>/senha" method="POST" style="display: inline-flex; gap: 6px; align-items: center; margin: 0;">
-                      <input type="password" name="new_password" placeholder="Nova senha" required minlength="6" class="form-control" style="padding: 5px 8px; font-size: 0.78rem; width: 130px; height: 32px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); color: #fff; border-radius: 6px;">
-                      <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 5px 10px; height: 32px; min-height: auto; white-space: nowrap; border-color: rgba(212, 180, 117, 0.4); color: var(--gold-400);" title="Alterar senha deste usuário">
-                        <%- icon('key', 13) %> <span>Alterar Senha</span>
-                      </button>
-                    </form>
+                    <button type="button" 
+                            class="btn btn-secondary btn-sm" 
+                            data-id="<%= u._id %>"
+                            data-name="<%= u.name %>"
+                            data-email="<%= u.email %>"
+                            onclick="openResetPasswordModal(this)"
+                            style="padding: 5px 10px; height: 32px; font-size: 0.8rem; border-color: rgba(212, 180, 117, 0.3); color: var(--gold-400);"
+                            title="Redefinir senha de acesso">
+                      <%- icon('key', 13) %> <span>Senha</span>
+                    </button>
                   <% } %>
 
-                  <% if (typeof user !== 'undefined' && user && u._id.toString() === user._id.toString()) { %>
-                    <span class="badge-status muted" title="Você está conectado com esta conta">Sua conta</span>
-                  <% } else if (u.role === 'admin') { %>
-                    <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja revogar as permissões de Administrador de <%= u.name %>? O usuário passará a ser Cliente.');">
-                      <input type="hidden" name="role" value="customer">
-                      <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto; height: 32px;" title="Revogar permissão de administrador">
-                        <%- icon('user', 14) %> <span>Remover Admin</span>
+                  <!-- Alternar Perfil (Admin / Cliente) -->
+                  <% if (!isSelf) { %>
+                    <% if (u.role === 'admin') { %>
+                      <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja revogar as permissões de Administrador deste usuário? Ele passará a ser Cliente.');">
+                        <input type="hidden" name="role" value="customer">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="color: #F87171; border-color: rgba(239, 68, 68, 0.3); font-size: 0.8rem; padding: 5px 10px; height: 32px;" title="Remover privilégio de administrador">
+                          <%- icon('user', 13) %> <span>Tornar Cliente</span>
+                        </button>
+                      </form>
+                    <% } else { %>
+                      <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja promover este usuário a Administrador? O usuário terá acesso completo ao painel administrativo.');">
+                        <input type="hidden" name="role" value="admin">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="color: #6EE7B7; border-color: rgba(110, 231, 183, 0.3); font-size: 0.8rem; padding: 5px 10px; height: 32px;" title="Promover usuário a administrador">
+                          <%- icon('shield', 13) %> <span>Promover Admin</span>
+                        </button>
+                      </form>
+                    <% } %>
+
+                    <!-- Excluir Conta -->
+                    <form action="/admin/clientes/<%= u._id %>/excluir" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('ATENÇÃO: Deseja realmente excluir permanentemente esta conta? Esta ação é irreversível.');">
+                      <button type="submit" class="btn btn-secondary btn-sm" style="color: #EF4444; border-color: rgba(239, 68, 68, 0.25); font-size: 0.8rem; padding: 5px 8px; height: 32px;" title="Excluir esta conta permanentemente">
+                        <%- icon('trash', 14) %>
                       </button>
                     </form>
                   <% } else { %>
-                    <form action="/admin/clientes/<%= u._id %>/role" method="POST" style="display: inline-block; margin: 0;" onsubmit="return confirm('Deseja promover <%= u.name %> a Administrador? Ele terá acesso total ao painel de gestão.');">
-                      <input type="hidden" name="role" value="admin">
-                      <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--cyan-400); border-color: rgba(0, 240, 255, 0.35); font-size: 0.8rem; padding: 6px 12px; min-height: auto; height: 32px;" title="Conceder permissão de administrador">
-                        <%- icon('shield', 14) %> <span>Promover a Admin</span>
-                      </button>
-                    </form>
+                    <span class="badge-status muted" style="font-size: 0.72rem; padding: 4px 8px;" title="Você está autenticado nesta sessão">Conectado</span>
                   <% } %>
                 </div>
               </td>
@@ -69,8 +229,239 @@
       </table>
     </div>
   <% } else { %>
-    <p style="color: var(--text-muted);">Nenhum usuário cadastrado.</p>
+    <div style="text-align: center; padding: 48px 16px; color: var(--text-muted);">
+      <div style="font-size: 2.2rem; margin-bottom: 12px; opacity: 0.6;">🔍</div>
+      <h3 style="font-size: 1.15rem; color: #EDE8DF; margin-bottom: 6px;">Nenhum usuário encontrado</h3>
+      <p style="font-size: 0.88rem; max-width: 420px; margin: 0 auto 18px auto;">
+        Não encontramos contas correspondentes aos critérios de filtro ou busca informados.
+      </p>
+      <% if (searchQuery || (currentRole && currentRole !== 'all')) { %>
+        <a href="/admin/clientes" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
+          Limpar Filtros e Ver Todos
+        </a>
+      <% } %>
+    </div>
   <% } %>
 </div>
+
+<!-- ==========================================================================
+     MODAL: REDEFINIR SENHA DO USUÁRIO
+     ========================================================================== -->
+<div id="modalResetPassword" class="modal-backdrop-custom" style="display: none;">
+  <div class="modal-dialog-custom">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin: 0 0 4px 0;">Redefinir Senha de Acesso</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Defina uma nova senha segura para o usuário.</p>
+      </div>
+      <button type="button" onclick="closeResetPasswordModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;" title="Fechar">
+        <%- icon('x', 18) %>
+      </button>
+    </div>
+
+    <!-- Informações do Usuário Selecionado -->
+    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; margin-bottom: 20px;">
+      <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gold-400); font-weight: 600; margin-bottom: 4px;">Usuário Selecionado</div>
+      <div id="resetUserTargetName" style="font-weight: 600; color: #FFFFFF; font-size: 0.94rem;">—</div>
+      <div id="resetUserTargetEmail" style="font-size: 0.82rem; color: var(--text-muted);">—</div>
+    </div>
+
+    <form id="formResetPassword" method="POST" action="">
+      <div class="form-group" style="margin-bottom: 22px;">
+        <label class="form-label" for="inputNewPassword">Nova Senha</label>
+        <div style="position: relative;">
+          <input type="password" id="inputNewPassword" name="new_password" required minlength="6" placeholder="Mínimo de 6 caracteres" class="form-control" style="padding-right: 42px;">
+          <button type="button" onclick="togglePasswordVisibility('inputNewPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; padding: 4px;" title="Visualizar / Ocultar">
+            <%- icon('eye', 16) %>
+          </button>
+        </div>
+        <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; display: block;">
+          O usuário poderá utilizar esta nova senha imediatamente ao efetuar login.
+        </small>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeResetPasswordModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" style="font-weight: 600;">
+          Salvar Nova Senha
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL: CADASTRAR NOVO USUÁRIO / ADMINISTRADOR
+     ========================================================================== -->
+<div id="modalCreateUser" class="modal-backdrop-custom" style="display: none;">
+  <div class="modal-dialog-custom" style="max-width: 500px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+      <div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin: 0 0 4px 0;">Cadastrar Nova Conta</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Crie um novo cliente ou adicione um novo administrador ao painel.</p>
+      </div>
+      <button type="button" onclick="closeCreateUserModal()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;" title="Fechar">
+        <%- icon('x', 18) %>
+      </button>
+    </div>
+
+    <form method="POST" action="/admin/clientes/novo">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" for="newUserName">Nome Completo *</label>
+        <input type="text" id="newUserName" name="name" required placeholder="Ex: Maria Silva" class="form-control">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label class="form-label" for="newUserEmail">E-mail de Acesso *</label>
+        <input type="email" id="newUserEmail" name="email" required placeholder="exemplo@dominio.com" class="form-control">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="newUserPhone">Telefone / WhatsApp</label>
+          <input type="tel" id="newUserPhone" name="phone" placeholder="(11) 99999-9999" class="form-control">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="newUserRole">Perfil de Acesso *</label>
+          <select id="newUserRole" name="role" class="form-control" style="background: var(--bg-surface); color: #fff;">
+            <option value="customer" selected>Cliente da Loja</option>
+            <option value="admin">Administrador Geral</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label class="form-label" for="newUserPassword">Senha Provisória *</label>
+        <div style="position: relative;">
+          <input type="password" id="newUserPassword" name="password" required minlength="6" placeholder="Mínimo 6 caracteres" class="form-control" style="padding-right: 42px;">
+          <button type="button" onclick="togglePasswordVisibility('newUserPassword', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; padding: 4px;" title="Visualizar / Ocultar">
+            <%- icon('eye', 16) %>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeCreateUserModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" style="font-weight: 600;">
+          Criar Conta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     ESTILOS DOS MODAIS E SCRIPTS
+     ========================================================================== -->
+<style>
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 8, 14, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeInModal 0.2s ease-out;
+}
+
+.modal-dialog-custom {
+  background: #1B1822;
+  border: 1px solid var(--border-color, #2E293A);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(12px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+</style>
+
+<script>
+function openResetPasswordModal(btn) {
+  const userId = btn.getAttribute('data-id');
+  const userName = btn.getAttribute('data-name');
+  const userEmail = btn.getAttribute('data-email');
+  const modal = document.getElementById('modalResetPassword');
+  const form = document.getElementById('formResetPassword');
+  const nameEl = document.getElementById('resetUserTargetName');
+  const emailEl = document.getElementById('resetUserTargetEmail');
+  const inputPass = document.getElementById('inputNewPassword');
+
+  form.action = '/admin/clientes/' + userId + '/senha';
+  nameEl.textContent = userName;
+  emailEl.textContent = userEmail;
+  inputPass.value = '';
+
+  modal.style.display = 'flex';
+  setTimeout(() => inputPass.focus(), 100);
+}
+
+function closeResetPasswordModal() {
+  document.getElementById('modalResetPassword').style.display = 'none';
+}
+
+function openCreateUserModal() {
+  const modal = document.getElementById('modalCreateUser');
+  modal.style.display = 'flex';
+  setTimeout(() => {
+    const input = document.getElementById('newUserName');
+    if (input) input.focus();
+  }, 100);
+}
+
+function closeCreateUserModal() {
+  document.getElementById('modalCreateUser').style.display = 'none';
+}
+
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.style.color = 'var(--gold-400)';
+  } else {
+    input.type = 'password';
+    btn.style.color = 'var(--text-muted)';
+  }
+}
+
+// Fechar modais ao clicar fora (backdrop)
+window.addEventListener('click', function(e) {
+  const modalReset = document.getElementById('modalResetPassword');
+  const modalCreate = document.getElementById('modalCreateUser');
+  if (e.target === modalReset) closeResetPasswordModal();
+  if (e.target === modalCreate) closeCreateUserModal();
+});
+
+// Fechar modais com tecla ESC
+window.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeResetPasswordModal();
+    closeCreateUserModal();
+  }
+});
+</script>
 
 <%- include('admin-footer') %>

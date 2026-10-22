@@ -579,15 +579,136 @@ exports.deleteReview = async (req, res, next) => {
 };
 
 /**
- * CLIENTES
+ * CLIENTES & GESTÃO DE CONTAS
  */
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const { q, role } = req.query;
+
+    const filter = {};
+    if (role && ['customer', 'admin'].includes(role)) {
+      filter.role = role;
+    }
+
+    if (q && q.trim()) {
+      const searchRegex = new RegExp(q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      filter.$or = [
+        { name: searchRegex },
+        { email: searchRegex },
+        { phone: searchRegex },
+      ];
+    }
+
+    const [users, totalUsers, totalAdmins, totalCustomers] = await Promise.all([
+      User.find(filter).sort({ createdAt: -1 }),
+      User.countDocuments(),
+      User.countDocuments({ role: 'admin' }),
+      User.countDocuments({ role: 'customer' }),
+    ]);
+
     res.render('admin/users', {
-      title: 'Clientes Cadastrados — Vista Bem',
+      title: 'Gestão de Contas e Usuários — Vista Bem',
       users,
+      stats: {
+        total: totalUsers,
+        admins: totalAdmins,
+        customers: totalCustomers,
+      },
+      currentRole: role || 'all',
+      searchQuery: q || '',
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postCreateUser = async (req, res, next) => {
+  try {
+    const { name, email, phone, role, password } = req.body;
+
+    const trimmedName = (name || '').trim();
+    const trimmedEmail = (email || '').toLowerCase().trim();
+    const trimmedPhone = (phone || '').trim();
+    const trimmedPassword = (password || '').trim();
+    const userRole = role === 'admin' ? 'admin' : 'customer';
+
+    if (!trimmedName || !trimmedEmail || !trimmedPassword) {
+      req.flash('danger', 'Nome, e-mail e senha são obrigatórios.');
+      return res.redirect('/admin/clientes');
+    }
+
+    if (trimmedPassword.length < 6) {
+      req.flash('danger', 'A senha deve possuir no mínimo 6 caracteres.');
+      return res.redirect('/admin/clientes');
+    }
+
+    const existingUser = await User.findOne({ email: trimmedEmail });
+    if (existingUser) {
+      req.flash('danger', `Já existe uma conta cadastrada com o e-mail "${trimmedEmail}".`);
+      return res.redirect('/admin/clientes');
+    }
+
+    const newUser = new User({
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
+      role: userRole,
+      password: trimmedPassword,
+      authProvider: 'local',
+      active: true,
+    });
+
+    await newUser.save();
+
+    req.flash(
+      'success',
+      `Conta de ${userRole === 'admin' ? 'Administrador' : 'Cliente'} criada com sucesso para "${newUser.name}".`
+    );
+    res.redirect('/admin/clientes');
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const targetUser = await User.findById(id);
+
+    if (!targetUser) {
+      req.flash('danger', 'Usuário não encontrado.');
+      return res.redirect('/admin/clientes');
+    }
+
+    // Não permitir que o usuário conectado exclua a si mesmo
+    if (targetUser._id.toString() === req.user._id.toString()) {
+      req.flash('danger', 'Você não pode excluir sua própria conta conectada.');
+      return res.redirect('/admin/clientes');
+    }
+
+    // Se for admin, impedir exclusão se for o único admin do sistema
+    if (targetUser.role === 'admin') {
+      const adminCount = await User.countDocuments({ role: 'admin' });
+      if (adminCount <= 1) {
+        req.flash('danger', 'Operação bloqueada: o sistema precisa manter ao menos um administrador ativo.');
+        return res.redirect('/admin/clientes');
+      }
+    }
+
+    const Order = require('../models/Order');
+    const Review = require('../models/Review');
+
+    // Desassociar os pedidos para preservar o histórico financeiro
+    await Order.updateMany({ user: targetUser._id }, { $set: { user: null } });
+
+    // Excluir avaliações associadas
+    await Review.deleteMany({ user: targetUser._id });
+
+    // Excluir o usuário
+    await User.findByIdAndDelete(id);
+
+    req.flash('success', `A conta de "${targetUser.name}" (${targetUser.email}) foi excluída definitivamente.`);
+    res.redirect('/admin/clientes');
   } catch (err) {
     next(err);
   }
