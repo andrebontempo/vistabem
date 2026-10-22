@@ -101,16 +101,6 @@
             <span class="theme-icon-dark"><%- icon('sun', 20) %></span>
           </button>
 
-          <% if (locals.user) { %>
-            <a href="<%= user.role === 'admin' ? '/admin' : '/minha-conta' %>" class="action-btn" title="Olá, <%= user.firstName %>">
-              <%- icon('user', 21) %>
-            </a>
-          <% } else { %>
-            <a href="/login" class="action-btn" title="Entrar na minha conta">
-              <%- icon('user', 21) %>
-            </a>
-          <% } %>
-
           <a href="/favoritos" class="action-btn" title="Meus Favoritos">
             <%- icon('heart', 21) %>
             <% if (locals.wishlistIds && locals.wishlistIds.length > 0) { %>
@@ -122,6 +112,32 @@
             <%- icon('bag', 21) %>
             <span id="cart-badge" class="badge-count cart-badge-count"><%= locals.cartCount || 0 %></span>
           </button>
+
+          <!-- Perfil do Usuário / Painel Admin / Logout (Estilo amigável) -->
+          <% if (locals.user) { %>
+            <div class="user-nav-actions">
+              <a href="/minha-conta" class="user-pill-btn" title="Minha Conta (<%= user.firstName %>)">
+                <%- icon('user', 17) %>
+                <span class="user-name-text"><%= user.firstName %></span>
+              </a>
+
+              <% if (user.role === 'admin') { %>
+                <a href="/admin" class="admin-badge-btn" title="Acessar Painel de Controle">
+                  <%- icon('crown', 16) %>
+                  <span class="admin-text-label">Admin</span>
+                </a>
+              <% } %>
+
+              <a href="/logout" class="logout-icon-btn" title="Sair da Conta">
+                <%- icon('logout', 18) %>
+              </a>
+            </div>
+          <% } else { %>
+            <a href="/login" class="user-pill-btn login-pill-btn" title="Entrar na minha conta">
+              <%- icon('user', 17) %>
+              <span class="user-name-text">Entrar</span>
+            </a>
+          <% } %>
         </div>
       </div>
     </div>
@@ -175,8 +191,20 @@
       <ul class="mobile-nav-list secondary">
         <% if (locals.user) { %>
           <li>
-            <a href="<%= user.role === 'admin' ? '/admin' : '/minha-conta' %>" class="mobile-nav-link">
+            <a href="/minha-conta" class="mobile-nav-link">
               <span style="display:flex;align-items:center;gap:10px;"><%- icon('user', 18) %> Minha Conta (<%= user.firstName %>)</span>
+            </a>
+          </li>
+          <% if (user.role === 'admin') { %>
+            <li>
+              <a href="/admin" class="mobile-nav-link" style="color: #F59E0B; font-weight: 700;">
+                <span style="display:flex;align-items:center;gap:10px;"><%- icon('crown', 18) %> Painel Administrativo</span>
+              </a>
+            </li>
+          <% } %>
+          <li>
+            <a href="/logout" class="mobile-nav-link" style="color: var(--danger, #EF4444);">
+              <span style="display:flex;align-items:center;gap:10px;"><%- icon('logout', 18) %> Sair da Conta</span>
             </a>
           </li>
         <% } else { %>
