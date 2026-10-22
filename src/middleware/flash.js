@@ -10,10 +10,10 @@ module.exports = function flash(req, res, next) {
     } catch {
       /* ignora */
     }
-    res.clearCookie('vb_flash');
+    res.clearCookie('vb_flash', { path: '/' });
   }
   req.flash = (type, message) => {
-    res.cookie('vb_flash', JSON.stringify({ type, message }), { httpOnly: true, sameSite: 'lax', maxAge: 60000 });
+    res.cookie('vb_flash', JSON.stringify({ type, message }), { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60000 });
   };
   next();
 };

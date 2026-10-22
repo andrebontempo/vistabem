@@ -16,12 +16,18 @@ function setAuthCookie(res, user) {
     httpOnly: true,
     sameSite: 'lax',
     secure: isProd(),
+    path: '/',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
 
 function clearAuthCookie(res) {
-  res.clearCookie('vb_token');
+  res.clearCookie('vb_token', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: isProd(),
+    path: '/',
+  });
 }
 
 let menuCache = null;
@@ -48,18 +54,30 @@ const loadContext = async (req, res, next) => {
   res.locals.user = null;
   res.locals.currentPath = req.path;
   res.locals.query = req.query;
-  try {
-    const token = req.cookies.vb_token;
-    if (token) {
+  const token = req.cookies && req.cookies.vb_token;
+  if (token) {
+    try {
       const decoded = jwt.verify(token, JWT_SECRET());
-      const user = await User.findById(decoded.id);
-      if (user && user.active) {
-        req.user = user;
-        res.locals.user = user;
-      } else clearAuthCookie(res);
+      try {
+        const user = await User.findById(decoded.id);
+        if (user && user.active) {
+          req.user = user;
+          res.locals.user = user;
+        } else if (user && !user.active) {
+          console.warn(`[Auth] Usuário ID ${decoded.id} está desativado.`);
+          clearAuthCookie(res);
+        } else {
+          console.warn(`[Auth] Usuário ID ${decoded.id} não encontrado no banco.`);
+          clearAuthCookie(res);
+        }
+      } catch (dbErr) {
+        // Erro de comunicação/timeout no MongoDB: não deve invalidar o cookie do usuário
+        console.error('[Auth] Erro ao buscar usuário no banco de dados:', dbErr.message);
+      }
+    } catch (jwtErr) {
+      console.warn('[Auth] Token JWT inválido ou expirado:', jwtErr.message);
+      clearAuthCookie(res);
     }
-  } catch {
-    clearAuthCookie(res);
   }
 
   try {
@@ -87,7 +105,11 @@ const protect = (req, res, next) => {
 
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') return next();
-  if (!req.user) return res.redirect('/login?redirect=' + encodeURIComponent(req.originalUrl));
+  if (!req.user) {
+    console.warn(`[Auth] Acesso bloqueado em ${req.originalUrl}: usuário não autenticado.`);
+    return res.redirect('/login?redirect=' + encodeURIComponent(req.originalUrl));
+  }
+  console.warn(`[Auth] Acesso negado: ${req.user.email} (${req.user.role}) tentou acessar área restrita.`);
   if (wantsJson(req)) return res.status(403).json({ error: 'Acesso restrito.' });
   return res.status(403).render('error', {
     title: 'Acesso negado',
