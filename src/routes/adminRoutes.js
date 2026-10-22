@@ -12,6 +12,7 @@ router.get('/', adminController.getDashboard);
 
 // Produtos
 router.get('/produtos', adminController.getProducts);
+router.post('/produtos/popular', adminController.postPopulateDemoProducts);
 router.get('/produtos/novo', adminController.getProductForm);
 router.post(
   '/produtos/novo',

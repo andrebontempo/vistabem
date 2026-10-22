@@ -93,6 +93,17 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
+exports.postPopulateDemoProducts = async (req, res, next) => {
+  try {
+    const { seed } = require('../scripts/seed');
+    await seed(false);
+    req.flash('success', 'Catálogo inicial de produtos, categorias e banners de demonstração carregado com sucesso!');
+    res.redirect('/admin/produtos');
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.getProductForm = async (req, res, next) => {
   try {
     const { id } = req.params;

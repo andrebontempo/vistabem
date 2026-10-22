@@ -1,14 +1,22 @@
 <%- include('admin-header') %>
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
   <div>
-    <h1 style="font-size: 1.8rem;">Catálogo de Produtos</h1>
-    <p style="color: var(--text-muted); font-size: 0.9rem;">Gerencie peças, fotos, variações de tamanho, cor e estoques</p>
+    <h1 style="font-size: 1.8rem; font-weight: 700; color: #F5F2EB; margin-bottom: 4px;">Catálogo de Produtos</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Gerencie peças, fotos, variações de tamanho, cor e estoques</p>
   </div>
-  <a href="/admin/produtos/novo" class="btn btn-primary">
-    <%- icon('plus', 18) %>
-    <span>Cadastrar Novo Produto</span>
-  </a>
+  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+    <form action="/admin/produtos/popular" method="POST" style="margin: 0;" onsubmit="return confirm('Deseja carregar os produtos, categorias e banners de demonstração no catálogo?');">
+      <button type="submit" class="btn btn-secondary" style="font-weight: 600; font-size: 0.88rem; padding: 10px 16px; border-radius: 9999px; border-color: rgba(212, 180, 117, 0.35); color: var(--gold-400);" title="Carrega produtos de exemplo pré-configurados">
+        <%- icon('sparkles', 16) %>
+        <span>Popular Demonstração</span>
+      </button>
+    </form>
+    <a href="/admin/produtos/novo" class="btn btn-primary" style="border-radius: 9999px; font-weight: 600; padding: 10px 20px;">
+      <%- icon('plus', 18) %>
+      <span>Cadastrar Novo Produto</span>
+    </a>
+  </div>
 </div>
 
 <div class="admin-card">
@@ -64,11 +72,11 @@
               </td>
               <td style="text-align: right;">
                 <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                  <a href="/admin/produtos/<%= p._id %>/editar" class="btn btn-secondary btn-sm" title="Editar" style="padding: 6px 10px;">
+                  <a href="/admin/produtos/<%= p._id %>/editar" class="btn btn-secondary btn-sm" title="Editar" style="padding: 6px 10px; border-radius: 8px;">
                     <%- icon('edit', 16) %>
                   </a>
                   <form action="/admin/produtos/<%= p._id %>/excluir" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
-                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); padding: 6px 10px;" title="Excluir">
+                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--danger); padding: 6px 10px; border-radius: 8px;" title="Excluir">
                       <%- icon('trash', 16) %>
                     </button>
                   </form>
@@ -80,7 +88,25 @@
       </table>
     </div>
   <% } else { %>
-    <p style="color: var(--text-muted); text-align: center; padding: 40px 0;">Nenhum produto cadastrado ainda.</p>
+    <div style="text-align: center; padding: 56px 16px; color: var(--text-muted);">
+      <div style="font-size: 2.5rem; margin-bottom: 12px; opacity: 0.7;">✨</div>
+      <h3 style="font-size: 1.25rem; color: #EDE8DF; margin-bottom: 8px;">Nenhum produto cadastrado ainda</h3>
+      <p style="font-size: 0.92rem; max-width: 480px; margin: 0 auto 24px auto;">
+        O catálogo da loja está vazio. Você pode carregar o pacote de produtos e categorias de demonstração ou cadastrar manualmente.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <form action="/admin/produtos/popular" method="POST" style="margin: 0;">
+          <button type="submit" class="btn btn-primary" style="font-weight: 700; padding: 12px 24px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 8px;">
+            <%- icon('sparkles', 18) %>
+            <span>Popular Produtos de Demonstração</span>
+          </button>
+        </form>
+        <a href="/admin/produtos/novo" class="btn btn-secondary" style="border-radius: 9999px; padding: 12px 20px;">
+          <%- icon('plus', 16) %>
+          <span>Cadastrar Manualmente</span>
+        </a>
+      </div>
+    </div>
   <% } %>
 </div>
 

@@ -341,9 +341,15 @@ async function seed() {
 
 async function autoSeedIfEmpty() {
   try {
-    const adminCount = await User.countDocuments({ role: 'admin' });
-    if (adminCount === 0) {
-      console.log('🌱 Banco de dados inicial vazio. Executando auto-seed...');
+    const [adminCount, productCount, categoryCount] = await Promise.all([
+      User.countDocuments({ role: 'admin' }),
+      Product.countDocuments(),
+      Category.countDocuments(),
+    ]);
+
+    // Se o banco estiver sem produtos ou sem categorias ou sem admin, executa o seed completo
+    if (productCount === 0 || categoryCount === 0 || adminCount === 0) {
+      console.log(`🌱 Catálogo vazio detectado (Produtos: ${productCount}, Categorias: ${categoryCount}, Admins: ${adminCount}). Populando banco de dados com catálogo padrão...`);
       await seed(false);
       return;
     }
