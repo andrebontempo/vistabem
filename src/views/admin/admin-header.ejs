@@ -13,8 +13,8 @@
   <!-- Sidebar Administrativa -->
   <aside class="admin-sidebar">
     <div class="admin-brand">
-      <a href="/admin">
-        <img src="/images/logo-white.svg?v=<%= assetVersion %>" alt="Vista Bem Admin" width="160" height="42">
+      <a href="/" title="Ir para a Loja Virtual Vista Bem">
+        <img src="/images/logo-white.svg?v=<%= assetVersion %>" alt="Vista Bem" width="160" height="42">
       </a>
       <div style="font-size: 0.72rem; letter-spacing: 2px; color: var(--gold-400); margin-top: 8px; font-weight: 700;">
         PAINEL DE GESTÃO
@@ -75,7 +75,10 @@
       <div class="admin-topbar-title">
         <%= typeof title !== 'undefined' ? title : 'Painel de Gestão' %>
       </div>
-      <div class="admin-topbar-user" style="display: flex; align-items: center; gap: 16px;">
+      <div class="admin-topbar-user" style="display: flex; align-items: center; gap: 14px;">
+        <a href="/" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: var(--gold-400); border-color: rgba(212, 180, 117, 0.3); font-size: 0.8rem; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px;" title="Ir para a Loja Virtual">
+          <%- icon('eye', 15) %> <span>Ver Loja</span>
+        </a>
         <% if (locals.settings && locals.settings.isMaintenanceMode) { %>
           <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4);">
             <span style="width: 7px; height: 7px; border-radius: 50%; background: #F59E0B;"></span>
