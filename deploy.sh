@@ -28,8 +28,17 @@ docker network create proxy 2>/dev/null || true
 
 # Encerra qualquer processo Node legado rodando no host da VPS
 echo "🧹 Parando processos Node legados no host..."
-pkill -9 -f 'node src/server.js' 2>/dev/null || true
-pkill -9 -f 'node.*vistabem' 2>/dev/null || true
+systemctl stop vistabem 2>/dev/null || true
+systemctl disable vistabem 2>/dev/null || true
+
+for pid in $(ps -ef | grep -E 'node.*(src/server\.js|server\.js)' | grep -v 'grep' | awk '{print $2}'); do
+  if [ -n "$pid" ] && [ "$pid" != "$$" ]; then
+    echo "Encerrando processo host legado PID: $pid"
+    kill -9 "$pid" 2>/dev/null || true
+  fi
+done
+
+fuser -k 3010/tcp 2>/dev/null || true
 
 # Encerra e remove qualquer container antigo da aplicação vistabem para evitar instâncias duplicadas na rede proxy
 docker ps -a --format '{{.ID}} {{.Names}}' | grep -i 'vistabem' | grep -v 'mongo' | awk '{print $1}' | while read -r cid; do

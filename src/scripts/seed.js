@@ -95,50 +95,77 @@ async function seed() {
 
   // 4. Categorias (Feminino, Masculino, Infantil, Acessórios)
   await Category.deleteMany({});
-  const catFeminino = await Category.create({
-    name: 'Feminino',
-    slug: 'feminino',
-    description: 'Vestidos, blusas, conjuntos e alfaiataria feminina com caimento refinado.',
-    image: '/images/categories/categoria-feminino.jpg',
-    order: 1,
-    active: true,
-  });
+  const catFeminino = await Category.findOneAndUpdate(
+    { slug: 'feminino' },
+    {
+      $set: {
+        name: 'Feminino',
+        slug: 'feminino',
+        description: 'Vestidos, blusas, conjuntos e alfaiataria feminina com caimento refinado.',
+        image: '/images/categories/categoria-feminino.jpg',
+        order: 1,
+        active: true,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
-  const catMasculino = await Category.create({
-    name: 'Masculino',
-    slug: 'masculino',
-    description: 'Camisas, calças, polos e bermudas masculinas com toque macio e corte elegante.',
-    image: '/images/categories/categoria-masculino.jpg',
-    order: 2,
-    active: true,
-  });
+  const catMasculino = await Category.findOneAndUpdate(
+    { slug: 'masculino' },
+    {
+      $set: {
+        name: 'Masculino',
+        slug: 'masculino',
+        description: 'Camisas, calças, polos e bermudas masculinas com toque macio e corte elegante.',
+        image: '/images/categories/categoria-masculino.jpg',
+        order: 2,
+        active: true,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
-  const catInfantil = await Category.create({
-    name: 'Infantil',
-    slug: 'infantil',
-    description: 'Moda confortável, alegre e durável para meninas e meninos.',
-    image: '/images/categories/categoria-infantil.jpg',
-    order: 3,
-    active: true,
-  });
+  const catInfantil = await Category.findOneAndUpdate(
+    { slug: 'infantil' },
+    {
+      $set: {
+        name: 'Infantil',
+        slug: 'infantil',
+        description: 'Moda confortável, alegre e durável para meninas e meninos.',
+        image: '/images/categories/categoria-infantil.jpg',
+        order: 3,
+        active: true,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
-  const catAcessorios = await Category.create({
-    name: 'Acessórios',
-    slug: 'acessorios',
-    description: 'Bolsas estruturadas, cintos, lenços e detalhes que complementam sua produção.',
-    image: '/images/categories/categoria-acessorios.jpg',
-    order: 4,
-    active: true,
-  });
+  const catAcessorios = await Category.findOneAndUpdate(
+    { slug: 'acessorios' },
+    {
+      $set: {
+        name: 'Acessórios',
+        slug: 'acessorios',
+        description: 'Bolsas estruturadas, cintos, lenços e detalhes que complementam sua produção.',
+        image: '/images/categories/categoria-acessorios.jpg',
+        order: 4,
+        active: true,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
   // Subcategorias
-  await Category.create([
+  const subcategories = [
     { name: 'Vestidos', slug: 'vestidos', parent: catFeminino._id, order: 1 },
     { name: 'Conjuntos & Blazers', slug: 'conjuntos-blazers', parent: catFeminino._id, order: 2 },
     { name: 'Camisas Masculinas', slug: 'camisas-masculinas', parent: catMasculino._id, order: 1 },
     { name: 'Casacos & Jaquetas', slug: 'streetwear-jaquetas', parent: catMasculino._id, order: 2 },
     { name: 'Bolsas', slug: 'bolsas', parent: catAcessorios._id, order: 1 },
-  ]);
+  ];
+  for (const sub of subcategories) {
+    await Category.findOneAndUpdate({ slug: sub.slug }, { $set: sub }, { upsert: true, new: true });
+  }
   console.log('✅ Categorias principais e subcategorias criadas.');
 
   // 5. Produtos Iniciais com Imagens em Alta Definição
@@ -308,7 +335,9 @@ async function seed() {
     },
   ];
 
-  await Product.insertMany(sampleProducts);
+  for (const prod of sampleProducts) {
+    await Product.findOneAndUpdate({ slug: prod.slug }, { $set: prod }, { upsert: true, new: true });
+  }
   console.log(`✅ ${sampleProducts.length} produtos de exemplo cadastrados com sucesso.`);
 
   // 6. Cupons de Desconto
