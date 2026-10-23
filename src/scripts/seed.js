@@ -99,7 +99,7 @@ async function seed() {
     name: 'Feminino',
     slug: 'feminino',
     description: 'Vestidos, blusas, conjuntos e alfaiataria feminina com caimento refinado.',
-    image: '/images/categories/categoria-feminino.svg',
+    image: '/images/categories/categoria-feminino.jpg',
     order: 1,
     active: true,
   });
@@ -108,7 +108,7 @@ async function seed() {
     name: 'Masculino',
     slug: 'masculino',
     description: 'Camisas, calças, polos e bermudas masculinas com toque macio e corte elegante.',
-    image: '/images/categories/categoria-masculino.svg',
+    image: '/images/categories/categoria-masculino.jpg',
     order: 2,
     active: true,
   });
@@ -117,7 +117,7 @@ async function seed() {
     name: 'Infantil',
     slug: 'infantil',
     description: 'Moda confortável, alegre e durável para meninas e meninos.',
-    image: '/images/categories/categoria-infantil.svg',
+    image: '/images/categories/categoria-infantil.jpg',
     order: 3,
     active: true,
   });
@@ -126,7 +126,7 @@ async function seed() {
     name: 'Acessórios',
     slug: 'acessorios',
     description: 'Bolsas estruturadas, cintos, lenços e detalhes que complementam sua produção.',
-    image: '/images/categories/categoria-acessorios.svg',
+    image: '/images/categories/categoria-acessorios.jpg',
     order: 4,
     active: true,
   });
@@ -153,8 +153,8 @@ async function seed() {
       price: 289.9,
       salePrice: 249.9,
       images: [
-        '/images/products/vestido-midi-roxo.svg',
-        '/images/products/vestido-midi-roxo-2.svg',
+        '/images/products/vestido-midi-roxo.jpg',
+        '/images/products/vestido-midi-roxo-2.jpg',
       ],
       composition: '95% Viscose Vortex, 5% Elastano Premium',
       care: 'Lavagem delicada à mão ou em saco protetor. Não secar em tambor.',
@@ -176,7 +176,7 @@ async function seed() {
       category: catFeminino._id,
       price: 389.0,
       salePrice: 0,
-      images: ['/images/products/blazer-alfaiataria-lilas.svg'],
+      images: ['/images/products/blazer-alfaiataria-lilas.jpg'],
       composition: '70% Poliéster Crepado, 28% Viscose, 2% Elastano',
       care: 'Lavagem a seco recomendada.',
       featured: true,
@@ -196,7 +196,7 @@ async function seed() {
       category: catFeminino._id,
       price: 459.0,
       salePrice: 399.0,
-      images: ['/images/products/vestido-festa-lilas.svg'],
+      images: ['/images/products/vestido-festa-lilas.jpg'],
       composition: '100% Viscose Acetinada Tipo Seda',
       care: 'Lavagem exclusivamente a seco.',
       featured: true,
@@ -215,7 +215,7 @@ async function seed() {
       category: catFeminino._id,
       price: 279.0,
       salePrice: 239.0,
-      images: ['/images/products/calca-pantalona-preta.svg'],
+      images: ['/images/products/calca-pantalona-preta.jpg'],
       composition: '96% Poliéster Premium, 4% Elastano',
       care: 'Lavar em água fria. Secar à sombra.',
       featured: false,
@@ -235,7 +235,7 @@ async function seed() {
       category: catMasculino._id,
       price: 259.9,
       salePrice: 219.9,
-      images: ['/images/products/camisa-linho-offwhite.svg'],
+      images: ['/images/products/camisa-linho-offwhite.jpg'],
       composition: '100% Linho puro certificado',
       care: 'Lavar à mão ou em ciclo delicado com água fria.',
       featured: true,
@@ -255,7 +255,7 @@ async function seed() {
       category: catMasculino._id,
       price: 349.0,
       salePrice: 299.0,
-      images: ['/images/products/jaqueta-corta-vento-ciano.svg'],
+      images: ['/images/products/jaqueta-corta-vento-ciano.jpg'],
       composition: '100% Poliamida com membrana hidrofóbica',
       care: 'Lavar com sabão neutro sem amaciante.',
       featured: true,
@@ -275,7 +275,7 @@ async function seed() {
       category: catInfantil._id,
       price: 149.9,
       salePrice: 129.9,
-      images: ['/images/products/conjunto-infantil-lilas.svg'],
+      images: ['/images/products/conjunto-infantil-lilas.jpg'],
       composition: '100% Algodão egípcio sustentável',
       care: 'Lavar em água fria com sabão neutro infantil.',
       featured: false,
@@ -295,7 +295,7 @@ async function seed() {
       category: catAcessorios._id,
       price: 320.0,
       salePrice: 289.0,
-      images: ['/images/products/bolsa-baguette-couro.svg'],
+      images: ['/images/products/bolsa-baguette-couro.jpg'],
       composition: '100% Couro Bovino Genuíno com ferragens tratadas',
       care: 'Limpar apenas com flanela seca macia.',
       featured: true,
@@ -441,6 +441,21 @@ async function autoSeedIfEmpty() {
         },
       }
     );
+
+    // Migração de imagens para fotos reais de alta resolução (.jpg)
+    await Category.updateOne({ slug: 'feminino' }, { $set: { image: '/images/categories/categoria-feminino.jpg' } });
+    await Category.updateOne({ slug: 'masculino' }, { $set: { image: '/images/categories/categoria-masculino.jpg' } });
+    await Category.updateOne({ slug: 'infantil' }, { $set: { image: '/images/categories/categoria-infantil.jpg' } });
+    await Category.updateOne({ slug: 'acessorios' }, { $set: { image: '/images/categories/categoria-acessorios.jpg' } });
+
+    await Product.updateOne({ slug: 'vestido-midi-canelado-elegance-roxo-nobre' }, { $set: { images: ['/images/products/vestido-midi-roxo.jpg', '/images/products/vestido-midi-roxo-2.jpg'] } });
+    await Product.updateOne({ slug: 'blazer-alfaiataria-estruturado-lilas-nevoa' }, { $set: { images: ['/images/products/blazer-alfaiataria-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'vestido-longo-gala-em-seda-lilas-lumina' }, { $set: { images: ['/images/products/vestido-festa-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'calca-pantalona-alfaiataria-noite-profunda' }, { $set: { images: ['/images/products/calca-pantalona-preta.jpg'] } });
+    await Product.updateOne({ slug: 'camisa-linho-pura-fibra-confort-masculina' }, { $set: { images: ['/images/products/camisa-linho-offwhite.jpg'] } });
+    await Product.updateOne({ slug: 'jaqueta-corta-vento-streetwear-ciano-neon' }, { $set: { images: ['/images/products/jaqueta-corta-vento-ciano.jpg'] } });
+    await Product.updateOne({ slug: 'conjunto-algodao-prime-infantil-menina' }, { $set: { images: ['/images/products/conjunto-infantil-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'bolsa-baguette-couro-legitimo-com-alca-metalica-ciano' }, { $set: { images: ['/images/products/bolsa-baguette-couro.jpg'] } });
   } catch (err) {
     console.error('⚠️  Não foi possível executar auto-seed:', err.message);
   }
