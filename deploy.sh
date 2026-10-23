@@ -46,6 +46,16 @@ docker compose down --remove-orphans 2>/dev/null || true
 echo "🐳 [4/5] Reconstruindo container único oficial..."
 docker compose up -d --build --remove-orphans
 
+echo "🔍 [5/6] Inspecionando rede Docker proxy e endpoints conectados..."
+docker network inspect proxy 2>/dev/null || true
+
+echo "🧪 [6/6] Validando estabilidade local na porta 3010..."
+sleep 4
+for i in 1 2 3 4 5; do
+  echo "--- Teste Local $i ---"
+  curl -s -o /dev/null -w "Status: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/
+done
+
 echo "===================================================="
-echo "✨ [5/5] Deploy concluído com sucesso!"
+echo "✨ Deploy concluído com sucesso!"
 echo "===================================================="

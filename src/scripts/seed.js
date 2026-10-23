@@ -352,11 +352,13 @@ async function autoSeedIfEmpty() {
     
     const hasSvgProduct = allProds.some(p => Array.isArray(p.images) && p.images.some(img => typeof img === 'string' && img.includes('.svg')));
     const hasSvgCategory = allCats.some(c => typeof c.image === 'string' && c.image.includes('.svg'));
-    const isCatalogInconsistent = allProds.length !== 8 || allCats.length !== 4;
+    const mainCatsCount = allCats.filter(c => !c.parent).length;
 
-    // Se o banco estiver sem produtos, inconsistente ou contiver imagens .svg antigas, executa o seed completo
-    if (adminCount === 0 || allProds.length === 0 || hasSvgProduct || hasSvgCategory || isCatalogInconsistent) {
-      console.log(`🌱 Catálogo desatualizado ou inconsistente detectado (Produtos: ${allProds.length}, Categorias: ${allCats.length}, SVG Prods: ${hasSvgProduct}, SVG Cats: ${hasSvgCategory}). Executando sincronização completa com fotos reais...`);
+    // Se o catálogo já tiver os 8 produtos oficiais com fotos reais e as categorias corretas, não faz nada
+    if (allProds.length === 8 && mainCatsCount === 4 && !hasSvgProduct && !hasSvgCategory) {
+      console.log('✅ Catálogo oficial verificado: 8 produtos com fotos reais (.jpg) e categorias íntegras.');
+    } else if (adminCount === 0 || allProds.length === 0 || hasSvgProduct || hasSvgCategory || allProds.length !== 8 || mainCatsCount !== 4) {
+      console.log(`🌱 Sincronização necessária (Produtos: ${allProds.length}, Categorias Principais: ${mainCatsCount}, SVG Prods: ${hasSvgProduct}, SVG Cats: ${hasSvgCategory}). Populando catálogo oficial...`);
       await Product.deleteMany({});
       await Category.deleteMany({});
       await seed(false);
