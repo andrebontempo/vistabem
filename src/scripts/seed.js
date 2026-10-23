@@ -354,6 +354,34 @@ async function autoSeedIfEmpty() {
       return;
     }
 
+    // Conversão automática e global de qualquer imagem antiga (.svg) para fotos reais (.jpg)
+    const allProducts = await Product.find({});
+    for (const p of allProducts) {
+      let modified = false;
+      if (Array.isArray(p.images)) {
+        p.images = p.images.map((img) => {
+          if (typeof img === 'string' && img.endsWith('.svg')) {
+            modified = true;
+            return img.replace(/\.svg$/, '.jpg');
+          }
+          return img;
+        });
+      }
+      if (modified) {
+        await p.save();
+        console.log(`📸 Produto "${p.name}" atualizado para foto real (.jpg).`);
+      }
+    }
+
+    const allCategories = await Category.find({});
+    for (const c of allCategories) {
+      if (typeof c.image === 'string' && c.image.endsWith('.svg')) {
+        c.image = c.image.replace(/\.svg$/, '.jpg');
+        await c.save();
+        console.log(`📸 Categoria "${c.name}" atualizada para foto real (.jpg).`);
+      }
+    }
+
     // Garante que as contas de administrador padrão existam e tenham perfil admin ativo
     const adminEmails = [
       'admin@vistabem.com',
