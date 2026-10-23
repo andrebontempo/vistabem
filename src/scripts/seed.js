@@ -347,30 +347,20 @@ async function autoSeedIfEmpty() {
       Category.countDocuments(),
     ]);
 
-    // Se o banco estiver sem produtos ou sem categorias ou sem admin, executa o seed completo
-    if (productCount === 0 || categoryCount === 0 || adminCount === 0) {
-      console.log(`🌱 Catálogo vazio detectado (Produtos: ${productCount}, Categorias: ${categoryCount}, Admins: ${adminCount}). Populando banco de dados com catálogo padrão...`);
-      await seed(false);
-      return;
-    }
+    const allProds = await Product.find({});
+    const allCats = await Category.find({});
+    
+    const hasSvgProduct = allProds.some(p => Array.isArray(p.images) && p.images.some(img => typeof img === 'string' && img.includes('.svg')));
+    const hasSvgCategory = allCats.some(c => typeof c.image === 'string' && c.image.includes('.svg'));
+    const isCatalogInconsistent = allProds.length !== 8 || allCats.length !== 4;
 
-    // Se ainda houver produtos com imagens antigas .svg, repovoa com as fotos reais .jpg
-    const hasSvgProduct = await Product.findOne({ images: { $regex: /\.svg$/ } });
-    if (hasSvgProduct) {
-      console.log('📸 Atualizando catálogo para fotos reais de alta definição (.jpg)...');
-      await Category.deleteMany({});
+    // Se o banco estiver sem produtos, inconsistente ou contiver imagens .svg antigas, executa o seed completo
+    if (adminCount === 0 || allProds.length === 0 || hasSvgProduct || hasSvgCategory || isCatalogInconsistent) {
+      console.log(`🌱 Catálogo desatualizado ou inconsistente detectado (Produtos: ${allProds.length}, Categorias: ${allCats.length}, SVG Prods: ${hasSvgProduct}, SVG Cats: ${hasSvgCategory}). Executando sincronização completa com fotos reais...`);
       await Product.deleteMany({});
+      await Category.deleteMany({});
       await seed(false);
       return;
-    }
-
-    const allCategories = await Category.find({});
-    for (const c of allCategories) {
-      if (typeof c.image === 'string' && c.image.endsWith('.svg')) {
-        c.image = c.image.replace(/\.svg$/, '.jpg');
-        await c.save();
-        console.log(`📸 Categoria "${c.name}" atualizada para foto real (.jpg).`);
-      }
     }
 
     // Garante que as contas de administrador padrão existam e tenham perfil admin ativo
