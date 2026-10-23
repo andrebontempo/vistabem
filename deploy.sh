@@ -31,9 +31,9 @@ echo "🧹 Parando processos Node legados no host..."
 systemctl stop vistabem 2>/dev/null || true
 systemctl disable vistabem 2>/dev/null || true
 
-for pid in $(ps -ef | grep -E 'node.*(src/server\.js|server\.js)' | grep -v 'grep' | awk '{print $2}'); do
+for pid in $(ps -ef | grep -i 'vistabem' | grep -v 'grep' | grep -v 'deploy.sh' | awk '{print $2}'); do
   if [ -n "$pid" ] && [ "$pid" != "$$" ]; then
-    echo "Encerrando processo host legado PID: $pid"
+    echo "Encerrando processo host legado Vista Bem PID: $pid"
     kill -9 "$pid" 2>/dev/null || true
   fi
 done
@@ -70,10 +70,9 @@ echo "🔍 Portas e processos escutando 3010 no host:"
 echo "🔍 Processos Node rodando no host:"
 ps aux | grep -i node | grep -v 'grep' || true
 
-# Se houver proxy reverso Nginx rodando em container, envia reload gracioso para atualizar resolução DNS de upstream
-for proxy_name in proxy nginx-proxy nginx traefik npm; do
-  docker kill -s HUP "$proxy_name" 2>/dev/null || true
-done
+# Reinicia o container do Nginx Proxy Manager (npm) para purgar a tabela interna de DNS/upstream
+echo "🔄 [6/7] Purgando cache DNS de upstream no Nginx Proxy Manager (npm)..."
+docker restart npm 2>/dev/null || docker kill -s HUP npm 2>/dev/null || true
 
 echo "🧪 [6/6] Validando estabilidade local na porta 3010..."
 sleep 5
