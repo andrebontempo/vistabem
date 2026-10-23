@@ -11,7 +11,7 @@ const Coupon = require('../models/Coupon');
 const Banner = require('../models/Banner');
 const Setting = require('../models/Setting');
 
-async function seed() {
+async function seed(exit = false) {
   console.log('====================================================');
   console.log('🌱 Povoando banco de dados inicial — Vista Bem');
   console.log('====================================================');

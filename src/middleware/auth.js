@@ -40,22 +40,15 @@ function clearAuthCookie(res) {
   });
 }
 
-let menuCache = null;
-let menuAt = 0;
 async function getMenu() {
-  if (menuCache && Date.now() - menuAt < 60000) return menuCache;
   const cats = await Category.find({ active: true }).sort({ order: 1, name: 1 }).lean();
   const roots = cats.filter((c) => !c.parent);
-  menuCache = roots.map((r) => ({
+  return roots.map((r) => ({
     ...r,
     children: cats.filter((c) => c.parent && c.parent.toString() === r._id.toString()),
   }));
-  menuAt = Date.now();
-  return menuCache;
 }
-function clearMenuCache() {
-  menuCache = null;
-}
+function clearMenuCache() {}
 
 /**
  * Injeta usuário, configurações, menu e contador do carrinho em todas as views.

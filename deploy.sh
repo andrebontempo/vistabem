@@ -79,11 +79,16 @@ ps aux | grep -i node | grep -v 'grep' || true
 echo "🔄 [6/7] Purgando cache DNS de upstream no Nginx Proxy Manager (npm)..."
 docker restart npm 2>/dev/null || docker kill -s HUP npm 2>/dev/null || true
 
-echo "🧪 [6/6] Validando estabilidade local na porta 3010..."
+echo "🔍 Configuração do upstream vistabem no NPM:"
+docker exec npm grep -rn "vistabem" /data/nginx/ 2>/dev/null || docker exec npm grep -rn "3010" /data/nginx/ 2>/dev/null || true
+
+echo "🧪 [7/7] Validando estabilidade local na porta 3010..."
 sleep 5
 for i in 1 2 3 4 5; do
-  echo "--- Teste Local $i ---"
-  curl -s -o /dev/null -w "Status: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/
+  echo "--- Teste Local Home $i ---"
+  curl -s -o /dev/null -w "Home: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/
+  echo "--- Teste Local Categoria Feminino $i ---"
+  curl -s -o /dev/null -w "Feminino: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/categoria/feminino
 done
 
 echo "📋 Logs recentes do vistabem-app:"

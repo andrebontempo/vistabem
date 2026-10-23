@@ -41,9 +41,9 @@ exports.getHome = async (req, res, next) => {
 exports.getCatalog = async (req, res, next) => {
   try {
     const { categoria } = req.params;
-    const { q, sort, size, color, minPrice, maxPrice, page = 1 } = req.query;
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
     const limit = 16;
-    const skip = (Math.max(1, parseInt(page, 10)) - 1) * limit;
+    const skip = (pageNum - 1) * limit;
 
     const filter = { active: true };
     let currentCategory = null;
@@ -90,10 +90,12 @@ exports.getCatalog = async (req, res, next) => {
     else if (sort === 'novidades') sortOption = { createdAt: -1 };
 
     const [products, totalProducts, availableCategories] = await Promise.all([
-      Product.find(filter).populate('category').sort(sortOption).skip(skip).limit(limit),
+      Product.find(filter).populate('category').sort(sortOption).skip(skip).limit(limit).lean(),
       Product.countDocuments(filter),
-      Category.find({ active: true, parent: null }).lean(),
+      Category.find({ active: true, parent: null }).sort({ order: 1, name: 1 }).lean(),
     ]);
+
+    console.log(`[getCatalog] cat=${categoria} catId=${currentCategory?._id} cats=${availableCategories.length} prods=${products.length} total=${totalProducts}`);
 
     const totalPages = Math.ceil(totalProducts / limit) || 1;
 
