@@ -27,7 +27,7 @@ services:
     depends_on:
       - vistabem-mongo
     networks:
-      - vistabem-network
+      vistabem-network:
       proxy:
         aliases:
           - vistabem-app
