@@ -354,23 +354,14 @@ async function autoSeedIfEmpty() {
       return;
     }
 
-    // Conversão automática e global de qualquer imagem antiga (.svg) para fotos reais (.jpg)
-    const allProducts = await Product.find({});
-    for (const p of allProducts) {
-      let modified = false;
-      if (Array.isArray(p.images)) {
-        p.images = p.images.map((img) => {
-          if (typeof img === 'string' && img.endsWith('.svg')) {
-            modified = true;
-            return img.replace(/\.svg$/, '.jpg');
-          }
-          return img;
-        });
-      }
-      if (modified) {
-        await p.save();
-        console.log(`📸 Produto "${p.name}" atualizado para foto real (.jpg).`);
-      }
+    // Se ainda houver produtos com imagens antigas .svg, repovoa com as fotos reais .jpg
+    const hasSvgProduct = await Product.findOne({ images: { $regex: /\.svg$/ } });
+    if (hasSvgProduct) {
+      console.log('📸 Atualizando catálogo para fotos reais de alta definição (.jpg)...');
+      await Category.deleteMany({});
+      await Product.deleteMany({});
+      await seed(false);
+      return;
     }
 
     const allCategories = await Category.find({});
