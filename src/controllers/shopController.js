@@ -17,8 +17,9 @@ exports.getHome = async (req, res, next) => {
       Category.find({ active: true, parent: null }).sort({ order: 1 }).limit(6).lean(),
       Product.find({ active: true, featured: true }).populate('category').limit(8).lean(),
       Product.find({ active: true, isNewArrival: true }).populate('category').sort({ createdAt: -1 }).limit(8).lean(),
-      Product.find({ active: true }).populate('category').sort({ soldCount: -1 }).limit(8).lean(),
     ]);
+
+    console.log(`[getHome] pid=${process.pid} feat=${featuredProducts.length} newArr=${newArrivals.length}`);
 
     res.render('index', {
       title: 'Vista Bem — Moda Contemporânea e Sofisticada',

@@ -50,6 +50,12 @@ echo "🔍 [5/6] Inspecionando containers ativos e rede Docker proxy..."
 docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
 docker network inspect proxy 2>/dev/null | grep -E '"(Name|IPv4Address|Aliases)"' || true
 
+echo "🔍 Portas e processos escutando 3010 no host:"
+(ss -tulpn 2>/dev/null || netstat -tlpn 2>/dev/null) | grep 3010 || true
+
+echo "🔍 Processos Node rodando no host:"
+ps aux | grep -i node | grep -v 'grep' || true
+
 # Se houver proxy reverso Nginx rodando em container, envia reload gracioso para atualizar resolução DNS de upstream
 for proxy_name in proxy nginx-proxy nginx traefik npm; do
   docker kill -s HUP "$proxy_name" 2>/dev/null || true
@@ -61,6 +67,9 @@ for i in 1 2 3 4 5; do
   echo "--- Teste Local $i ---"
   curl -s -o /dev/null -w "Status: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/
 done
+
+echo "📋 Logs recentes do vistabem-app:"
+docker logs --tail 40 vistabem-app || true
 
 echo "===================================================="
 echo "✨ Deploy concluído com sucesso!"
