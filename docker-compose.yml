@@ -1,12 +1,14 @@
 services:
-  mongo:
+  vistabem-mongo:
     image: mongo:7.0
     container_name: vistabem-mongo
     restart: unless-stopped
     volumes:
       - mongo_data:/data/db
     networks:
-      - app-network
+      vistabem-network:
+        aliases:
+          - vistabem-mongo
 
   app:
     build: .
@@ -18,14 +20,14 @@ services:
       - .env
     environment:
       - PORT=80
-      - MONGODB_URI=mongodb://mongo:27017/vistabem
+      - MONGODB_URI=mongodb://vistabem-mongo:27017/vistabem
       - NODE_ENV=production
     volumes:
       - uploads_data:/usr/src/app/public/uploads
     depends_on:
-      - mongo
+      - vistabem-mongo
     networks:
-      app-network:
+      - vistabem-network
       proxy:
         aliases:
           - vistabem-app
@@ -37,7 +39,8 @@ volumes:
   uploads_data:
 
 networks:
-  app-network:
+  vistabem-network:
     driver: bridge
   proxy:
     external: true
+

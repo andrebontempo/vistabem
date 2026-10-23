@@ -50,7 +50,7 @@ exports.getCatalog = async (req, res, next) => {
     let currentCategory = null;
 
     if (categoria) {
-      currentCategory = await Category.findOne({ slug: categoria, active: true });
+      currentCategory = await Category.findOne({ slug: categoria, active: true }).lean();
       if (!currentCategory) {
         return res.status(404).render('error', {
           title: 'Categoria Não Encontrada',
@@ -60,7 +60,7 @@ exports.getCatalog = async (req, res, next) => {
       }
 
       // Se for categoria mãe, incluir produtos das subcategorias também
-      const subcategories = await Category.find({ parent: currentCategory._id, active: true });
+      const subcategories = await Category.find({ parent: currentCategory._id, active: true }).lean();
       const catIds = [currentCategory._id, ...subcategories.map((c) => c._id)];
       filter.category = { $in: catIds };
     }

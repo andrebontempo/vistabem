@@ -23,6 +23,9 @@ if [ ! -f ".env" ]; then
   cp .env.example .env
 fi
 
+# Assegura que o .env aponte para o hostname exclusivo vistabem-mongo
+sed -i 's|mongodb://mongo:27017|mongodb://vistabem-mongo:27017|g' .env 2>/dev/null || true
+
 echo "🌐 [3/5] Verificando rede externa Docker proxy e limpando instâncias órfãs..."
 docker network create proxy 2>/dev/null || true
 
@@ -54,10 +57,11 @@ docker ps -a --format '{{.ID}} {{.Names}}' | grep -i 'vistabem' | grep -v 'mongo
   fi
 done
 
-# Desconecta quaisquer endpoints fantasmas da rede proxy
+# Desconecta quaisquer endpoints fantasmas da rede proxy (incluindo qualquer mongo indevido)
 docker network disconnect -f proxy vistabem 2>/dev/null || true
 docker network disconnect -f proxy vistabem-app 2>/dev/null || true
 docker network disconnect -f proxy vistabem_nginx 2>/dev/null || true
+docker network disconnect -f proxy vistabem-mongo 2>/dev/null || true
 
 # Derruba o compose atual com remoção de órfãos
 docker compose down --remove-orphans 2>/dev/null || true
@@ -72,21 +76,13 @@ docker network inspect proxy 2>/dev/null | grep -E '"(Name|IPv4Address|Aliases)"
 echo "🔍 Portas e processos escutando 3010 no host:"
 (ss -tulpn 2>/dev/null || netstat -tlpn 2>/dev/null) | grep 3010 || true
 
-echo "🔍 Processos Node rodando no host:"
-ps aux | grep -i node | grep -v 'grep' || true
-
 # Reinicia o container do Nginx Proxy Manager (npm) para purgar a tabela interna de DNS/upstream
 echo "🔄 [6/7] Purgando cache DNS de upstream no Nginx Proxy Manager (npm)..."
 docker restart npm 2>/dev/null || docker kill -s HUP npm 2>/dev/null || true
 
-echo "🔍 Configuração do upstream vistabem no NPM:"
-docker exec npm grep -rn "vistabem" /data/nginx/ 2>/dev/null || docker exec npm grep -rn "3010" /data/nginx/ 2>/dev/null || true
-
 echo "🧪 [7/7] Validando estabilidade local na porta 3010..."
-sleep 5
-for i in 1 2 3 4 5; do
-  echo "--- Teste Local Home $i ---"
-  curl -s -o /dev/null -w "Home: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/
+sleep 6
+for i in 1 2 3 4 5 6 7 8 9 10; do
   echo "--- Teste Local Categoria Feminino $i ---"
   curl -s -o /dev/null -w "Feminino: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/categoria/feminino
 done
