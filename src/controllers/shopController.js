@@ -41,6 +41,7 @@ exports.getHome = async (req, res, next) => {
 exports.getCatalog = async (req, res, next) => {
   try {
     const { categoria } = req.params;
+    const { q, sort, size, color, minPrice, maxPrice, page = 1 } = req.query;
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
     const limit = 16;
     const skip = (pageNum - 1) * limit;
