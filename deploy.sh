@@ -46,11 +46,17 @@ docker compose down --remove-orphans 2>/dev/null || true
 echo "🐳 [4/5] Reconstruindo container único oficial..."
 docker compose up -d --build --remove-orphans
 
-echo "🔍 [5/6] Inspecionando rede Docker proxy e endpoints conectados..."
-docker network inspect proxy 2>/dev/null || true
+echo "🔍 [5/6] Inspecionando containers ativos e rede Docker proxy..."
+docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
+docker network inspect proxy 2>/dev/null | grep -E '"(Name|IPv4Address|Aliases)"' || true
+
+# Se houver proxy reverso Nginx rodando em container, envia reload gracioso para atualizar resolução DNS de upstream
+for proxy_name in proxy nginx-proxy nginx traefik npm; do
+  docker kill -s HUP "$proxy_name" 2>/dev/null || true
+done
 
 echo "🧪 [6/6] Validando estabilidade local na porta 3010..."
-sleep 4
+sleep 5
 for i in 1 2 3 4 5; do
   echo "--- Teste Local $i ---"
   curl -s -o /dev/null -w "Status: %{http_code} | Bytes: %{size_download}\n" http://127.0.0.1:3010/

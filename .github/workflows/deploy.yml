@@ -46,13 +46,15 @@ jobs:
           script: |
             mkdir -p /opt/docker/vistabem
             cd /opt/docker/vistabem
-            if [ ! -f "deploy.sh" ]; then
+            git config --global --add safe.directory /opt/docker/vistabem 2>/dev/null || true
+            if [ ! -d ".git" ]; then
               echo "Repositório não encontrado em /opt/docker/vistabem. Inicializando clone inicial..."
               git init
-              git config --global --add safe.directory /opt/docker/vistabem 2>/dev/null || true
-              git remote add origin https://github.com/andrebontempo/vistabem.git 2>/dev/null || git remote set-url origin https://github.com/andrebontempo/vistabem.git
-              git fetch origin main
-              git reset --hard origin/main
+              git remote add origin https://github.com/andrebontempo/vistabem.git
+            else
+              git remote set-url origin https://github.com/andrebontempo/vistabem.git 2>/dev/null || true
             fi
+            git fetch origin main
+            git reset --hard origin/main
             chmod +x ./deploy.sh
             bash ./deploy.sh
