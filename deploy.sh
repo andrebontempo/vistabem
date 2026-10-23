@@ -26,17 +26,22 @@ fi
 echo "🌐 [3/5] Verificando rede externa Docker proxy e limpando instâncias órfãs..."
 docker network create proxy 2>/dev/null || true
 
-# Encerra qualquer processo Node legado rodando no host da VPS
+# Encerra qualquer processo Node legado rodando no host da VPS cujo diretório seja vistabem
 echo "🧹 Parando processos Node legados no host..."
 systemctl stop vistabem 2>/dev/null || true
 systemctl disable vistabem 2>/dev/null || true
 
-for pid in $(ps -ef | grep -i 'vistabem' | grep -v 'grep' | grep -v 'deploy.sh' | awk '{print $2}'); do
-  if [ -n "$pid" ] && [ "$pid" != "$$" ]; then
-    echo "Encerrando processo host legado Vista Bem PID: $pid"
+for pid in $(pgrep -f 'node' 2>/dev/null || true); do
+  cwd=$(readlink -f /proc/$pid/cwd 2>/dev/null || true)
+  if [ -n "$cwd" ] && [[ "$cwd" == *"vistabem"* ]]; then
+    echo "🎯 Processo zumbi detectado no host! PID: $pid (cwd: $cwd). Encerrando com kill -9..."
     kill -9 "$pid" 2>/dev/null || true
   fi
 done
+
+# Mata especificamente qualquer processo remanescente de node src/server.js no host
+kill -9 3484886 2>/dev/null || true
+pkill -9 -f 'node src/server.js' 2>/dev/null || true
 
 fuser -k 3010/tcp 2>/dev/null || true
 
