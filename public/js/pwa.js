@@ -1,15 +1,18 @@
 /**
- * Registro de PWA
+ * Limpeza e desativação de Service Workers e Caches legados do navegador
  */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((reg) => {
-        // SW registrado com sucesso
-      })
-      .catch((err) => {
-        console.warn('SW falhou:', err);
-      });
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let reg of registrations) {
+      reg.unregister();
+    }
+  });
+}
+
+if ('caches' in window) {
+  caches.keys().then((names) => {
+    for (let name of names) {
+      caches.delete(name);
+    }
   });
 }

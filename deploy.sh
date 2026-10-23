@@ -23,11 +23,27 @@ if [ ! -f ".env" ]; then
   cp .env.example .env
 fi
 
-echo "🌐 [3/5] Verificando rede externa Docker proxy..."
+echo "🌐 [3/5] Verificando rede externa Docker proxy e limpando instâncias órfãs..."
 docker network create proxy 2>/dev/null || true
 
-echo "🐳 [4/5] Reconstruindo containers..."
-docker compose down --remove-orphans
+# Encerra e remove qualquer container antigo da aplicação vistabem para evitar instâncias duplicadas na rede proxy
+docker ps -a --format '{{.ID}} {{.Names}}' | grep -i 'vistabem' | grep -v 'mongo' | awk '{print $1}' | while read -r cid; do
+  if [ -n "$cid" ]; then
+    echo "Parando e removendo container legado/zumbi da aplicação: $cid"
+    docker stop "$cid" 2>/dev/null || true
+    docker rm -f "$cid" 2>/dev/null || true
+  fi
+done
+
+# Desconecta quaisquer endpoints fantasmas da rede proxy
+docker network disconnect -f proxy vistabem 2>/dev/null || true
+docker network disconnect -f proxy vistabem-app 2>/dev/null || true
+docker network disconnect -f proxy vistabem_nginx 2>/dev/null || true
+
+# Derruba o compose atual com remoção de órfãos
+docker compose down --remove-orphans 2>/dev/null || true
+
+echo "🐳 [4/5] Reconstruindo container único oficial..."
 docker compose up -d --build --remove-orphans
 
 echo "===================================================="

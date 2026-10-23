@@ -54,14 +54,27 @@ app.use(passport.initialize());
 
 app.use(
   express.static(path.join(__dirname, '../public'), {
-    maxAge: process.env.NODE_ENV === 'production' ? '7d' : 0,
+    maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0,
     setHeaders: (res, filePath) => {
-      if (filePath.endsWith('sw.js')) res.setHeader('Cache-Control', 'no-cache');
+      if (filePath.endsWith('sw.js') || filePath.endsWith('manifest.json')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      } else if (filePath.match(/\.(css|js|jpg|jpeg|png|webp|svg|woff2)$/)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400, must-revalidate');
+      }
     },
   })
 );
 
 app.get('/health', (req, res) => res.json({ status: 'ok', uptime: process.uptime() }));
+
+// Política profissional de Cache-Control para E-commerce (Prevenção de cache em HTML dinâmico, preços, estoques e sessões)
+app.use((req, res, next) => {
+  res.setHeader('Surrogate-Control', 'no-store');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 
 app.use(flash);
 app.use(loadContext);
