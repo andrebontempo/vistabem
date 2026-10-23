@@ -26,6 +26,11 @@ fi
 echo "🌐 [3/5] Verificando rede externa Docker proxy e limpando instâncias órfãs..."
 docker network create proxy 2>/dev/null || true
 
+# Encerra qualquer processo Node legado rodando no host da VPS
+echo "🧹 Parando processos Node legados no host..."
+pkill -9 -f 'node src/server.js' 2>/dev/null || true
+pkill -9 -f 'node.*vistabem' 2>/dev/null || true
+
 # Encerra e remove qualquer container antigo da aplicação vistabem para evitar instâncias duplicadas na rede proxy
 docker ps -a --format '{{.ID}} {{.Names}}' | grep -i 'vistabem' | grep -v 'mongo' | awk '{print $1}' | while read -r cid; do
   if [ -n "$cid" ]; then

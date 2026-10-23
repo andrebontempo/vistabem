@@ -12,14 +12,15 @@ const mailService = require('../services/mailService');
  */
 exports.getHome = async (req, res, next) => {
   try {
-    const [banners, categories, featuredProducts, newArrivals, bestSellers] = await Promise.all([
+    const [banners, categories, allProducts] = await Promise.all([
       Banner.find({ active: true }).sort({ order: 1 }).lean(),
       Category.find({ active: true, parent: null }).sort({ order: 1 }).limit(6).lean(),
-      Product.find({ active: true, featured: true }).populate('category').limit(8).lean(),
-      Product.find({ active: true, isNewArrival: true }).populate('category').sort({ createdAt: -1 }).limit(8).lean(),
+      Product.find({ active: true }).populate('category').sort({ createdAt: -1 }).lean(),
     ]);
 
-    console.log(`[getHome] pid=${process.pid} feat=${featuredProducts.length} newArr=${newArrivals.length}`);
+    const featuredProducts = allProducts.filter((p) => p.featured).slice(0, 8);
+    const newArrivals = allProducts.filter((p) => p.isNewArrival).slice(0, 8);
+    const bestSellers = [...allProducts].sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0)).slice(0, 8);
 
     res.render('index', {
       title: 'Vista Bem — Moda Contemporânea e Sofisticada',
