@@ -346,3 +346,20 @@ body.admin-layout {
     padding: 18px;
   }
 }
+
+/* Botão de remoção de fotos no produto */
+.btn-remove-image {
+  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease !important;
+}
+
+.btn-remove-image:hover {
+  background: #DC2626 !important;
+  color: #FFFFFF !important;
+  border-color: #EF4444 !important;
+  transform: scale(1.12);
+}
+
+.btn-remove-image:active {
+  transform: scale(0.95);
+}
+

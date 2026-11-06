@@ -114,17 +114,22 @@
           As imagens serão otimizadas automaticamente para formato <strong>WebP</strong> leve e veloz.
         </p>
 
-        <% if (product.images && product.images.length > 0) { %>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
+        <div id="product-images-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
+          <% if (product.images && product.images.length > 0) { %>
             <% product.images.forEach(function(img) { %>
-              <div style="position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color);">
-                <img src="<%= img %>" alt="" style="width: 100%; aspect-ratio: 3/4; object-fit: cover;">
+              <div class="product-image-item" style="position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-surface, #231F2C);">
+                <img src="<%= img %>" alt="Foto do produto" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
                 <input type="hidden" name="existingImages" value="<%= img %>">
-                <button type="button" onclick="this.parentElement.remove()" style="position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; width: 22px; height: 22px; border-radius: 999px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center;">&times;</button>
+                <button type="button"
+                        class="btn-remove-image"
+                        title="Remover esta foto"
+                        aria-label="Remover foto"
+                        onclick="this.closest('.product-image-item').remove()"
+                        style="position: absolute; top: 6px; right: 6px; z-index: 10; background: rgba(19, 17, 24, 0.85); color: #fff; width: 28px; height: 28px; border-radius: 999px; font-size: 1.15rem; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.25); box-shadow: 0 2px 6px rgba(0,0,0,0.4); padding: 0;">&times;</button>
               </div>
             <% }); %>
-          </div>
-        <% } %>
+          <% } %>
+        </div>
 
         <div class="form-group">
           <label class="form-label">Enviar Novas Imagens (JPG, PNG ou WEBP)</label>
@@ -162,6 +167,39 @@
 </form>
 
 <script>
+  // Delegação global de eventos para remoção de fotos e variações
+  document.addEventListener('click', function(e) {
+    const btnRemoveImg = e.target.closest('.btn-remove-image');
+    if (btnRemoveImg) {
+      e.preventDefault();
+      e.stopPropagation();
+      const item = btnRemoveImg.closest('.product-image-item');
+      if (item) {
+        item.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        item.style.opacity = '0';
+        item.style.transform = 'scale(0.85)';
+        setTimeout(() => {
+          item.remove();
+          const grid = document.getElementById('product-images-grid');
+          if (grid && grid.querySelectorAll('.product-image-item').length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1 / -1; font-size: 0.85rem; color: var(--text-muted); font-style: italic; padding: 4px 0 10px 0;">Nenhuma imagem existente mantida. Envie novas imagens abaixo se desejar.</div>';
+          }
+        }, 180);
+      }
+      return;
+    }
+
+    const btnRemoveVar = e.target.closest('.btn-remove-variant');
+    if (btnRemoveVar) {
+      e.preventDefault();
+      e.stopPropagation();
+      const row = btnRemoveVar.closest('.variant-row');
+      if (row) {
+        row.remove();
+      }
+    }
+  });
+
   document.getElementById('btn-add-variant')?.addEventListener('click', () => {
     const container = document.getElementById('variants-container');
     const row = document.createElement('div');
@@ -172,7 +210,7 @@
       <input type="text" name="variantSize" placeholder="Tamanho" class="form-control" style="font-size: 0.85rem;">
       <input type="text" name="variantColor" placeholder="Cor" class="form-control" style="font-size: 0.85rem;">
       <input type="number" name="variantStock" value="1" min="0" placeholder="Estoque" class="form-control" style="font-size: 0.85rem;">
-      <button type="button" onclick="this.parentElement.remove()" style="color: var(--danger); font-size: 1.2rem; text-align: center;">&times;</button>
+      <button type="button" class="btn-remove-variant" onclick="this.parentElement.remove()" style="color: var(--danger); font-size: 1.2rem; text-align: center; cursor: pointer; border: none; background: none;">&times;</button>
     `;
     container.appendChild(row);
   });

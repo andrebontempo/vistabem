@@ -12,6 +12,7 @@ const settingService = require('../services/settingService');
 const { clearMenuCache } = require('../middleware/auth');
 const mailService = require('../services/mailService');
 const stockService = require('../services/stockService');
+const { removeImage } = require('../middleware/upload');
 
 /**
  * Dashboard Administrativo
@@ -200,6 +201,11 @@ exports.postProductForm = async (req, res, next) => {
     };
 
     if (id) {
+      const oldProduct = await Product.findById(id);
+      if (oldProduct && Array.isArray(oldProduct.images)) {
+        const removed = oldProduct.images.filter((img) => !images.includes(img));
+        removed.forEach((img) => removeImage(img));
+      }
       await Product.findByIdAndUpdate(id, data);
       req.flash('success', 'Produto atualizado com sucesso!');
     } else {
@@ -216,6 +222,10 @@ exports.postProductForm = async (req, res, next) => {
 exports.deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const prod = await Product.findById(id);
+    if (prod && Array.isArray(prod.images)) {
+      prod.images.forEach((img) => removeImage(img));
+    }
     await Product.findByIdAndDelete(id);
     req.flash('info', 'Produto excluído.');
     res.redirect('/admin/produtos');
