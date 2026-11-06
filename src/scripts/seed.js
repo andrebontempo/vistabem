@@ -383,16 +383,15 @@ async function autoSeedIfEmpty() {
     const hasSvgCategory = allCats.some(c => typeof c.image === 'string' && c.image.includes('.svg'));
     const mainCatsCount = allCats.filter(c => !c.parent).length;
 
-    // Se o catálogo já tiver os 8 produtos oficiais com fotos reais e as categorias corretas, não faz nada
-    if (allProds.length === 8 && mainCatsCount === 4 && !hasSvgProduct && !hasSvgCategory) {
-      console.log('✅ Catálogo oficial verificado: 8 produtos com fotos reais (.jpg) e categorias íntegras.');
-    } else if (adminCount === 0 || allProds.length === 0 || hasSvgProduct || hasSvgCategory || allProds.length !== 8 || mainCatsCount !== 4) {
-      console.log(`🌱 Sincronização necessária (Produtos: ${allProds.length}, Categorias Principais: ${mainCatsCount}, SVG Prods: ${hasSvgProduct}, SVG Cats: ${hasSvgCategory}). Populando catálogo oficial...`);
+    // Inicializa catálogo apenas se o banco estiver vazio
+    if (adminCount === 0 || allProds.length === 0 || allCats.length === 0) {
+      console.log('🌱 Banco vazio detectado. Populando catálogo oficial inicial...');
       await Product.deleteMany({});
       await Category.deleteMany({});
       await seed(false);
       return;
     }
+
 
     // Garante que as contas de administrador padrão existam e tenham perfil admin ativo
     const adminEmails = [
@@ -482,20 +481,22 @@ async function autoSeedIfEmpty() {
       }
     );
 
-    // Migração de imagens para fotos reais de alta resolução (.jpg)
-    await Category.updateOne({ slug: 'feminino' }, { $set: { image: '/images/categories/categoria-feminino.jpg' } });
-    await Category.updateOne({ slug: 'masculino' }, { $set: { image: '/images/categories/categoria-masculino.jpg' } });
-    await Category.updateOne({ slug: 'infantil' }, { $set: { image: '/images/categories/categoria-infantil.jpg' } });
-    await Category.updateOne({ slug: 'acessorios' }, { $set: { image: '/images/categories/categoria-acessorios.jpg' } });
+    // Migração de imagens apenas para registros legados que ainda apontam para .svg ou vazios (preserva uploads do admin)
+    const svgOrEmpty = { $or: [{ image: { $regex: /\.svg$/i } }, { image: '' }, { image: null }, { image: { $exists: false } }] };
+    await Category.updateOne({ slug: 'feminino', ...svgOrEmpty }, { $set: { image: '/images/categories/categoria-feminino.jpg' } });
+    await Category.updateOne({ slug: 'masculino', ...svgOrEmpty }, { $set: { image: '/images/categories/categoria-masculino.jpg' } });
+    await Category.updateOne({ slug: 'infantil', ...svgOrEmpty }, { $set: { image: '/images/categories/categoria-infantil.jpg' } });
+    await Category.updateOne({ slug: 'acessorios', ...svgOrEmpty }, { $set: { image: '/images/categories/categoria-acessorios.jpg' } });
 
-    await Product.updateOne({ slug: 'vestido-midi-canelado-elegance-roxo-nobre' }, { $set: { images: ['/images/products/vestido-midi-roxo.jpg', '/images/products/vestido-midi-roxo-2.jpg'] } });
-    await Product.updateOne({ slug: 'blazer-alfaiataria-estruturado-lilas-nevoa' }, { $set: { images: ['/images/products/blazer-alfaiataria-lilas.jpg'] } });
-    await Product.updateOne({ slug: 'vestido-longo-gala-em-seda-lilas-lumina' }, { $set: { images: ['/images/products/vestido-festa-lilas.jpg'] } });
-    await Product.updateOne({ slug: 'calca-pantalona-alfaiataria-noite-profunda' }, { $set: { images: ['/images/products/calca-pantalona-preta.jpg'] } });
-    await Product.updateOne({ slug: 'camisa-linho-pura-fibra-confort-masculina' }, { $set: { images: ['/images/products/camisa-linho-offwhite.jpg'] } });
-    await Product.updateOne({ slug: 'jaqueta-corta-vento-streetwear-ciano-neon' }, { $set: { images: ['/images/products/jaqueta-corta-vento-ciano.jpg'] } });
-    await Product.updateOne({ slug: 'conjunto-algodao-prime-infantil-menina' }, { $set: { images: ['/images/products/conjunto-infantil-lilas.jpg'] } });
-    await Product.updateOne({ slug: 'bolsa-baguette-couro-legitimo-com-alca-metalica-ciano' }, { $set: { images: ['/images/products/bolsa-baguette-couro.jpg'] } });
+    const prodSvgOrEmpty = { $or: [{ images: { $size: 0 } }, { 'images.0': { $regex: /\.svg$/i } }] };
+    await Product.updateOne({ slug: 'vestido-midi-canelado-elegance-roxo-nobre', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/vestido-midi-roxo.jpg', '/images/products/vestido-midi-roxo-2.jpg'] } });
+    await Product.updateOne({ slug: 'blazer-alfaiataria-estruturado-lilas-nevoa', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/blazer-alfaiataria-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'vestido-longo-gala-em-seda-lilas-lumina', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/vestido-festa-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'calca-pantalona-alfaiataria-noite-profunda', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/calca-pantalona-preta.jpg'] } });
+    await Product.updateOne({ slug: 'camisa-linho-pura-fibra-confort-masculina', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/camisa-linho-offwhite.jpg'] } });
+    await Product.updateOne({ slug: 'jaqueta-corta-vento-streetwear-ciano-neon', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/jaqueta-corta-vento-ciano.jpg'] } });
+    await Product.updateOne({ slug: 'conjunto-algodao-prime-infantil-menina', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/conjunto-infantil-lilas.jpg'] } });
+    await Product.updateOne({ slug: 'bolsa-baguette-couro-legitimo-com-alca-metalica-ciano', ...prodSvgOrEmpty }, { $set: { images: ['/images/products/bolsa-baguette-couro.jpg'] } });
   } catch (err) {
     console.error('⚠️  Não foi possível executar auto-seed:', err.message);
   }

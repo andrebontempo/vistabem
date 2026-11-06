@@ -81,45 +81,56 @@
         <p>Descubra as tendências pensadas especialmente para você</p>
       </div>
 
+      <%
+        const catMap = {};
+        if (Array.isArray(categories)) {
+          categories.forEach(c => { if (c && c.slug) catMap[c.slug] = c; });
+        }
+        const fem = catMap['feminino'] || {};
+        const masc = catMap['masculino'] || {};
+        const inf = catMap['infantil'] || {};
+        const acess = catMap['acessorios'] || {};
+      %>
+
       <div class="bento-grid">
         <!-- Card Grande: Feminino -->
-        <a href="/categoria/feminino" class="bento-card large">
-          <img src="/images/categories/categoria-feminino.jpg?v=<%= assetVersion %>" alt="Moda Feminina Vista Bem" class="bento-bg" loading="lazy">
+        <a href="/categoria/<%= fem.slug || 'feminino' %>" class="bento-card large">
+          <img src="<%= fem.image || '/images/categories/categoria-feminino.jpg' %>" alt="<%= fem.name || 'Moda Feminina' %> Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
             <span class="badge badge-gold" style="margin-bottom: 8px;">Destaque</span>
-            <h3 class="bento-title">Moda Feminina</h3>
-            <span class="bento-link">Ver vestidos, saias e conjuntos <%- icon('chevron-right', 16) %></span>
+            <h3 class="bento-title"><%= fem.name || 'Moda Feminina' %></h3>
+            <span class="bento-link"><%= fem.description || 'Ver vestidos, saias e conjuntos' %> <%- icon('chevron-right', 16) %></span>
           </div>
         </a>
 
         <!-- Card: Masculino -->
-        <a href="/categoria/masculino" class="bento-card">
-          <img src="/images/categories/categoria-masculino.jpg?v=<%= assetVersion %>" alt="Moda Masculina Vista Bem" class="bento-bg" loading="lazy">
+        <a href="/categoria/<%= masc.slug || 'masculino' %>" class="bento-card">
+          <img src="<%= masc.image || '/images/categories/categoria-masculino.jpg' %>" alt="<%= masc.name || 'Moda Masculina' %> Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
-            <h3 class="bento-title">Moda Masculina</h3>
-            <span class="bento-link">Camisas e alfaiataria <%- icon('chevron-right', 16) %></span>
+            <h3 class="bento-title"><%= masc.name || 'Moda Masculina' %></h3>
+            <span class="bento-link"><%= masc.description || 'Camisas e alfaiataria' %> <%- icon('chevron-right', 16) %></span>
           </div>
         </a>
 
         <!-- Card: Infantil -->
-        <a href="/categoria/infantil" class="bento-card">
-          <img src="/images/categories/categoria-infantil.jpg?v=<%= assetVersion %>" alt="Moda Infantil Vista Bem" class="bento-bg" loading="lazy">
+        <a href="/categoria/<%= inf.slug || 'infantil' %>" class="bento-card">
+          <img src="<%= inf.image || '/images/categories/categoria-infantil.jpg' %>" alt="<%= inf.name || 'Moda Infantil' %> Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
-            <h3 class="bento-title">Moda Infantil</h3>
-            <span class="bento-link">Conforto para os pequenos <%- icon('chevron-right', 16) %></span>
+            <h3 class="bento-title"><%= inf.name || 'Moda Infantil' %></h3>
+            <span class="bento-link"><%= inf.description || 'Conforto para os pequenos' %> <%- icon('chevron-right', 16) %></span>
           </div>
         </a>
 
         <!-- Card: Acessórios -->
-        <a href="/categoria/acessorios" class="bento-card wide">
-          <img src="/images/categories/categoria-acessorios.jpg?v=<%= assetVersion %>" alt="Bolsas e Acessórios Vista Bem" class="bento-bg" loading="lazy">
+        <a href="/categoria/<%= acess.slug || 'acessorios' %>" class="bento-card wide">
+          <img src="<%= acess.image || '/images/categories/categoria-acessorios.jpg' %>" alt="<%= acess.name || 'Bolsas & Acessórios' %> Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">
-            <h3 class="bento-title">Bolsas &amp; Acessórios</h3>
-            <span class="bento-link">O toque final para o seu look <%- icon('chevron-right', 16) %></span>
+            <h3 class="bento-title"><%= acess.name || 'Bolsas & Acessórios' %></h3>
+            <span class="bento-link"><%= acess.description || 'O toque final para o seu look' %> <%- icon('chevron-right', 16) %></span>
           </div>
         </a>
       </div>
