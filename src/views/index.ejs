@@ -89,7 +89,7 @@
         const fem = catMap['feminino'] || {};
         const masc = catMap['masculino'] || {};
         const inf = catMap['infantil'] || {};
-        const acess = catMap['acessorios'] || {};
+        const acess = catMap['bolsas'] || catMap['acessorios'] || {};
       %>
 
       <div class="bento-grid">
@@ -124,8 +124,8 @@
           </div>
         </a>
 
-        <!-- Card: Acessórios -->
-        <a href="/categoria/<%= acess.slug || 'acessorios' %>" class="bento-card wide">
+        <!-- Card: Bolsas / Acessórios -->
+        <a href="/categoria/<%= acess.slug || 'bolsas' %>" class="bento-card wide">
           <img src="<%= acess.image || '/images/categories/categoria-acessorios.jpg' %>" alt="<%= acess.name || 'Bolsas & Acessórios' %> Vista Bem" class="bento-bg" loading="lazy">
           <div class="bento-overlay"></div>
           <div class="bento-content">

@@ -14,7 +14,7 @@ exports.getHome = async (req, res, next) => {
   try {
     const [banners, categories, allProducts] = await Promise.all([
       Banner.find({ active: true }).sort({ order: 1 }).lean(),
-      Category.find({ active: true, parent: null }).sort({ order: 1 }).limit(6).lean(),
+      Category.find({ active: true }).sort({ order: 1 }).lean(),
       Product.find({ active: true }).populate('category').sort({ createdAt: -1 }).lean(),
     ]);
 
